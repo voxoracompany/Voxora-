@@ -1,34 +1,67 @@
+import "./App.css";
+
 function App() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <header className="flex justify-between items-center px-10 py-6 border-b border-white/10">
-        <h1 className="text-3xl font-bold">
-          Voxora
-        </h1>
+    <div className="voxora">
+      <nav className="navbar">
+        <div className="logo">
+          VOXORA
+        </div>
 
-        <button className="bg-white text-black px-6 py-2 rounded-full">
-          Enter Platform
+        <div className="nav-links">
+          <a href="#">Platform</a>
+          <a href="#">AI Agents</a>
+          <a href="#">Solutions</a>
+          <a href="#">About</a>
+        </div>
+
+        <button className="launch-btn">
+          Launch Voxora
         </button>
-      </header>
+      </nav>
 
-      <main className="flex flex-col items-center justify-center text-center min-h-[80vh] px-6">
-        <h2 className="text-5xl font-bold max-w-5xl">
-          The Intelligence Layer For The Future Of AI Agents
-        </h2>
+      <main className="hero">
+        <div className="hero-content">
+          <p className="tagline">
+            THE INTELLIGENCE LAYER FOR THE FUTURE OF THE AI AGE
+          </p>
 
-        <p className="mt-6 text-gray-400 text-lg max-w-3xl">
-          Voxora is building the foundation where humans and AI agents
-          create, collaborate, and transform ideas into reality.
-        </p>
+          <h1>
+            Build, Create and Think
+            <br />
+            With The Power Of AI
+          </h1>
 
-        <div className="flex gap-4 mt-10">
-          <button className="bg-blue-600 px-8 py-3 rounded-lg">
-            Create AI Agent
-          </button>
+          <p className="description">
+            Voxora is the intelligent foundation that connects AI agents,
+            creativity, automation, and human ideas into one powerful
+            ecosystem.
+          </p>
 
-          <button className="border border-white/20 px-8 py-3 rounded-lg">
-            Explore Ecosystem
-          </button>
+          <div className="buttons">
+            <button className="primary">
+              Start Building
+            </button>
+
+            <button className="secondary">
+              Explore AI Agents
+            </button>
+          </div>
+        </div>
+
+        <div className="ai-card">
+          <div className="circle">
+            AI
+          </div>
+
+          <h2>
+            Voxora Intelligence Engine
+          </h2>
+
+          <p>
+            Your AI command center for ideas, content, products and
+            innovation.
+          </p>
         </div>
       </main>
     </div>
