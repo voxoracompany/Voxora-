@@ -168,9 +168,7 @@ function App() {
         </div>
 
       </section>
-
-
-
+      
       <section className="how-it-works">
 
         <h2>
@@ -210,21 +208,191 @@ function App() {
               Turn AI-powered insights into real products, content and solutions.
             </p>
           </div>
-
-
-          <div className="step-card">
-            <span>04</span>
-            <h3>Achieve Results</h3>
-            <p>
-              Transform ideas into outcomes with continuous intelligence.
-            </p>
+          
           </div>
 
-        </div>
-
       </section>
+      
+      <section className="workspace">
+
+  <h2>
+    Inside The Voxora Intelligence Workspace
+  </h2>
+
+  <p>
+    A unified AI environment where ideas become strategies,
+    content, products and automated solutions.
+  </p>
 
 
+  <div className="workspace-grid">
+
+    <div className="workspace-card">
+      <h3>🧠 AI Command Center</h3>
+      <p>
+        Manage your intelligence tools, ideas and AI conversations
+        from one central workspace.
+      </p>
+    </div>
+
+
+    <div className="workspace-card">
+      <h3>🤖 AI Agent Hub</h3>
+      <p>
+        Activate specialized AI agents built for different tasks
+        and goals.
+      </p>
+    </div>
+
+
+    <div className="workspace-card">
+      <h3>📁 Project Builder</h3>
+      <p>
+        Organize ideas, plans and projects with intelligent
+        AI assistance.
+      </p>
+    </div>
+
+
+    <div className="workspace-card">
+      <h3>⚙️ Automation Hub</h3>
+      <p>
+        Create smarter workflows and reduce repetitive tasks.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<section className="built-for">
+
+  <h2>
+    Built For The AI Era
+  </h2>
+
+  <p>
+    Voxora empowers people and organizations to create,
+    innovate and grow with intelligent AI systems.
+  </p>
+
+
+  <div className="audience-grid">
+
+    <div className="audience-card">
+      <h3>🎨 Creators</h3>
+      <p>
+        Create content, designs and digital experiences faster
+        with AI-powered tools.
+      </p>
+    </div>
+
+
+    <div className="audience-card">
+      <h3>🚀 Entrepreneurs</h3>
+      <p>
+        Transform ideas into businesses with intelligent
+        strategy and execution support.
+      </p>
+    </div>
+
+
+    <div className="audience-card">
+      <h3>🏢 Businesses</h3>
+      <p>
+        Improve productivity, automate workflows and make
+        smarter decisions.
+      </p>
+    </div>
+
+
+    <div className="audience-card">
+      <h3>💻 Developers</h3>
+      <p>
+        Build the next generation of applications with
+        AI-powered infrastructure.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+    
+    <section className="cta">
+
+  <h2>
+    Join The Future Of Intelligence
+  </h2>
+
+  <p>
+    Start building, creating and innovating with the power of
+    connected AI agents.
+  </p>
+
+  <div className="cta-buttons">
+
+    <button className="primary">
+      Start Building With Voxora
+    </button>
+
+    <button className="secondary">
+      Explore The Platform
+    </button>
+
+  </div>
+
+</section>
+    
+    <footer className="footer">
+
+  <div className="footer-brand">
+
+    <h2>
+      VOXORA
+    </h2>
+
+    <p>
+      The intelligence layer for the future of the AI age.
+    </p>
+
+  </div>
+
+
+  <div className="footer-links">
+
+    <div>
+      <h3>Platform</h3>
+      <p>AI Agents</p>
+      <p>Workspace</p>
+      <p>Automation</p>
+    </div>
+
+
+    <div>
+      <h3>Solutions</h3>
+      <p>Creators</p>
+      <p>Businesses</p>
+      <p>Developers</p>
+    </div>
+
+
+    <div>
+      <h3>Company</h3>
+      <p>About</p>
+      <p>Contact</p>
+      <p>Careers</p>
+    </div>
+
+  </div>
+
+
+  <div className="copyright">
+
+    © 2026 Voxora. All rights reserved.
+
+  </div>
+
+</footer>
     </div>
   );
 }
