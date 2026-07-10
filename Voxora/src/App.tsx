@@ -391,9 +391,11 @@ function App() {
     © 2026 Voxora. All rights reserved.
 
   </div>
-
-</footer>
-    </div>
+  
+  </footer>
+   
+   
+   </div>
   );
 }
 
