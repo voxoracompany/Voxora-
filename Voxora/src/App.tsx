@@ -1,3 +1,5 @@
+import Dashboard from "./pages/Dashboard/Dashboard";
+
 import "./App.css";
 
 function App() {
@@ -394,6 +396,7 @@ function App() {
   
   </footer>
    
+   <Dashboard />
    
    </div>
   );
