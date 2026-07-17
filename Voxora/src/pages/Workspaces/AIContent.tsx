@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { useProjects } from "../../context/ProjectContext";
 
-const AIContent = () => {
+const AIContent = ({
+  setWorkspace,
+}: {
+  setWorkspace: (workspace: string) => void;
+}) => {
   const [topic, setTopic] = useState("");
   const [ideas, setIdeas] = useState<string[]>([]);
+
   const { saveProject } = useProjects();
 
   const generateIdeas = () => {
-    if (!topic) return;
+    if (!topic.trim()) return;
 
     setIdeas([
       `${topic} - Beginner Guide`,
@@ -16,10 +21,29 @@ const AIContent = () => {
     ]);
   };
 
+  const saveIdea = (idea: string) => {
+    saveProject({
+      id: Date.now().toString(),
+      title: `✍️ ${idea}`,
+      category: "AI Content",
+      createdAt: new Date().toLocaleString(),
+      notes: "",
+    });
+  };
+
   return (
     <div>
+      <button
+        onClick={() => setWorkspace("dashboard")}
+      >
+        ← Back to Dashboard
+      </button>
+
       <h1>AI Content Ideas</h1>
-      <p>Generate and save creative content ideas with Voxora AI.</p>
+
+      <p>
+        Generate and save creative content ideas with Voxora AI.
+      </p>
 
       <input
         type="text"
@@ -32,17 +56,23 @@ const AIContent = () => {
         Generate Ideas
       </button>
 
-      <h3>Generated Ideas:</h3>
+      {ideas.length > 0 && (
+        <>
+          <h3>Generated Ideas:</h3>
 
-      {ideas.map((idea, index) => (
-        <div key={index}>
-          <p>{idea}</p>
+          {ideas.map((idea, index) => (
+            <div key={index}>
+              <p>{idea}</p>
 
-          <button onClick={() => saveProject(idea)}>
-            Save Project
-          </button>
-        </div>
-      ))}
+              <button
+                onClick={() => saveIdea(idea)}
+              >
+                Save Project
+              </button>
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 };

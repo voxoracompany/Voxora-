@@ -1,16 +1,14 @@
-const TopBar = () => {
+import React from "react";
+
+export default function TopBar() {
   return (
-    <header className="topbar">
-      <div>
-        <h2>Dashboard</h2>
-        <p>Welcome back to Voxora</p>
-      </div>
+    <div className="topbar">
 
-      <div className="user-info">
-        <p>Bethel</p>
-      </div>
-    </header>
+      <input
+        type="text"
+        placeholder="🔍 Search projects, ideas or customers..."
+      />
+
+    </div>
   );
-};
-
-export default TopBar;
+}

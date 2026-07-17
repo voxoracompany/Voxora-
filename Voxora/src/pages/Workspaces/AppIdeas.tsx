@@ -1,50 +1,89 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useProjects } from "../../context/ProjectContext";
 
-const AppIdeas = () => {
-  const [topic, setTopic] = useState("");
-  const [ideas, setIdeas] = useState<string[]>([]);
+interface AppIdeasProps {
+  setWorkspace: (workspace: string) => void;
+}
+
+export default function AppIdeas({
+  setWorkspace,
+}: AppIdeasProps) {
   const { saveProject } = useProjects();
 
+  const [topic, setTopic] = useState("");
+  const [ideas, setIdeas] = useState<string[]>([]);
+
   const generateIdeas = () => {
-    if (!topic) return;
+    if (!topic.trim()) return;
 
     setIdeas([
-      `${topic} Mobile App Concept`,
-      `${topic} Productivity App`,
-      `${topic} AI-Powered App Idea`,
+      `AI app for solving ${topic} problems`,
+      `Mobile platform that helps users with ${topic}`,
+      `Smart assistant focused on ${topic}`,
     ]);
+  };
+
+  const saveIdea = (idea: string) => {
+    console.log("Saving idea:", idea);
+
+    saveProject({
+      id: Date.now().toString(),
+      title: `💡 ${idea}`,
+      category: "App Idea",
+      createdAt: new Date().toLocaleString(),
+      notes: "",
+    });
   };
 
   return (
     <div>
-      <h1>App Ideas</h1>
-      <p>Discover new app concepts with Voxora AI.</p>
+      <p
+        onClick={() => setWorkspace("dashboard")}
+        style={{ cursor: "pointer" }}
+      >
+        ← Back to Dashboard
+      </p>
+
+      <h1>App Ideas Generator</h1>
+
+      <p>
+        Discover new application concepts with Voxora AI.
+      </p>
 
       <input
         type="text"
-        placeholder="Enter an app category..."
+        placeholder="Enter a topic or problem..."
         value={topic}
-        onChange={(e) => setTopic(e.target.value)}
+        onChange={(e) =>
+          setTopic(e.target.value)
+        }
       />
 
       <button onClick={generateIdeas}>
-        Generate App Ideas
+        Generate Ideas
       </button>
 
-      <h3>Generated App Ideas:</h3>
+      {ideas.length > 0 && (
+        <div>
+          <h2>
+            Generated Ideas
+          </h2>
 
-      {ideas.map((idea, index) => (
-        <div key={index}>
-          <p>{idea}</p>
+          {ideas.map((idea, index) => (
+            <div key={index}>
+              <p>
+                {idea}
+              </p>
 
-          <button onClick={() => saveProject(idea)}>
-            Save Project
-          </button>
+              <button
+                onClick={() => saveIdea(idea)}
+              >
+                Save Idea
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
-};
-
-export default AppIdeas;
+}

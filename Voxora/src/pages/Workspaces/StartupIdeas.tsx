@@ -1,50 +1,81 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useProjects } from "../../context/ProjectContext";
 
-const StartupIdeas = () => {
-  const [industry, setIndustry] = useState("");
-  const [ideas, setIdeas] = useState<string[]>([]);
+interface StartupIdeasProps {
+  setWorkspace: (workspace: string) => void;
+}
+
+export default function StartupIdeas({
+  setWorkspace,
+}: StartupIdeasProps) {
   const { saveProject } = useProjects();
 
+  const [topic, setTopic] = useState("");
+  const [ideas, setIdeas] = useState<string[]>([]);
+
   const generateIdeas = () => {
-    if (!industry) return;
+    if (!topic.trim()) return;
 
     setIdeas([
-      `${industry} AI Startup Concept`,
-      `${industry} Marketplace Startup`,
-      `${industry} Future Technology Startup`,
+      `Startup solving ${topic} challenges`,
+      `Digital platform helping businesses with ${topic}`,
+      `AI-powered company focused on ${topic}`,
     ]);
+  };
+
+  const saveIdea = (idea: string) => {
+    saveProject({
+      id: Date.now().toString(),
+      title: `🚀 ${idea}`,
+      category: "Startup Idea",
+      createdAt: new Date().toLocaleString(),
+      notes: "",
+    });
   };
 
   return (
     <div>
-      <h1>Startup Ideas</h1>
-      <p>Create and explore startup opportunities with Voxora AI.</p>
+      <p
+        onClick={() => setWorkspace("dashboard")}
+        style={{ cursor: "pointer" }}
+      >
+        ← Back to Dashboard
+      </p>
+
+      <h1>Startup Ideas Generator</h1>
+
+      <p>
+        Create new business concepts with Voxora AI.
+      </p>
 
       <input
         type="text"
-        placeholder="Enter an industry..."
-        value={industry}
-        onChange={(e) => setIndustry(e.target.value)}
+        placeholder="Enter a market or problem..."
+        value={topic}
+        onChange={(e) => setTopic(e.target.value)}
       />
 
       <button onClick={generateIdeas}>
         Generate Startup Ideas
       </button>
 
-      <h3>Generated Startup Ideas:</h3>
+      {ideas.length > 0 && (
+        <div>
+          <h2>Generated Startup Ideas</h2>
 
-      {ideas.map((idea, index) => (
-        <div key={index}>
-          <p>{idea}</p>
+          {ideas.map((idea, index) => (
+            <div key={index}>
+              <p>{idea}</p>
 
-          <button onClick={() => saveProject(idea)}>
-            Save Project
-          </button>
+              <button
+                onClick={() => saveIdea(idea)}
+              >
+                Save Idea
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
-};
-
-export default StartupIdeas;
+}
