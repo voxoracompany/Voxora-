@@ -1,142 +1,112 @@
 import { useState } from "react";
 import { useProjects } from "../../context/ProjectContext";
 import { useActivity } from "../../context/ActivityContext";
+import { useToast } from "../../context/ToastContext";
+import "./Workspace.css";
 
-interface MarketResearchProps {
-  setWorkspace: (workspace: string) => void;
-}
-
-export default function MarketResearch({
-  setWorkspace,
-}: MarketResearchProps) {
+export default function MarketResearch({ setWorkspace }: { setWorkspace: (workspace: string) => void }) {
   const { saveProject } = useProjects();
   const { addActivity } = useActivity();
-
-  const [idea, setIdea] = useState("");
+  const { showToast } = useToast();
+  const [market, setMarket] = useState("");
   const [report, setReport] = useState("");
 
   const generateResearch = () => {
-    if (!idea.trim()) return;
+    if (!market.trim()) return;
+    const result = `📊 MARKET RESEARCH — ${market}
 
-    const result = `
-📊 MARKET RESEARCH REPORT
+📈 MARKET SIZE & GROWTH
+• Total Addressable Market (TAM): Large and expanding globally
+• Growing at an estimated 15–25% CAGR
+• Driven by digital transformation and AI adoption
 
-💡 Product
-${idea}
+🎯 TARGET SEGMENTS
+• Small businesses and startups (high volume, lower ARPU)
+• Mid-market companies (best growth segment)
+• Enterprise clients (high ARPU, long sales cycle)
 
-🌍 Target Market
-• Entrepreneurs
-• Startups
-• Small Businesses
-• Freelancers
+📊 KEY MARKET TRENDS
+• Increasing demand for AI-powered automation
+• Shift from manual workflows to intelligent systems
+• Growing preference for no-code / low-code solutions
+• Remote-first business operations becoming standard
 
-📈 Market Demand
-Growing demand for AI-powered productivity and business tools.
+🏆 COMPETITIVE LANDSCAPE
+• 3–5 established players with significant market share
+• Many underfunded niche competitors
+• Consolidation happening through M&A
+• Whitespace exists for AI-native vertical solutions
 
-🎯 Target Audience
-• Ages 18–45
-• Tech-savvy users
-• Business owners
-• Digital creators
+⚡ MARKET OPPORTUNITIES
+• Underserved SMB segment with limited AI tools
+• International markets with low competition
+• Workflow automation for non-technical users
+• Integration with existing business software
 
-🔥 Market Trends
-• Artificial Intelligence
-• SaaS Products
-• Automation
-• Remote Work
-• Creator Economy
+⚠️ MARKET RISKS
+• High customer acquisition costs
+• Long enterprise sales cycles
+• Fast-moving technology landscape
+• Regulatory changes affecting AI usage
 
-⚠ Challenges
-• Strong competition
-• Customer trust
-• User acquisition
-• Pricing pressure
-
-🚀 Opportunities
-• AI-first experiences
-• Emerging markets
-• Mobile accessibility
-• Personalized recommendations
-
-✅ Voxora Recommendation
-
-Focus on solving one important customer problem better than competitors before expanding features.
-`;
-
+💡 VOXORA RECOMMENDATION
+Focus on the SMB segment initially — they adopt fast, pay reliably, and generate strong word-of-mouth when delighted.`;
     setReport(result);
+    addActivity({
+      type: "market_research",
+      title: "Market Research Generated",
+      description: `Market research generated for the "${market}" market.`,
+      category: "Research",
+      icon: "📊",
+    });
   };
 
-  const saveResearch = () => {
+  const saveReport = () => {
     if (!report) return;
-
     saveProject({
       id: Date.now().toString(),
-      title: `Market Research - ${idea}`,
+      title: `Market Research — ${market}`,
       category: "Market Research",
       createdAt: new Date().toISOString(),
       notes: report,
     });
-
-    addActivity(
-      `📊 Market Research created: ${idea}`
-    );
-
-    alert("✅ Market Research saved!");
+    showToast("📊 Market research saved!");
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <button
-        onClick={() => setWorkspace("dashboard")}
-      >
-        ← Back to Dashboard
-      </button>
-
+    <div className="workspace-container">
+      <button className="back-btn" onClick={() => setWorkspace("dashboard")}>← Back to Dashboard</button>
       <h1>📊 Market Research</h1>
+      <p className="workspace-subtitle">Research your market before building your product.</p>
 
-      <p>
-        Research your market before building your product.
-      </p>
-
-      <input
-        type="text"
-        placeholder="Enter your startup or product idea..."
-        value={idea}
-        onChange={(e) => setIdea(e.target.value)}
-        style={{
-          width: "100%",
-          padding: "12px",
-          marginTop: "20px",
-        }}
-      />
-
-      <br />
-      <br />
-
-      <button onClick={generateResearch}>
-        📊 Generate Market Research
-      </button>
+      <div className="workspace-form">
+        <input
+          className="workspace-input"
+          type="text"
+          placeholder="Enter your market or industry..."
+          value={market}
+          onChange={(e) => setMarket(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && generateResearch()}
+        />
+        <button className="workspace-btn" onClick={generateResearch} disabled={!market.trim()}>
+          📊 Generate Market Research
+        </button>
+      </div>
 
       {report && (
-        <>
-          <div
-            style={{
-              marginTop: "30px",
-              padding: "20px",
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            {report}
-          </div>
-
-          <br />
-
-          <button onClick={saveResearch}>
+        <div className="workspace-results">
+          <div className="report-box">{report}</div>
+          <button className="workspace-btn workspace-save-btn" onClick={saveReport}>
             💾 Save Research
           </button>
-        </>
+        </div>
+      )}
+
+      {!report && (
+        <div className="workspace-empty">
+          <div className="workspace-empty-icon">📊</div>
+          <p>Enter a market or industry above to generate a comprehensive research report.</p>
+        </div>
       )}
     </div>
   );

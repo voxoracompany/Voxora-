@@ -1,0 +1,144 @@
+Voxora V2.1 — Real SaaS Upgrade
+
+Now that Voxora V2 is complete, begin building Voxora V2.1.
+
+The goal is to stop relying on placeholder data and make Voxora feel like a real SaaS product.
+
+Priority 1 — Activity Center
+
+Create a real Activity Center powered by application data instead of hardcoded items.
+
+Automatically record every important user action, including:
+
+- Project created
+- Project updated
+- Project deleted
+- Project pinned
+- Project unpinned
+- Project added to favorites
+- Project removed from favorites
+- AI conversation saved
+- Customer Research completed
+- Product Roadmap created
+- Business Model Canvas created
+- SWOT Analysis completed
+- Competitor Analysis completed
+
+Each activity should include:
+
+- Unique ID
+- Activity type
+- Title
+- Description
+- Timestamp
+- Related project ID (if available)
+- Category
+- Icon
+
+Store activities in localStorage so they persist after refresh.
+
+Display activities in reverse chronological order.
+
+Add filters:
+
+- All
+- Projects
+- AI
+- Research
+- Roadmaps
+- Favorites
+
+Include an Empty State when there is no activity.
+
+---
+
+Priority 2 — Real Analytics Dashboard
+
+Replace all placeholder statistics with live values calculated from application data.
+
+Display:
+
+- Total Projects
+- AI Sessions
+- Saved Ideas
+- Favorite Projects
+- Pinned Projects
+- Activity Count
+
+Add additional insights:
+
+- Most Used Workspace
+- Projects Created This Week
+- Recent Activity
+- Total Notes
+
+Analytics should update automatically whenever data changes.
+
+---
+
+Priority 3 — Smart Search
+
+Create a global search system.
+
+Search across:
+
+- Project titles
+- Categories
+- Notes
+- AI conversations
+- Customer Research
+- Product Roadmaps
+- SWOT Analyses
+- Competitor Analyses
+
+Include:
+
+- Instant search
+- Highlight matching text
+- No results state
+- Filter by category
+- Sort by newest and oldest
+
+---
+
+Priority 4 — Export
+
+Allow users to export projects as:
+
+- PDF
+- Markdown (.md)
+- Plain Text (.txt)
+
+Export should include:
+
+- Project title
+- Category
+- Creation date
+- Notes
+- AI-generated content
+- Research
+- Roadmap
+- Analysis
+
+---
+
+Priority 5 — UI Polish
+
+Improve the overall product experience.
+
+Add:
+
+- Better cards
+- Smooth animations
+- Loading indicators
+- Empty states
+- Responsive mobile layout
+- Better spacing
+- Improved typography
+- Consistent icons
+- Better hover effects
+- Improved navigation transitions
+
+Do not remove any existing functionality.
+
+Maintain the current Voxora design language and ensure all new features integrate cleanly with the existing dashboard and project management system.

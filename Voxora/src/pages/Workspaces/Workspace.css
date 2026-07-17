@@ -1,0 +1,190 @@
+/* Shared workspace styles */
+
+.workspace-container {
+  padding: 30px;
+  max-width: 860px;
+}
+
+.workspace-container h1 {
+  font-size: 28px;
+  margin: 16px 0 6px;
+}
+
+.workspace-subtitle {
+  color: #6b7280;
+  font-size: 15px;
+  margin: 0 0 28px;
+}
+
+.workspace-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.workspace-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.workspace-form-grid .workspace-btn {
+  grid-column: 1 / -1;
+}
+
+.workspace-input {
+  padding: 13px 16px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #fff;
+  color: #111827;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.workspace-input:focus { border-color: #6C63FF; }
+.workspace-input::placeholder { color: #9ca3af; }
+
+.workspace-textarea {
+  padding: 13px 16px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #fff;
+  color: #111827;
+  width: 100%;
+  min-height: 120px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.workspace-textarea:focus { border-color: #6C63FF; }
+.workspace-textarea::placeholder { color: #9ca3af; }
+
+.workspace-btn {
+  padding: 13px 24px;
+  background: #6C63FF;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  align-self: flex-start;
+}
+
+.workspace-btn:hover:not(:disabled) { background: #5a52d5; transform: translateY(-1px); }
+.workspace-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.workspace-save-btn {
+  margin-top: 16px;
+  background: #10b981;
+}
+.workspace-save-btn:hover:not(:disabled) { background: #059669; }
+
+.workspace-results { animation: fadeIn 0.3s ease; }
+.workspace-results h3 { font-size: 18px; margin: 0 0 16px; color: #111827; }
+
+.idea-list { display: flex; flex-direction: column; gap: 10px; }
+
+.idea-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s;
+}
+.idea-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+.idea-text { flex: 1; font-size: 15px; color: #111827; line-height: 1.4; }
+
+.idea-save-btn {
+  padding: 8px 14px;
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.idea-save-btn:hover { background: #6C63FF; color: #fff; }
+
+.insight-list { display: flex; flex-direction: column; gap: 10px; }
+
+.insight-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.insight-num {
+  width: 28px;
+  height: 28px;
+  background: #6C63FF;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.insight-card p { margin: 0; font-size: 15px; color: #374151; line-height: 1.5; padding-top: 3px; }
+
+.report-box {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 24px;
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #374151;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.workspace-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: #fafafa;
+  border-radius: 16px;
+  border: 2px dashed #e5e7eb;
+}
+.workspace-empty-icon { font-size: 48px; margin-bottom: 14px; }
+.workspace-empty p { color: #6b7280; font-size: 15px; max-width: 360px; margin: 0 auto; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .workspace-form-grid { grid-template-columns: 1fr; }
+  .idea-card { flex-direction: column; align-items: flex-start; }
+}

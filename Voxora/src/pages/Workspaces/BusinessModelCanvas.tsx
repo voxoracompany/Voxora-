@@ -1,145 +1,135 @@
 import { useState } from "react";
 import { useProjects } from "../../context/ProjectContext";
+import { useActivity } from "../../context/ActivityContext";
+import { useToast } from "../../context/ToastContext";
+import "./Workspace.css";
 
-interface BusinessModelCanvasProps {
-  setWorkspace: (workspace: string) => void;
-}
-
-export default function BusinessModelCanvas({
-  setWorkspace,
-}: BusinessModelCanvasProps) {
+export default function BusinessModelCanvas({ setWorkspace }: { setWorkspace: (workspace: string) => void }) {
   const { saveProject } = useProjects();
-
+  const { addActivity } = useActivity();
+  const { showToast } = useToast();
   const [idea, setIdea] = useState("");
   const [canvas, setCanvas] = useState("");
 
   const generateCanvas = () => {
     if (!idea.trim()) return;
+    const report = `📊 BUSINESS MODEL CANVAS — ${idea}
 
-    const report = `
-📊 BUSINESS MODEL CANVAS
+🎯 VALUE PROPOSITION
+Deliver a simple, powerful solution that solves a critical customer problem faster and cheaper than alternatives.
 
-💡 Business Idea
-${idea}
+👥 CUSTOMER SEGMENTS
+• Early-stage entrepreneurs and solo founders
+• Small and medium businesses (SMB)
+• Content creators and digital marketers
+• Innovation teams at larger companies
 
-🎯 Value Proposition
-Deliver a simple and valuable solution that solves an important customer problem.
+📢 CHANNELS
+• Organic social media (LinkedIn, X, TikTok)
+• SEO-driven content marketing
+• Product-led growth (free tier → paid)
+• Partnership and affiliate programs
 
-👥 Customer Segments
-• Entrepreneurs
-• Startups
-• Small Businesses
-• Content Creators
+❤️ CUSTOMER RELATIONSHIPS
+• Self-serve onboarding (under 5 minutes)
+• In-app AI assistance
+• Community forum and knowledge base
+• Personalized upgrade recommendations
 
-📢 Channels
-• Social Media
-• Website
-• Email Marketing
-• Partnerships
+💰 REVENUE STREAMS
+• Monthly SaaS subscription ($29–$99/month)
+• Annual plans (20% discount)
+• Enterprise custom pricing
+• API access for developers
 
-❤️ Customer Relationships
-• Community Support
-• AI Assistance
-• Personalized Recommendations
+🛠 KEY ACTIVITIES
+• Product development and AI integration
+• Content marketing and SEO
+• Customer success and support
+• Partnership development
 
-💰 Revenue Streams
-• Monthly Subscription
-• Premium Features
-• Enterprise Plans
+🤝 KEY PARTNERS
+• AI API providers (OpenAI, Anthropic)
+• Payment processors (Stripe)
+• Cloud infrastructure (AWS, Vercel)
+• Distribution partners
 
-🛠 Key Activities
-• Product Development
-• Marketing
-• Customer Support
+📦 KEY RESOURCES
+• AI technology and proprietary models
+• Engineering and product team
+• Customer data and usage insights
 
-🤝 Key Partners
-• Payment Providers
-• AI Providers
-• Marketing Platforms
+💸 COST STRUCTURE
+• Cloud hosting and infrastructure
+• AI API usage costs
+• Marketing and paid acquisition
+• Team salaries and operations
 
-📦 Key Resources
-• AI Technology
-• Development Team
-• Customer Data
-
-💸 Cost Structure
-• Hosting
-• AI APIs
-• Marketing
-• Operations
-
-✅ Voxora Recommendation
-Start with one customer segment and validate demand before expanding.
-`;
-
+✅ VOXORA RECOMMENDATION
+Start with one customer segment and validate demand before expanding. Aim for 10 paying customers before building new features.`;
     setCanvas(report);
+    addActivity({
+      type: "canvas_generated",
+      title: "Business Model Canvas Generated",
+      description: `Business model canvas generated for "${idea}".`,
+      category: "Research",
+      icon: "📊",
+    });
   };
 
   const saveCanvas = () => {
     if (!canvas) return;
-
     saveProject({
       id: Date.now().toString(),
-      title: `Business Model - ${idea}`,
+      title: `Business Model — ${idea}`,
       category: "Business Model",
       createdAt: new Date().toISOString(),
       notes: canvas,
     });
-
-    alert("✅ Business Model saved!");
+    addActivity({
+      type: "canvas_created",
+      title: "Business Model Canvas Saved",
+      description: `Business model canvas for "${idea}" saved to projects.`,
+      category: "Research",
+      icon: "📊",
+    });
+    showToast("📊 Business Model Canvas saved!");
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <button onClick={() => setWorkspace("dashboard")}>
-        ← Back to Dashboard
-      </button>
-
+    <div className="workspace-container">
+      <button className="back-btn" onClick={() => setWorkspace("dashboard")}>← Back to Dashboard</button>
       <h1>📊 Business Model Canvas</h1>
+      <p className="workspace-subtitle">Build a complete business model for your startup idea.</p>
 
-      <p>
-        Build a complete business model for your startup idea.
-      </p>
-
-      <input
-        type="text"
-        placeholder="Enter your business idea..."
-        value={idea}
-        onChange={(e) => setIdea(e.target.value)}
-        style={{
-          width: "100%",
-          padding: "12px",
-          marginTop: "20px",
-        }}
-      />
-
-      <br />
-      <br />
-
-      <button onClick={generateCanvas}>
-        📊 Generate Business Model
-      </button>
+      <div className="workspace-form">
+        <input
+          className="workspace-input"
+          type="text"
+          placeholder="Enter your business idea..."
+          value={idea}
+          onChange={(e) => setIdea(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && generateCanvas()}
+        />
+        <button className="workspace-btn" onClick={generateCanvas} disabled={!idea.trim()}>
+          📊 Generate Business Model
+        </button>
+      </div>
 
       {canvas && (
-        <>
-          <div
-            style={{
-              marginTop: "30px",
-              padding: "20px",
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            {canvas}
-          </div>
-
-          <br />
-
-          <button onClick={saveCanvas}>
+        <div className="workspace-results">
+          <div className="report-box">{canvas}</div>
+          <button className="workspace-btn workspace-save-btn" onClick={saveCanvas}>
             💾 Save Business Model
           </button>
-        </>
+        </div>
+      )}
+
+      {!canvas && (
+        <div className="workspace-empty">
+          <div className="workspace-empty-icon">📊</div>
+          <p>Enter your business idea above to generate a full Business Model Canvas.</p>
+        </div>
       )}
     </div>
   );

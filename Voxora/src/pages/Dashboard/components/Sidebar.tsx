@@ -1,4 +1,3 @@
-import React from "react";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -6,121 +5,74 @@ interface SidebarProps {
   workspace: string;
 }
 
-export default function Sidebar({
-  setWorkspace,
-  workspace,
-}: SidebarProps) {
+type NavItem = {
+  label: string;
+  icon: string;
+  id: string;
+};
+
+const NAV_ITEMS: NavItem[] = [
+  { icon: "🏠", label: "Dashboard",          id: "dashboard" },
+  { icon: "📁", label: "Saved Projects",     id: "saved" },
+  { icon: "✍️", label: "AI Content",         id: "content" },
+  { icon: "💡", label: "App Ideas",          id: "apps" },
+  { icon: "🚀", label: "Startup Ideas",      id: "startup" },
+  { icon: "👤", label: "Customer Persona",   id: "persona" },
+  { icon: "🔍", label: "Customer Research",  id: "research" },
+  { icon: "📊", label: "Market Research",    id: "market" },
+  { icon: "📈", label: "Product Validation", id: "validation" },
+  { icon: "🗺️", label: "Product Roadmap",   id: "productRoadmap" },
+  { icon: "📊", label: "Business Model",     id: "business" },
+  { icon: "📋", label: "SWOT Analysis",      id: "swot" },
+  { icon: "🏆", label: "Competitor Analysis",id: "competitor" },
+  { icon: "🤖", label: "AI Assistant",       id: "assistant" },
+];
+
+const BOTTOM_ITEMS: NavItem[] = [
+  { icon: "🔍", label: "Smart Search",       id: "search" },
+  { icon: "📊", label: "Analytics",          id: "analytics" },
+  { icon: "🔔", label: "Activity Center",    id: "activity" },
+  { icon: "📤", label: "Export Center",      id: "export" },
+  { icon: "⚙️", label: "Settings",          id: "settings" },
+];
+
+export default function Sidebar({ setWorkspace, workspace }: SidebarProps) {
   return (
     <aside className="sidebar">
-      <h2>🚀 Voxora AI</h2>
+      <div className="sidebar-brand">
+        <span className="sidebar-logo">🚀</span>
+        <span className="sidebar-title">Voxora AI</span>
+      </div>
 
-      <p
-        className={workspace === "dashboard" ? "active" : ""}
-        onClick={() => setWorkspace("dashboard")}
-      >
-        🏠 Dashboard
-      </p>
+      <div className="sidebar-section-label">Workspaces</div>
+      <nav className="sidebar-nav">
+        {NAV_ITEMS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
 
-      <p
-        className={workspace === "apps" ? "active" : ""}
-        onClick={() => setWorkspace("apps")}
-      >
-        💡 App Ideas
-      </p>
+      <div className="sidebar-divider" />
 
-      <p
-        className={workspace === "startup" ? "active" : ""}
-        onClick={() => setWorkspace("startup")}
-      >
-        🚀 Startup Ideas
-      </p>
-
-      <p
-  onClick={() =>
-    setWorkspace("validation")
-  }
->
-  📈 Product Validation
-</p> 
-      
-     <p
-  className={
-    workspace === "persona"
-      ? "active"
-      : ""
-  }
-  onClick={() =>
-    setWorkspace("persona")
-  }
->
-  👤 Customer Persona
-</p>
-     
-      
-      <p
-  onClick={() => setWorkspace("business")}
->
-  📊 Business Model
-</p>
-      
-      
-      <p
-        className={workspace === "research" ? "active" : ""}
-        onClick={() => setWorkspace("research")}
-      >
-        🔍 Customer Research
-      </p>
-
-      <p
-        className={workspace === "saved" ? "active" : ""}
-        onClick={() => setWorkspace("saved")}
-      >
-        📁 Saved Projects
-      </p>
-
-      <p
-        className={workspace === "assistant" ? "active" : ""}
-        onClick={() => setWorkspace("assistant")}
-      >
-        🤖 AI Assistant
-      </p>
-
-      <p
-        className={workspace === "settings" ? "active" : ""}
-        onClick={() => setWorkspace("settings")}
-      >
-        ⚙️ Settings
-      </p>
-    
-    <p
-  onClick={() => setWorkspace("activity")}
->
-  🔔 Activity Center
-</p>
-
-   <p
-  onClick={() => setWorkspace("competitor")}
->
-  🏆 Competitor Analysis
-</p>
-   
-    <p
-  onClick={() => setWorkspace("market")}
->
-  📊 Market Research
-</p>
-    
-    <p
-  onClick={() => setWorkspace("swot")}
->
-  📋 SWOT Analysis
-</p>
-    
-    
-    <p onClick={() => setWorkspace("productRoadmap")}>
-  Product Roadmap
-</p>
-    
+      <div className="sidebar-section-label">Tools</div>
+      <nav className="sidebar-nav">
+        {BOTTOM_ITEMS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
     </aside>
   );
 }

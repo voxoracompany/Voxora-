@@ -1,135 +1,76 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import { useActivity } from "../../context/ActivityContext";
+import { useToast } from "../../context/ToastContext";
+import "./Workspace.css";
+import "./Settings.css";
 
-interface SettingsProps {
-  setWorkspace: (workspace: string) => void;
-}
+export default function Settings({ setWorkspace }: { setWorkspace: (workspace: string) => void }) {
+  const { addActivity } = useActivity();
+  const { showToast } = useToast();
 
-export default function Settings({
-  setWorkspace,
-}: SettingsProps) {
+  const [name, setName] = useState(() => localStorage.getItem("voxora-name") || "");
+  const [goal, setGoal] = useState(() => localStorage.getItem("voxora-goal") || "");
+  const [theme, setTheme] = useState(() => localStorage.getItem("voxora-theme") || "light");
 
-  const [name, setName] = useState(() => {
-  return localStorage.getItem("voxora-name") || "";
-});
+  const saveSettings = () => {
+    localStorage.setItem("voxora-name", name);
+    localStorage.setItem("voxora-goal", goal);
+    localStorage.setItem("voxora-theme", theme);
+    addActivity({
+      type: "settings_updated",
+      title: "Settings Updated",
+      description: "User profile and preferences were updated.",
+      category: "Projects",
+      icon: "⚙️",
+    });
+    showToast("⚙️ Settings saved!");
+  };
 
-const [goal, setGoal] = useState(() => {
-  return localStorage.getItem("voxora-goal") || "";
-});
+  return (
+    <div className="workspace-container settings-container">
+      <button className="back-btn" onClick={() => setWorkspace("dashboard")}>← Back to Dashboard</button>
+      <h1>⚙️ Settings</h1>
+      <p className="workspace-subtitle">Customize your Voxora experience.</p>
 
-const [saved, setSaved] = useState(false);
+      <div className="settings-card">
+        <h3>👤 User Profile</h3>
+        <label className="settings-label">Your Name</label>
+        <input
+          className="workspace-input"
+          placeholder="Enter your name..."
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <label className="settings-label">Business Goal</label>
+        <input
+          className="workspace-input"
+          placeholder="What are you building?"
+          value={goal}
+          onChange={(e) => setGoal(e.target.value)}
+        />
+      </div>
 
-useEffect(() => {
-  localStorage.setItem(
-    "voxora-name",
-    name
-  );
+      <div className="settings-card">
+        <h3>🎨 Appearance</h3>
+        <label className="settings-label">Theme</label>
+        <div className="theme-options">
+          {["light", "dark"].map((t) => (
+            <label key={t} className={`theme-option ${theme === t ? "active" : ""}`}>
+              <input type="radio" name="theme" value={t} checked={theme === t} onChange={() => setTheme(t)} />
+              {t === "light" ? "☀️ Light" : "🌙 Dark"}
+            </label>
+          ))}
+        </div>
+      </div>
 
-  localStorage.setItem(
-    "voxora-goal",
-    goal
-  );
+      <div className="settings-card current-profile">
+        <h3>📋 Current Profile</h3>
+        <p><strong>Name:</strong> {name || <span className="not-set">Not set</span>}</p>
+        <p><strong>Goal:</strong> {goal || <span className="not-set">Not set</span>}</p>
+        <p><strong>Theme:</strong> {theme}</p>
+      </div>
 
-}, [name, goal]);
-
-
-const saveSettings = () => {
-  localStorage.setItem(
-    "voxora-name",
-    name
-  );
-
-  localStorage.setItem(
-    "voxora-goal",
-    goal
-  );
-
-  setSaved(true);
-
-  setTimeout(() => {
-    setSaved(false);
-  }, 2000);
-};
-
-
-return (
-  <div>
-
-    <button
-      onClick={() => setWorkspace("dashboard")}
-    >
-      ← Back to Dashboard
-    </button>
-
-    <h1>
-      ⚙️ Voxora Settings
-    </h1>
-
-    <p>
-      Customize your Voxora experience.
-    </p>
-
-    <h2>
-      👤 User Profile
-    </h2>
-
-    <input
-      placeholder="Your name"
-      value={name}
-      onChange={(e) =>
-        setName(e.target.value)
-      }
-    />
-
-
-    <h2>
-      🎯 Business Goal
-    </h2>
-
-    <input
-      placeholder="What are you building?"
-      value={goal}
-      onChange={(e) =>
-        setGoal(e.target.value)
-      }
-    />
-
-
-    <h2>
-      🤖 AI Preferences
-    </h2>
-
-    <p>
-      Voxora will use your goals to provide better suggestions.
-    </p>
-
-
-    <button onClick={saveSettings}>
-      💾 Save Settings
-    </button>
-
-
-    {saved && (
-      <p>
-        ✅ Settings saved!
-      </p>
-    )}
-
-
-    <div>
-      <h3>
-        Current Profile
-      </h3>
-
-      <p>
-        Name: {name || "Not set"}
-      </p>
-
-      <p>
-        Goal: {goal || "Not set"}
-      </p>
-
+      <button className="workspace-btn" onClick={saveSettings}>💾 Save Settings</button>
     </div>
-
-  </div>
-);
+  );
 }

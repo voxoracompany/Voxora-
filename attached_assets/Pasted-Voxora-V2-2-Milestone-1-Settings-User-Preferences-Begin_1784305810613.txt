@@ -1,0 +1,126 @@
+Voxora V2.2 — Milestone 1: Settings & User Preferences
+
+Begin Voxora V2.2 by creating a complete Settings & Preferences system that prepares the application for user accounts and cloud synchronization.
+
+General
+
+Create a modern Settings page that matches the existing Voxora design.
+
+Organize settings into sections.
+
+---
+
+Profile
+
+Display:
+
+- Avatar placeholder
+- Display name
+- Email placeholder
+- Workspace name
+- Member since
+- App version
+
+For now, store editable profile information locally.
+
+---
+
+Appearance
+
+Support:
+
+- Light Theme
+- Dark Theme
+- System Theme
+
+Remember the user's choice after refresh.
+
+---
+
+Notifications
+
+Allow users to enable or disable:
+
+- Project notifications
+- AI notifications
+- Export notifications
+- Product updates
+- Tips & announcements
+
+Persist preferences locally.
+
+---
+
+Workspace
+
+Add options for:
+
+- Default startup workspace
+- Default sorting
+- Default search behavior
+- Auto-save preferences
+- Activity logging preferences
+
+---
+
+Export Preferences
+
+Allow users to choose default export format:
+
+- PDF
+- Markdown
+- Plain Text
+
+Remember the selected option.
+
+---
+
+Privacy
+
+Provide controls for:
+
+- Clear activity history
+- Clear search history
+- Clear AI conversations
+- Clear saved projects (with confirmation)
+- Reset all local application data
+
+Use confirmation dialogs for destructive actions.
+
+---
+
+About
+
+Display:
+
+- Voxora logo
+- Current version
+- Release channel
+- Copyright
+- Links to documentation (placeholder)
+- Release notes (placeholder)
+
+---
+
+Technical Requirements
+
+- Store all settings in localStorage.
+- Create a reusable SettingsContext.
+- Make settings available throughout the application.
+- Ensure all preferences persist after refresh.
+- Follow the existing Voxora UI style.
+- Keep the code modular and easy to extend for future authentication.
+
+---
+
+Quality Checks
+
+Before finishing:
+
+- Verify the project builds successfully.
+- Ensure there are no TypeScript errors.
+- Ensure there are no console errors.
+- Commit with a descriptive commit message.
+- Push the latest commit to GitHub.
+
+This milestone establishes the foundation for future user accounts and cloud synchronization.

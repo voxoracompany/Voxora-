@@ -1,3 +1,5 @@
+import "./FeatureCard.css";
+
 type FeatureCardProps = {
   title: string;
   description: string;
@@ -5,20 +7,12 @@ type FeatureCardProps = {
   onClick: () => void;
 };
 
-const FeatureCard = ({
-  title,
-  description,
-  buttonText,
-  onClick,
-}: FeatureCardProps) => {
+const FeatureCard = ({ title, description, buttonText, onClick }: FeatureCardProps) => {
   return (
-    <div className="card">
-      <h3>{title}</h3>
-      <p>{description}</p>
-
-      <button className="card-button" onClick={onClick}>
-        {buttonText}
-      </button>
+    <div className="feature-card">
+      <h3 className="feature-card-title">{title}</h3>
+      <p className="feature-card-desc">{description}</p>
+      <button className="feature-card-btn" onClick={onClick}>{buttonText}</button>
     </div>
   );
 };

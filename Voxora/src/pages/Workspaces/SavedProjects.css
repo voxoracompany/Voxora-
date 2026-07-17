@@ -1,0 +1,158 @@
+.sp-container { padding: 30px; max-width: 860px; }
+
+.sp-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; }
+.sp-header h1 { font-size: 28px; margin: 0 0 4px; }
+.sp-subtitle   { color: #6b7280; font-size: 14px; margin: 0; }
+
+.sp-controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+
+.sp-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 6px 14px;
+  transition: border-color 0.2s;
+}
+.sp-search-wrap:focus-within { border-color: #6C63FF; }
+
+.sp-search {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  padding: 8px 0;
+  background: transparent;
+  color: #111827;
+}
+.sp-search::placeholder { color: #9ca3af; }
+
+.sp-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.sp-filter-btn {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1.5px solid #e5e7eb;
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.sp-filter-btn:hover  { border-color: #6C63FF; color: #6C63FF; }
+.sp-filter-btn.active { background: #6C63FF; color: #fff; border-color: #6C63FF; }
+
+.sp-list { display: flex; flex-direction: column; gap: 14px; }
+
+.sp-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s;
+}
+.sp-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.09); }
+.sp-card.pinned { border-color: #6C63FF; border-left: 4px solid #6C63FF; }
+
+.sp-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap; }
+
+.sp-card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+.sp-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #374151;
+}
+.sp-pinned { background: rgba(108,99,255,0.1); color: #6C63FF; }
+.sp-fav    { background: rgba(245,158,11,0.1); color: #d97706; }
+
+.sp-category {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.sp-actions { display: flex; gap: 4px; }
+
+.sp-icon-btn {
+  background: none;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+.sp-icon-btn:hover { background: #f3f4f6; }
+.sp-icon-btn.active-fav { background: rgba(245,158,11,0.1); border-color: #f59e0b; }
+.sp-icon-btn.active-pin { background: rgba(108,99,255,0.1); border-color: #6C63FF; }
+.sp-icon-btn.sp-delete:hover { background: #fee2e2; border-color: #dc2626; }
+
+.sp-card-title { font-size: 17px; font-weight: 700; color: #111827; margin: 0 0 6px; line-height: 1.3; }
+.sp-card-date  { font-size: 12px; color: #9ca3af; margin: 0 0 12px; }
+
+.sp-toggle-notes {
+  background: none;
+  border: none;
+  color: #6C63FF;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+.sp-toggle-notes:hover { text-decoration: underline; }
+
+.sp-notes-wrap { margin-top: 12px; }
+.sp-notes {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  color: #374151;
+  line-height: 1.5;
+}
+.sp-notes:focus { border-color: #6C63FF; }
+
+.sp-empty {
+  text-align: center;
+  padding: 80px 20px;
+  background: #fafafa;
+  border-radius: 16px;
+  border: 2px dashed #e5e7eb;
+}
+.sp-empty-icon { font-size: 52px; margin-bottom: 16px; }
+.sp-empty h3 { color: #374151; margin: 0 0 8px; font-size: 20px; }
+.sp-empty p  { color: #6b7280; max-width: 360px; margin: 0 auto 24px; font-size: 15px; }
+
+.ac-cta-btn {
+  background: #6C63FF;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background 0.2s;
+}
+.ac-cta-btn:hover { background: #5a52d5; }
