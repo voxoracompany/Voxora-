@@ -1,0 +1,37 @@
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  padding: 25px 20px;
+  background: #111827;
+  color: white;
+}
+
+
+.sidebar h2 {
+  margin-bottom: 35px;
+  font-size: 24px;
+}
+
+
+.sidebar p {
+  padding: 12px 15px;
+  margin: 8px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+
+.sidebar p:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+
+.sidebar p:first-of-type {
+  margin-top: 0;
+}
+
+.sidebar .active {
+  background: rgba(255,255,255,0.15);
+  font-weight: bold;
+}

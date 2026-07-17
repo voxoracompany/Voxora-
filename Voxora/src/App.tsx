@@ -1,3 +1,5 @@
+import Dashboard from "./pages/Dashboard/Dashboard";
+
 import "./App.css";
 
 function App() {
@@ -391,9 +393,12 @@ function App() {
     © 2026 Voxora. All rights reserved.
 
   </div>
-
-</footer>
-    </div>
+  
+  </footer>
+   
+   <Dashboard />
+   
+   </div>
   );
 }
 
