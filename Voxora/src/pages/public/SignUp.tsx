@@ -7,6 +7,7 @@ import "./public-pages.css";
 export default function SignUp() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [googleNote, setGoogleNote] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,16 +70,23 @@ export default function SignUp() {
           <div className="pub-auth-divider" style={{ marginTop: 20 }}>or</div>
 
           <button
+            type="button"
             style={{
               width: "100%", padding: "12px", border: "1.5px solid #e5e7eb", borderRadius: 12,
-              background: "#fff", fontSize: 14, fontWeight: 600, color: "#374151",
-              cursor: "pointer", marginTop: 12, display: "flex", alignItems: "center",
-              justifyContent: "center", gap: 8, fontFamily: "inherit",
+              background: "#f9fafb", fontSize: 14, fontWeight: 600, color: "#9ca3af",
+              cursor: "not-allowed", marginTop: 12, display: "flex", alignItems: "center",
+              justifyContent: "center", gap: 8, fontFamily: "inherit", opacity: 0.7,
             }}
-            onClick={() => navigate("/dashboard")}
+            onClick={() => setGoogleNote(true)}
           >
             <span>🌐</span> Sign up with Google
+            <span style={{ fontSize: 10, background: "#e5e7eb", color: "#6b7280", borderRadius: 6, padding: "2px 7px", marginLeft: 4, fontWeight: 700, letterSpacing: 0.5 }}>COMING SOON</span>
           </button>
+          {googleNote && (
+            <p style={{ fontSize: 12, color: "#6C63FF", textAlign: "center", marginTop: 8 }}>
+              Google sign-up is coming soon. Please create your account with email above.
+            </p>
+          )}
 
           <p style={{ fontSize: 12, color: "#9ca3af", textAlign: "center", marginTop: 16, lineHeight: 1.5 }}>
             By creating an account you agree to our{" "}

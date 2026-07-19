@@ -1,5 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import { ProjectProvider } from "./context/ProjectContext";
+import { ActivityProvider } from "./context/ActivityContext";
+import { ToastProvider } from "./context/ToastContext";
 
 // Public pages
 import LandingPage from "./pages/LandingPage";
@@ -74,8 +77,16 @@ export default function App() {
         <Route path="/solutions/businesses" element={<Businesses />} />
         <Route path="/solutions/developers" element={<Developers />} />
 
-        {/* App */}
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* App — wrapped with all required context providers */}
+        <Route path="/dashboard" element={
+          <ToastProvider>
+            <ActivityProvider>
+              <ProjectProvider>
+                <Dashboard />
+              </ProjectProvider>
+            </ActivityProvider>
+          </ToastProvider>
+        } />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
