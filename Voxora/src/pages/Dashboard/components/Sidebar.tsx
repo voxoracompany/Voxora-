@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -41,9 +42,11 @@ const BOTTOM_NAV = [
 ];
 
 export default function Sidebar({ workspace, setWorkspace }: SidebarProps) {
+  const navigate = useNavigate();
+
   return (
     <aside className="sidebar">
-      <div className="sidebar-brand">
+      <div className="sidebar-brand" style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
         <span className="sidebar-logo">🚀</span>
         <span className="sidebar-title">VOXORA</span>
       </div>
@@ -116,6 +119,14 @@ export default function Sidebar({ workspace, setWorkspace }: SidebarProps) {
             <span className="sidebar-item-label">{item.label}</span>
           </button>
         ))}
+        <button
+          className="sidebar-item"
+          onClick={() => navigate("/")}
+          style={{ marginTop: 4 }}
+        >
+          <span className="sidebar-item-icon">🌐</span>
+          <span className="sidebar-item-label">Home Page</span>
+        </button>
       </nav>
     </aside>
   );

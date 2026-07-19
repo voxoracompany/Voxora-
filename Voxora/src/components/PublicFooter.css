@@ -1,0 +1,120 @@
+/* ============================================================
+   VOXORA — Public Footer Styles
+   ============================================================ */
+
+.pub-footer {
+  background: #0f172a;
+  padding: 0;
+  margin-top: auto;
+}
+
+.pub-footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 60px 60px 40px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pub-footer-brand {
+  max-width: 260px;
+}
+.pub-footer-brand h2 {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 10px;
+}
+.pub-footer-brand p {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+.pub-footer-launch {
+  background: #6C63FF;
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  text-decoration: none;
+  display: inline-block;
+  font-family: inherit;
+}
+.pub-footer-launch:hover {
+  background: #5850e8;
+  transform: translateY(-1px);
+  text-decoration: none;
+  color: #fff;
+}
+
+.pub-footer-links {
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.pub-footer-col h3 {
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+
+.pub-footer-col a {
+  display: block;
+  font-size: 14px;
+  color: #64748b;
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color 0.2s;
+}
+.pub-footer-col a:hover {
+  color: #e2e8f0;
+  text-decoration: none;
+}
+
+.pub-footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  border-top: 1px solid #1e293b;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pub-footer-bottom span {
+  font-size: 13px;
+  color: #475569;
+}
+
+.pub-footer-bottom-links {
+  display: flex;
+  gap: 20px;
+}
+.pub-footer-bottom-links a {
+  font-size: 13px;
+  color: #475569;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.pub-footer-bottom-links a:hover { color: #94a3b8; }
+
+@media (max-width: 768px) {
+  .pub-footer-inner { padding: 40px 24px 28px; }
+  .pub-footer-bottom { padding: 16px 24px; }
+  .pub-footer-links { gap: 28px; }
+}
