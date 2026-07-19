@@ -1,37 +1,21 @@
 # Voxora
 
-An AI-native platform for creating, orchestrating, and scaling intelligent agent, automation, and business applications.
+An AI-powered platform landing page and workspace built with React, TypeScript, and Vite.
 
 ## Stack
-
 - **Framework:** React 19 + TypeScript
-- **Build tool:** Vite 8
-- **Styling:** Plain CSS (component-scoped files)
-- **State / persistence:** React Context + localStorage (no backend)
-- **Package manager:** npm
-
-## Project structure
-
-```
-Voxora/          ← all app source lives here
-  src/
-    App.tsx               Landing page + root
-    pages/Dashboard/      Main dashboard shell
-    pages/Workspaces/     Feature pages (AI, Analytics, Activity, Search, Export, …)
-    context/              ProjectContext, ActivityContext, ToastContext
-    components/           Shared UI (ToastContainer)
-```
+- **Build tool:** Vite (serves on port 5000)
+- **Styling:** Plain CSS per component
 
 ## How to run
+The workflow `Start application` runs `cd Voxora && npm run dev`, which starts the Vite dev server on port 5000.
 
-```
-cd Voxora && npm run dev
-```
+## Project structure
+- `Voxora/src/pages/` — Landing page and all workspace pages (Dashboard, AI Assistant, Analytics, etc.)
+- `Voxora/src/components/` — Shared UI components (ToastContainer, etc.)
+- `Voxora/src/context/` — React context providers (Activity, Project, Toast)
 
-Dev server runs on port **5173**.
+## Navigation
+The app uses `useState`-based routing (no router library). All workspace pages are lazy-loaded. Dark mode is toggled via `data-theme` on `<html>`.
 
 ## User preferences
-
-- Keep existing UI and design language intact when adding features
-- Do not remove existing functionality
-- Preferred feature roadmap: V2.1 (Analytics Dashboard, Smart Search, Export Center, Activity Center, Supabase, Auth, Responsive UI)
