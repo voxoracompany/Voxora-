@@ -4,6 +4,23 @@
   background: #f8fafc;
 }
 
+/* Workspace lazy-load spinner */
+.workspace-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+}
+.workspace-loader-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e5e7eb;
+  border-top-color: var(--accent, #6C63FF);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
 .main-content {
   flex: 1;
   padding: 28px 32px;

@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-export type ActivityCategory = "Projects" | "AI" | "Research" | "Roadmaps" | "Favorites";
+export type ActivityCategory = "Projects" | "AI" | "Research" | "Roadmaps" | "Favorites" | "General";
 
 export type Activity = {
   id: string;
@@ -8,9 +8,9 @@ export type Activity = {
   title: string;
   description: string;
   timestamp: string;
-  projectId?: string;
-  category: ActivityCategory;
+  category: string;
   icon: string;
+  projectId?: string;
 };
 
 type ActivityContextType = {
@@ -19,46 +19,62 @@ type ActivityContextType = {
   clearActivities: () => void;
 };
 
+const ActivityContext = createContext<ActivityContextType | undefined>(undefined);
+
 const STORAGE_KEY = "voxora-activities";
 const MAX_ACTIVITIES = 500;
 
-function loadActivities(): Activity[] {
+function safeLoadActivities(): Activity[] {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((a): a is Activity =>
+        a &&
+        typeof a === "object" &&
+        typeof a.id === "string" &&
+        typeof a.title === "string" &&
+        typeof a.timestamp === "string"
+      )
+      .slice(0, MAX_ACTIVITIES);
   } catch {
+    console.warn("[Voxora] Failed to parse activities from localStorage. Resetting.");
+    localStorage.removeItem(STORAGE_KEY);
     return [];
   }
 }
 
-function saveActivities(activities: Activity[]) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(activities));
-  } catch {}
-}
-
-const ActivityContext = createContext<ActivityContextType | undefined>(undefined);
-
 export const ActivityProvider = ({ children }: { children: React.ReactNode }) => {
-  const [activities, setActivities] = useState<Activity[]>(loadActivities);
+  const [activities, setActivities] = useState<Activity[]>(safeLoadActivities);
 
-  const addActivity = useCallback((activity: Omit<Activity, "id" | "timestamp">) => {
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(activities.slice(0, MAX_ACTIVITIES)));
+    } catch (e) {
+      console.warn("[Voxora] Could not save activities:", e);
+    }
+  }, [activities]);
+
+  const addActivity = (activity: Omit<Activity, "id" | "timestamp">) => {
     const newActivity: Activity = {
-      ...activity,
-      id: `act_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      id: `act_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
       timestamp: new Date().toISOString(),
+      title: String(activity.title || "").slice(0, 200),
+      description: String(activity.description || "").slice(0, 500),
+      type: String(activity.type || "general").slice(0, 50),
+      category: String(activity.category || "General").slice(0, 50),
+      icon: String(activity.icon || "📌").slice(0, 10),
+      projectId: activity.projectId ? String(activity.projectId).slice(0, 100) : undefined,
     };
-    setActivities((prev) => {
-      const updated = [newActivity, ...prev].slice(0, MAX_ACTIVITIES);
-      saveActivities(updated);
-      return updated;
-    });
-  }, []);
+    setActivities((prev) => [newActivity, ...prev].slice(0, MAX_ACTIVITIES));
+  };
 
-  const clearActivities = useCallback(() => {
+  const clearActivities = () => {
     setActivities([]);
     localStorage.removeItem(STORAGE_KEY);
-  }, []);
+  };
 
   return (
     <ActivityContext.Provider value={{ activities, addActivity, clearActivities }}>

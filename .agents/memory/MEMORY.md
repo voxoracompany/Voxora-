@@ -1,0 +1,1 @@
+- [Voxora architecture](voxora-arch.md) — state-based routing (useState, no router), all workspace pages lazy-loaded, dark mode via `data-theme` on `<html>`.

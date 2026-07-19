@@ -1,0 +1,309 @@
+.help-container {
+  padding: 30px;
+  max-width: 860px;
+}
+
+.help-header { margin-bottom: 8px; }
+.help-header h1 { font-size: 28px; margin: 16px 0 4px; }
+
+.help-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 28px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 0;
+}
+
+.help-tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  padding: 10px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  border-radius: 6px 6px 0 0;
+}
+
+.help-tab-btn:hover { color: #374151; background: #f9fafb; }
+.help-tab-btn.active {
+  color: #6C63FF;
+  border-bottom-color: #6C63FF;
+  background: rgba(108,99,255,0.05);
+}
+
+.help-content { animation: fadeIn 0.2s ease; }
+
+/* Section cards */
+.help-section-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.help-section-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: #111827;
+}
+
+.help-section-card p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Getting Started steps */
+.help-steps { display: flex; flex-direction: column; gap: 12px; }
+
+.help-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.help-step-num {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #6C63FF, #9C8DFF);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.help-step-body h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+.help-step-body p {
+  font-size: 13.5px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Nav overview grid */
+.help-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.help-nav-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px;
+  border: 1px solid #f1f5f9;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.help-nav-icon { font-size: 20px; flex-shrink: 0; }
+.help-nav-item strong { display: block; font-size: 13px; font-weight: 700; color: #111827; margin-bottom: 2px; }
+.help-nav-item p { font-size: 12px; color: #6b7280; margin: 0; line-height: 1.4; }
+
+/* FAQ */
+.faq-list { display: flex; flex-direction: column; gap: 8px; }
+
+.faq-item {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  text-align: left;
+  gap: 12px;
+}
+
+.faq-question:hover { background: #fafafa; }
+.faq-chevron { font-size: 11px; color: #6b7280; flex-shrink: 0; }
+
+.faq-answer {
+  padding: 12px 20px 16px;
+  font-size: 13.5px;
+  color: #6b7280;
+  line-height: 1.6;
+  border-top: 1px solid #f1f5f9;
+  background: #fafafa;
+}
+
+/* Keyboard shortcuts */
+.shortcuts-list { display: flex; flex-direction: column; gap: 8px; }
+
+.shortcut-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.shortcut-desc { font-size: 14px; color: #374151; font-weight: 500; }
+
+.shortcut-keys { display: flex; gap: 4px; align-items: center; }
+
+.shortcut-key {
+  display: inline-block;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  font-family: monospace;
+  box-shadow: 0 1px 0 #d1d5db;
+}
+
+/* Contact */
+.help-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.help-contact-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 22px 18px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.help-contact-icon { font-size: 28px; margin-bottom: 10px; }
+
+.help-contact-card h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 6px;
+}
+
+.help-contact-email {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6C63FF;
+  margin: 0 0 6px;
+}
+
+.help-contact-card p {
+  font-size: 12.5px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* About */
+.help-about-hero {
+  text-align: center;
+  padding: 36px 24px;
+}
+
+.help-about-logo {
+  font-size: 52px;
+  margin-bottom: 10px;
+}
+
+.help-about-hero h2 {
+  font-size: 28px;
+  font-weight: 900;
+  color: #111827;
+  margin: 0 0 6px;
+}
+
+.help-about-tagline {
+  font-size: 15px;
+  color: #6b7280;
+  margin: 0 0 16px;
+}
+
+.help-about-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+
+.help-badge {
+  background: rgba(108,99,255,0.1);
+  color: #6C63FF;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.help-roadmap { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+
+.help-roadmap-item {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.help-roadmap-item strong {
+  min-width: 80px;
+  color: #111827;
+}
+
+/* Legal */
+.help-legal-list {
+  margin: 12px 0 0 16px;
+  padding: 0;
+  list-style: disc;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.help-legal-list li {
+  font-size: 13.5px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .help-container { padding: 16px; }
+  .help-tabs { gap: 4px; }
+  .help-tab-btn { padding: 8px 10px; font-size: 12px; }
+  .help-contact-grid { grid-template-columns: 1fr 1fr; }
+  .shortcut-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+}

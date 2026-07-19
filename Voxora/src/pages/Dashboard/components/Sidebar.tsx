@@ -1,52 +1,97 @@
 import "./Sidebar.css";
 
 interface SidebarProps {
-  setWorkspace: (workspace: string) => void;
   workspace: string;
+  setWorkspace: (workspace: string) => void;
 }
 
-type NavItem = {
-  label: string;
-  icon: string;
-  id: string;
-};
-
-const NAV_ITEMS: NavItem[] = [
-  { icon: "🏠", label: "Dashboard",          id: "dashboard" },
-  { icon: "📁", label: "Saved Projects",     id: "saved" },
-  { icon: "✍️", label: "AI Content",         id: "content" },
-  { icon: "💡", label: "App Ideas",          id: "apps" },
-  { icon: "🚀", label: "Startup Ideas",      id: "startup" },
-  { icon: "👤", label: "Customer Persona",   id: "persona" },
-  { icon: "🔍", label: "Customer Research",  id: "research" },
-  { icon: "📊", label: "Market Research",    id: "market" },
-  { icon: "📈", label: "Product Validation", id: "validation" },
-  { icon: "🗺️", label: "Product Roadmap",   id: "productRoadmap" },
-  { icon: "📊", label: "Business Model",     id: "business" },
-  { icon: "📋", label: "SWOT Analysis",      id: "swot" },
-  { icon: "🏆", label: "Competitor Analysis",id: "competitor" },
-  { icon: "🤖", label: "AI Assistant",       id: "assistant" },
+const MAIN_NAV = [
+  { id: "dashboard",     icon: "🏠", label: "Dashboard" },
+  { id: "saved",         icon: "📁", label: "Saved Projects" },
+  { id: "activity",      icon: "🕒", label: "Activity Center" },
+  { id: "analytics",     icon: "📊", label: "Analytics" },
+  { id: "search",        icon: "🔍", label: "Smart Search" },
+  { id: "export",        icon: "📤", label: "Export Center" },
 ];
 
-const BOTTOM_ITEMS: NavItem[] = [
-  { icon: "🔍", label: "Smart Search",       id: "search" },
-  { icon: "📊", label: "Analytics",          id: "analytics" },
-  { icon: "🔔", label: "Activity Center",    id: "activity" },
-  { icon: "📤", label: "Export Center",      id: "export" },
-  { icon: "⚙️", label: "Settings",          id: "settings" },
+const AI_TOOLS = [
+  { id: "assistant",      icon: "🤖", label: "AI Assistant" },
+  { id: "content",        icon: "✍️", label: "AI Content" },
+  { id: "apps",           icon: "💡", label: "App Ideas" },
+  { id: "startup",        icon: "🚀", label: "Startup Ideas" },
 ];
 
-export default function Sidebar({ setWorkspace, workspace }: SidebarProps) {
+const RESEARCH_TOOLS = [
+  { id: "research",       icon: "🔬", label: "Customer Research" },
+  { id: "market",         icon: "📈", label: "Market Research" },
+  { id: "persona",        icon: "👤", label: "Customer Persona" },
+  { id: "validation",     icon: "✅", label: "Product Validation" },
+  { id: "competitor",     icon: "🏆", label: "Competitor Analysis" },
+  { id: "swot",           icon: "📋", label: "SWOT Analysis" },
+];
+
+const STRATEGY_TOOLS = [
+  { id: "business",       icon: "🏢", label: "Business Model" },
+  { id: "productRoadmap", icon: "🗺️", label: "Product Roadmap" },
+];
+
+const BOTTOM_NAV = [
+  { id: "help",           icon: "❓", label: "Help Center" },
+  { id: "settings",       icon: "⚙️", label: "Settings" },
+];
+
+export default function Sidebar({ workspace, setWorkspace }: SidebarProps) {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
         <span className="sidebar-logo">🚀</span>
-        <span className="sidebar-title">Voxora AI</span>
+        <span className="sidebar-title">VOXORA</span>
       </div>
 
-      <div className="sidebar-section-label">Workspaces</div>
       <nav className="sidebar-nav">
-        {NAV_ITEMS.map((item) => (
+        {MAIN_NAV.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">AI Tools</div>
+      <nav className="sidebar-nav">
+        {AI_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">Research</div>
+      <nav className="sidebar-nav">
+        {RESEARCH_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">Strategy</div>
+      <nav className="sidebar-nav">
+        {STRATEGY_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
@@ -60,9 +105,8 @@ export default function Sidebar({ setWorkspace, workspace }: SidebarProps) {
 
       <div className="sidebar-divider" />
 
-      <div className="sidebar-section-label">Tools</div>
       <nav className="sidebar-nav">
-        {BOTTOM_ITEMS.map((item) => (
+        {BOTTOM_NAV.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
