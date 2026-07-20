@@ -1,2 +1,2 @@
 - [Voxora architecture](voxora-arch.md) — state-based routing (useState, no router), all workspace pages lazy-loaded, dark mode via `data-theme` on `<html>`.
-- [V4 AI Engine build state](v4-build-state.md) — V4.1–V4.6 all complete; V4.5 Growth Studio (11 tools) and V4.6 Analytics Studio (9 modules) built and committed; V4.7 Team Collaboration is next.
+- [V4 AI Engine build state](v4-build-state.md) — V4.1–V4.9 all complete; V4.9 added AuthContext (localStorage demo mode, backend-swappable), ProtectedRoute, 3 workspace pages (UserProfile, AccountSettings, SecuritySettings), 3 public pages (ForgotPassword, ResetPassword, EmailVerification).
