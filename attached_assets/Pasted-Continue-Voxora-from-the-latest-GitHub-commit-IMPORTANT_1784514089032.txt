@@ -1,0 +1,159 @@
+Continue Voxora from the latest GitHub commit.
+
+IMPORTANT
+
+Do NOT rebuild V4.1–V4.5.
+
+Preserve all existing functionality.
+
+Reuse existing components.
+
+Maintain the premium UI and responsive design.
+
+==================================================
+V4.6 — Advanced Analytics Studio
+==================================================
+
+Create a complete Analytics Studio.
+
+Features:
+
+1. Executive Dashboard
+- Business Health Score
+- Overall Performance Score
+- AI Activity
+- Growth Score
+- Revenue Summary
+- Financial Summary
+- Marketing Summary
+- Investor Readiness
+
+2. Revenue Analytics
+- Revenue Trends
+- Monthly Revenue
+- Annual Revenue
+- Forecast
+- Revenue Growth
+
+3. Customer Analytics
+- Customer Growth
+- Retention
+- Churn
+- Acquisition
+- Lifetime Value
+
+4. Marketing Analytics
+- Campaign Performance
+- SEO Performance
+- Social Media Performance
+- Email Performance
+- Conversion Rates
+
+5. Financial Analytics
+- Profit
+- Expenses
+- Cash Flow
+- Burn Rate
+- Break-even Progress
+
+6. AI Analytics
+- AI Requests
+- Workspace Usage
+- Prompt Usage
+- Estimated Tokens
+- Average Response Time
+
+7. Startup Analytics
+- Startup Readiness
+- Validation Score
+- Business Model Score
+- Competitor Score
+- Market Opportunity Score
+
+8. Trend Analysis
+- Weekly Trends
+- Monthly Trends
+- Quarterly Trends
+- Yearly Trends
+
+9. Reports
+Generate:
+
+- Weekly Report
+- Monthly Report
+- Quarterly Report
+- Annual Report
+
+10. Charts
+
+Create responsive charts for:
+
+- Line
+- Bar
+- Pie
+- Area
+
+==================================================
+Dashboard Improvements
+==================================================
+
+Add:
+
+- Analytics Summary
+- Weekly Insights
+- KPI Cards
+- Revenue Widget
+- Growth Widget
+- AI Usage Widget
+
+==================================================
+Export
+==================================================
+
+Allow Analytics exports to:
+
+- PDF
+- CSV
+- JSON
+- Markdown
+- Text
+
+==================================================
+Integration
+==================================================
+
+Integrate Analytics Studio with:
+
+- AI Engine
+- Marketing Studio
+- Financial Studio
+- Investor Studio
+- Growth Studio
+- Dashboard
+- Activity Center
+- Saved Projects
+- Export Center
+
+==================================================
+Validation
+==================================================
+
+Run production build.
+
+Fix all TypeScript errors.
+
+Fix all runtime errors.
+
+Verify:
+
+- No broken routes.
+- No blank pages.
+- No dead buttons.
+
+Commit:
+
+V4.6 Advanced Analytics Studio
+
+Push to GitHub.
+
+If completed before the session ends, automatically continue with V4.7 — Team Collaboration.

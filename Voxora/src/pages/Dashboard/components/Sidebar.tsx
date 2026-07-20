@@ -68,6 +68,34 @@ const MARKETING_TOOLS = [
   { id: "brandVoice",        icon: "🎙️", label: "Brand Voice" },
 ];
 
+const GROWTH_TOOLS = [
+  { id: "growthHub",              icon: "📈", label: "Growth Hub" },
+  { id: "growthPlanner",          icon: "🌱", label: "Growth Planner" },
+  { id: "kpiDashboard",           icon: "📊", label: "KPI Dashboard" },
+  { id: "goalTracker",            icon: "🎯", label: "Goal Tracker" },
+  { id: "okrManager",             icon: "🏆", label: "OKR Manager" },
+  { id: "growthOpportunity",      icon: "🔭", label: "Growth Opportunities" },
+  { id: "growthExperiments",      icon: "🧪", label: "Growth Experiments" },
+  { id: "abTestPlanner",          icon: "⚖️", label: "A/B Test Planner" },
+  { id: "businessMilestones",     icon: "🗓️", label: "Milestones" },
+  { id: "weeklyReview",           icon: "📋", label: "Weekly Review" },
+  { id: "monthlyGrowthReport",    icon: "📈", label: "Monthly Report" },
+  { id: "aiGrowthRecommendations",icon: "🤖", label: "AI Recommendations" },
+];
+
+const ANALYTICS_TOOLS = [
+  { id: "analyticsHub",        icon: "📊", label: "Analytics Hub" },
+  { id: "executiveDashboard",  icon: "🏢", label: "Executive Dashboard" },
+  { id: "revenueAnalytics",    icon: "💰", label: "Revenue Analytics" },
+  { id: "customerAnalytics",   icon: "👥", label: "Customer Analytics" },
+  { id: "marketingAnalytics",  icon: "📣", label: "Marketing Analytics" },
+  { id: "financialAnalytics",  icon: "📊", label: "Financial Analytics" },
+  { id: "aiAnalytics",         icon: "🤖", label: "AI Analytics" },
+  { id: "startupAnalytics",    icon: "🚀", label: "Startup Analytics" },
+  { id: "trendAnalysis",       icon: "📈", label: "Trend Analysis" },
+  { id: "analyticsReports",    icon: "📄", label: "Reports" },
+];
+
 const BOTTOM_NAV = [
   { id: "help",           icon: "❓", label: "Help Center" },
   { id: "settings",       icon: "⚙️", label: "Settings" },
@@ -169,6 +197,34 @@ export default function Sidebar({ workspace, setWorkspace }: SidebarProps) {
       <div className="sidebar-section-label">Marketing Studio</div>
       <nav className="sidebar-nav">
         {MARKETING_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">Growth Studio</div>
+      <nav className="sidebar-nav">
+        {GROWTH_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">Analytics Studio</div>
+      <nav className="sidebar-nav">
+        {ANALYTICS_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}

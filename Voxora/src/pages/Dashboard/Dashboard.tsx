@@ -30,6 +30,30 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V4.6 Advanced Analytics Studio ───────────────────────────────────────────
+const AnalyticsHub         = lazy(() => import("../Workspaces/AnalyticsHub"));
+const ExecutiveDashboard   = lazy(() => import("../Workspaces/ExecutiveDashboard"));
+const RevenueAnalytics     = lazy(() => import("../Workspaces/RevenueAnalytics"));
+const CustomerAnalytics    = lazy(() => import("../Workspaces/CustomerAnalytics"));
+const MarketingAnalytics   = lazy(() => import("../Workspaces/MarketingAnalytics"));
+const FinancialAnalytics   = lazy(() => import("../Workspaces/FinancialAnalytics"));
+const AIAnalytics          = lazy(() => import("../Workspaces/AIAnalytics"));
+const StartupAnalytics     = lazy(() => import("../Workspaces/StartupAnalytics"));
+const TrendAnalysis        = lazy(() => import("../Workspaces/TrendAnalysis"));
+const AnalyticsReports     = lazy(() => import("../Workspaces/AnalyticsReports"));
+// ── V4.5 Growth Studio ────────────────────────────────────────────────────────
+const GrowthHub                = lazy(() => import("../Workspaces/GrowthHub"));
+const GrowthPlanner            = lazy(() => import("../Workspaces/GrowthPlanner"));
+const KPIDashboard             = lazy(() => import("../Workspaces/KPIDashboard"));
+const GoalTracker              = lazy(() => import("../Workspaces/GoalTracker"));
+const OKRManager               = lazy(() => import("../Workspaces/OKRManager"));
+const GrowthOpportunity        = lazy(() => import("../Workspaces/GrowthOpportunity"));
+const GrowthExperiments        = lazy(() => import("../Workspaces/GrowthExperiments"));
+const ABTestPlanner            = lazy(() => import("../Workspaces/ABTestPlanner"));
+const BusinessMilestones       = lazy(() => import("../Workspaces/BusinessMilestones"));
+const WeeklyReview             = lazy(() => import("../Workspaces/WeeklyReview"));
+const MonthlyGrowthReport      = lazy(() => import("../Workspaces/MonthlyGrowthReport"));
+const AIGrowthRecommendations  = lazy(() => import("../Workspaces/AIGrowthRecommendations"));
 // ── V4.4 Investor Studio ──────────────────────────────────────────────────────
 const InvestorHub          = lazy(() => import("../Workspaces/InvestorHub"));
 const FundraisingStrategy  = lazy(() => import("../Workspaces/FundraisingStrategy"));
@@ -239,6 +263,87 @@ const Dashboard = () => {
                 )}
               </div>
 
+              {/* ── Growth Studio Widgets ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  📈 Growth Studio
+                </h2>
+                <div className="stats">
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("kpiDashboard")}>
+                    <div className="stat-icon">📊</div>
+                    <p className="stat-value">{Math.min(100, Math.round((Math.min(projects.length, 20) / 20) * 100))}%</p>
+                    <h3 className="stat-label">Growth Score</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("kpiDashboard")}>
+                    <div className="stat-icon">📌</div>
+                    <p className="stat-value">9</p>
+                    <h3 className="stat-label">KPI Metrics</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("goalTracker")}>
+                    <div className="stat-icon">🎯</div>
+                    <p className="stat-value">{projects.filter(p => p.category === "Goal").length}</p>
+                    <h3 className="stat-label">Active Goals</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("businessMilestones")}>
+                    <div className="stat-icon">🗓️</div>
+                    <p className="stat-value">{projects.filter(p => p.category === "Business Milestone").length}</p>
+                    <h3 className="stat-label">Milestones</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("monthlyGrowthReport")}>
+                    <div className="stat-icon">📈</div>
+                    <p className="stat-value">{projects.filter(p => ["Monthly Report","Weekly Review","Growth Plan"].includes(p.category)).length}</p>
+                    <h3 className="stat-label">Growth Reports</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("growthHub")}>
+                    <div className="stat-icon">🌱</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Open</p>
+                    <h3 className="stat-label">Growth Studio</h3>
+                  </div>
+                </div>
+              </div>
+
+              {/* ── Analytics Studio Widgets ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  📊 Analytics Studio
+                </h2>
+                <div className="stats">
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("executiveDashboard")}>
+                    <div className="stat-icon">🏢</div>
+                    <p className="stat-value">{Math.min(100, Math.round((Math.min(projects.length, 20) / 20) * 30 + (Math.min(activities.length, 50) / 50) * 30 + (Math.min(usage.todayCount, 10) / 10) * 25 + (favorites.length > 0 ? 15 : 0)))}%</p>
+                    <h3 className="stat-label">Health Score</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("revenueAnalytics")}>
+                    <div className="stat-icon">💰</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Track</p>
+                    <h3 className="stat-label">Revenue</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("trendAnalysis")}>
+                    <div className="stat-icon">📈</div>
+                    <p className="stat-value">{projects.filter(p => { const d = new Date(); d.setDate(d.getDate() - 7); return new Date(p.createdAt) >= d; }).length}</p>
+                    <h3 className="stat-label">Weekly Insights</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("aiAnalytics")}>
+                    <div className="stat-icon">🤖</div>
+                    <p className="stat-value">{usage.todayCount}</p>
+                    <h3 className="stat-label">AI Usage</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("startupAnalytics")}>
+                    <div className="stat-icon">🚀</div>
+                    <p className="stat-value">{Math.min(100, Math.round(
+                      (projects.filter(p => ["Customer Research","Product Validation","Business Model Canvas","Market Research"].includes(p.category)).length / 4) * 50 +
+                      (projects.filter(p => ["Pitch Deck","Executive Summary","Fundraising Strategy"].includes(p.category)).length / 3) * 50
+                    ))}%</p>
+                    <h3 className="stat-label">Startup Score</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("analyticsHub")}>
+                    <div className="stat-icon">📊</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Open</p>
+                    <h3 className="stat-label">Analytics Studio</h3>
+                  </div>
+                </div>
+              </div>
+
               {/* Quick Actions */}
               <div className="quick-actions">
                 <h2>⚡ Quick Actions</h2>
@@ -337,6 +442,32 @@ const Dashboard = () => {
           {workspace === "export"         && <ExportCenter       setWorkspace={setWorkspace} />}
           {workspace === "help"           && <HelpCenter         setWorkspace={setWorkspace} />}
           {workspace === "admin"          && <DevAdmin           setWorkspace={setWorkspace} />}
+
+          {/* V4.6 Advanced Analytics Studio */}
+          {workspace === "analyticsHub"        && <AnalyticsHub        setWorkspace={setWorkspace} />}
+          {workspace === "executiveDashboard"  && <ExecutiveDashboard  setWorkspace={setWorkspace} />}
+          {workspace === "revenueAnalytics"    && <RevenueAnalytics    setWorkspace={setWorkspace} />}
+          {workspace === "customerAnalytics"   && <CustomerAnalytics   setWorkspace={setWorkspace} />}
+          {workspace === "marketingAnalytics"  && <MarketingAnalytics  setWorkspace={setWorkspace} />}
+          {workspace === "financialAnalytics"  && <FinancialAnalytics  setWorkspace={setWorkspace} />}
+          {workspace === "aiAnalytics"         && <AIAnalytics         setWorkspace={setWorkspace} />}
+          {workspace === "startupAnalytics"    && <StartupAnalytics    setWorkspace={setWorkspace} />}
+          {workspace === "trendAnalysis"       && <TrendAnalysis       setWorkspace={setWorkspace} />}
+          {workspace === "analyticsReports"    && <AnalyticsReports    setWorkspace={setWorkspace} />}
+
+          {/* V4.5 Growth Studio */}
+          {workspace === "growthHub"               && <GrowthHub               setWorkspace={setWorkspace} />}
+          {workspace === "growthPlanner"           && <GrowthPlanner           setWorkspace={setWorkspace} />}
+          {workspace === "kpiDashboard"            && <KPIDashboard            setWorkspace={setWorkspace} />}
+          {workspace === "goalTracker"             && <GoalTracker             setWorkspace={setWorkspace} />}
+          {workspace === "okrManager"              && <OKRManager              setWorkspace={setWorkspace} />}
+          {workspace === "growthOpportunity"       && <GrowthOpportunity       setWorkspace={setWorkspace} />}
+          {workspace === "growthExperiments"       && <GrowthExperiments       setWorkspace={setWorkspace} />}
+          {workspace === "abTestPlanner"           && <ABTestPlanner           setWorkspace={setWorkspace} />}
+          {workspace === "businessMilestones"      && <BusinessMilestones      setWorkspace={setWorkspace} />}
+          {workspace === "weeklyReview"            && <WeeklyReview            setWorkspace={setWorkspace} />}
+          {workspace === "monthlyGrowthReport"     && <MonthlyGrowthReport     setWorkspace={setWorkspace} />}
+          {workspace === "aiGrowthRecommendations" && <AIGrowthRecommendations setWorkspace={setWorkspace} />}
 
           {/* V4.4 Investor Studio */}
           {workspace === "investorHub"         && <InvestorHub         setWorkspace={setWorkspace} />}
