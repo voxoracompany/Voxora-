@@ -30,6 +30,18 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V4.8 Integrations Studio ─────────────────────────────────────────────────
+const IntegrationsHub      = lazy(() => import("../Workspaces/IntegrationsHub"));
+const IntOpenAI            = lazy(() => import("../Workspaces/IntOpenAI"));
+const IntGemini            = lazy(() => import("../Workspaces/IntGemini"));
+const IntAnthropic         = lazy(() => import("../Workspaces/IntAnthropic"));
+const IntGoogleDrive       = lazy(() => import("../Workspaces/IntGoogleDrive"));
+const IntDropbox           = lazy(() => import("../Workspaces/IntDropbox"));
+const IntNotion            = lazy(() => import("../Workspaces/IntNotion"));
+const IntSlack             = lazy(() => import("../Workspaces/IntSlack"));
+const IntZapier            = lazy(() => import("../Workspaces/IntZapier"));
+const IntWebhooks          = lazy(() => import("../Workspaces/IntWebhooks"));
+const IntegrationSettings  = lazy(() => import("../Workspaces/IntegrationSettings"));
 // ── V4.7 Team Collaboration ───────────────────────────────────────────────────
 const TeamHub             = lazy(() => import("../Workspaces/TeamHub"));
 const TeamMembers         = lazy(() => import("../Workspaces/TeamMembers"));
@@ -352,6 +364,45 @@ const Dashboard = () => {
                 </div>
               </div>
 
+              {/* ── Integrations Studio Widgets ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  🔌 Integrations Studio
+                </h2>
+                <div className="stats">
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("integrationsHub")}>
+                    <div className="stat-icon">🔌</div>
+                    <p className="stat-value">9</p>
+                    <h3 className="stat-label">Connected Apps</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("intOpenAI")}>
+                    <div className="stat-icon">🧠</div>
+                    <p className="stat-value">3</p>
+                    <h3 className="stat-label">AI Providers</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("intSettings")}>
+                    <div className="stat-icon">✅</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Active</p>
+                    <h3 className="stat-label">Provider Status</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("intWebhooks")}>
+                    <div className="stat-icon">🔗</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Ready</p>
+                    <h3 className="stat-label">Sync Activity</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("intSettings")}>
+                    <div className="stat-icon">📊</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>OK</p>
+                    <h3 className="stat-label">API Status</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("integrationsHub")}>
+                    <div className="stat-icon">⚡</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Open</p>
+                    <h3 className="stat-label">Integrations</h3>
+                  </div>
+                </div>
+              </div>
+
               {/* ── Analytics Studio Widgets ── */}
               <div style={{ margin: "28px 0 4px" }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
@@ -492,6 +543,19 @@ const Dashboard = () => {
           {workspace === "export"         && <ExportCenter       setWorkspace={setWorkspace} />}
           {workspace === "help"           && <HelpCenter         setWorkspace={setWorkspace} />}
           {workspace === "admin"          && <DevAdmin           setWorkspace={setWorkspace} />}
+
+          {/* V4.8 Integrations Studio */}
+          {workspace === "integrationsHub" && <IntegrationsHub     setWorkspace={setWorkspace} />}
+          {workspace === "intOpenAI"       && <IntOpenAI           setWorkspace={setWorkspace} />}
+          {workspace === "intGemini"       && <IntGemini           setWorkspace={setWorkspace} />}
+          {workspace === "intAnthropic"    && <IntAnthropic        setWorkspace={setWorkspace} />}
+          {workspace === "intGoogleDrive"  && <IntGoogleDrive      setWorkspace={setWorkspace} />}
+          {workspace === "intDropbox"      && <IntDropbox          setWorkspace={setWorkspace} />}
+          {workspace === "intNotion"       && <IntNotion           setWorkspace={setWorkspace} />}
+          {workspace === "intSlack"        && <IntSlack            setWorkspace={setWorkspace} />}
+          {workspace === "intZapier"       && <IntZapier           setWorkspace={setWorkspace} />}
+          {workspace === "intWebhooks"     && <IntWebhooks         setWorkspace={setWorkspace} />}
+          {workspace === "intSettings"     && <IntegrationSettings setWorkspace={setWorkspace} />}
 
           {/* V4.7 Team Collaboration */}
           {workspace === "teamHub"            && <TeamHub            setWorkspace={setWorkspace} />}

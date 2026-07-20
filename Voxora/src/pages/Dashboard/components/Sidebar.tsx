@@ -96,6 +96,20 @@ const TEAM_TOOLS = [
   { id: "teamRetrospective",  icon: "🔁", label: "Retrospective" },
 ];
 
+const INTEGRATIONS_TOOLS = [
+  { id: "integrationsHub",  icon: "🔌", label: "Integrations Hub" },
+  { id: "intOpenAI",        icon: "🧠", label: "OpenAI" },
+  { id: "intGemini",        icon: "♊", label: "Google Gemini" },
+  { id: "intAnthropic",     icon: "🤖", label: "Anthropic Claude" },
+  { id: "intGoogleDrive",   icon: "🗂️", label: "Google Drive" },
+  { id: "intDropbox",       icon: "📦", label: "Dropbox" },
+  { id: "intNotion",        icon: "📄", label: "Notion" },
+  { id: "intSlack",         icon: "💬", label: "Slack" },
+  { id: "intZapier",        icon: "⚡", label: "Zapier" },
+  { id: "intWebhooks",      icon: "🔗", label: "Webhooks" },
+  { id: "intSettings",      icon: "⚙️", label: "Integration Settings" },
+];
+
 const ANALYTICS_TOOLS = [
   { id: "analyticsHub",        icon: "📊", label: "Analytics Hub" },
   { id: "executiveDashboard",  icon: "🏢", label: "Executive Dashboard" },
@@ -238,6 +252,20 @@ export default function Sidebar({ workspace, setWorkspace }: SidebarProps) {
       <div className="sidebar-section-label">Growth Studio</div>
       <nav className="sidebar-nav">
         {GROWTH_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">Integrations Studio</div>
+      <nav className="sidebar-nav">
+        {INTEGRATIONS_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
