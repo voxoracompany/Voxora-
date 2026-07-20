@@ -1014,6 +1014,587 @@ Headlines: Sentence case, not Title Case. Action-oriented.
 💡 VOXORA RECOMMENDATION
 Lead with Pillar 1 (Speed) in top-of-funnel content. Shift to Pillar 3 (Confidence) closer to conversion. The tagline "#3" should appear in your bio, email footer, and paid ads immediately.`;
 
+    case 'fundraisingStrategy':
+      return `🚀 FUNDRAISING STRATEGY — ${subject}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💼 ROUND TYPE & AMOUNT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Recommended Stage: Pre-Seed / Seed
+Amount to Raise: $250,000–$1,500,000
+
+Why this amount:
+• 18 months runway at current burn rate
+• Enough to hit the next de-risking milestone (first $10K MRR / 500 users)
+• Not so much that you take excessive dilution before proving PMF
+• Rule of thumb: raise 18–24 months of runway, never more than you can deploy productively
+
+Valuation range: $2M–$6M pre-money (pre-seed) / $5M–$15M pre-money (seed)
+Dilution to expect: 15–25% (target the lower end — negotiate hard on valuation)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 IDEAL INVESTOR PROFILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Primary targets — Angel Investors:
+• Former founders in your vertical who understand the pain point firsthand
+• Operators turned investors (ex-Google, Stripe, Shopify) with relevant network
+• Domain experts who can open doors to your first 100 customers
+• Check size: $25K–$250K
+
+Secondary targets — Micro-VCs / Pre-seed funds:
+• Funds with AUM $20–$100M (they need small checks, not $1M minimum)
+• Known for founder-friendly terms (look for 1× non-participating preferred)
+• Stage-appropriate: actively lead or participate in $500K–$1.5M rounds
+• Check size: $100K–$500K
+
+Do NOT target:
+• Tier 1 VCs (Sequoia, a16z) — too early, wrong check size, distracts you
+• Strategic investors (corporate VCs) — slow process, agenda conflicts
+• Family offices without startup experience — slow, unpredictable
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏆 5 SPECIFIC INVESTOR ARCHETYPES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. THE DOMAIN EXPERT ANGEL
+Profile: 10+ years in your industry, recently sold company or went from operator to angel
+Value: Customer introductions, market credibility, honest product feedback
+Where to find: Twitter/X, LinkedIn, AngelList, YC alumni network
+First message: Lead with the specific problem, ask for 20-min call, not money
+
+2. THE COMMUNITY INVESTOR
+Profile: Active in your target customer community (Indie Hackers, specific Slack groups)
+Value: Distribution through their audience, authentic community credibility
+Where to find: The same communities your customers live in
+First message: Build a genuine relationship FIRST, then raise when they know your work
+
+3. THE PORTFOLIO SYNERGY INVESTOR
+Profile: Has invested in adjacent companies (your potential partners or integrations)
+Value: Warm intros to their portfolio companies, ecosystem knowledge
+Where to find: Check LinkedIn of investors in companies you'd want to partner with
+First message: Reference the synergy explicitly — "I noticed you invested in X, we solve Y for their customers"
+
+4. THE OPERATOR ANGEL
+Profile: Current or former exec at a company your customers use (Notion, Figma, Linear)
+Value: Product sense, recruiting network, potential enterprise channel
+Where to find: LinkedIn search "[Company] + VP/Director + angel"
+First message: Lead with product vision, not just numbers
+
+5. THE SUPER CONNECTOR
+Profile: Well-networked individual who makes 20+ angel investments/year
+Value: Warm intros to institutional VCs, high-quality co-investors
+Where to find: AngelList, Twitter/X, FirstRound's "Notable" lists
+First message: Be concise — they see hundreds of decks. One-line hook + clear ask
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 FUNDRAISING TIMELINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Month 1 — PREPARATION (Do NOT skip this)
+✅ Metrics dashboard ready and updated weekly
+✅ Data room: deck, financials, product demo, cap table, team bios
+✅ List of 100 target investors (prioritised by fit)
+✅ Warm intro paths identified for top 30
+✅ Narrative locked — can tell the story in 60 seconds
+
+Month 2 — OUTREACH PHASE
+Week 1–2: Activate warm intro requests (not cold outreach yet)
+Week 3–4: First meetings with 10–15 investors
+Rule: Meet with less important investors first to refine pitch before your top targets
+
+Month 3 — MOMENTUM
+• Create FOMO: "We have X committed, closing in 3 weeks"
+• Send weekly investor update to everyone who's in diligence
+• Never negotiate solo — get a lawyer for term sheet review
+
+Month 4 — CLOSE
+• Sign term sheet with lead investor first
+• 2–4 weeks for diligence and legal
+• Wire and close — celebrate briefly, then get back to building
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ COMMON MISTAKES TO AVOID
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ Raising before you have something to show — get to 10 customers first
+❌ Giving too much equity at pre-seed — 20%+ dilution at idea stage is a red flag
+❌ Only talking to VCs — angels are faster, more helpful, and founder-friendly
+❌ Accepting a bad term sheet to close fast — 1 month of patience saves years of regret
+❌ Not having a lead investor — rounds without leads look weak to co-investors
+❌ Emailing your deck cold — warm intros convert 10× better
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 WHAT TO HAVE READY (Day 1 of Outreach)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ 12-slide pitch deck (PDF, no animations)
+✅ 2-minute demo video (screen recording, Loom)
+✅ Financial model (12-month projection in Google Sheets)
+✅ Cap table (current + post-raise pro forma)
+✅ One-page executive summary
+✅ Reference list (3–5 customers who will take a call)
+✅ Data room (Notion or Docsend — track who views it and for how long)
+
+💡 VOXORA RECOMMENDATION
+Raise when you have momentum, not when you need money. The best fundraise happens when you don't desperately need it. Get to the milestone that makes investors lean forward, then run a tight 60–90 day process.`;
+
+    case 'termSheet':
+      return `📋 TERM SHEET GUIDE — ${subject}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💰 VALUATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRE-MONEY VALUATION: The value of your company before the investment.
+POST-MONEY VALUATION: Pre-money + investment amount.
+
+Example:
+• $4M pre-money + $1M investment = $5M post-money
+• Investor owns: $1M ÷ $5M = 20%
+
+Founder-friendly: Higher pre-money = less dilution
+Investor-friendly: Lower pre-money = more ownership for same check
+Negotiate: Always negotiate pre-money up. A $1M difference at seed = $10M+ difference at exit.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📉 DILUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dilution occurs every time you issue new shares. At each round:
+• Seed: ~20–25% dilution
+• Series A: ~20% dilution
+• Series B: ~15–20% dilution
+
+After Pre-seed + Seed + Series A, founders often own 40–55%.
+
+✅ Healthy: Founders own 50%+ at Series A
+⚠️ Warning: Founders own <30% at Series A (retention/motivation risk)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚖️ LIQUIDATION PREFERENCES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This determines who gets paid first if the company is sold.
+
+1× NON-PARTICIPATING PREFERRED (Founder-friendly ✅)
+• Investor gets their money back OR converts to common stock — whichever is higher
+• If acquired for $5M and investor put in $1M: they take $1M back OR 20% of $5M ($1M) — same
+• If acquired for $20M: investor takes 20% of $20M ($4M) > their $1M → converts to common
+
+2× PARTICIPATING PREFERRED (Investor-friendly ❌)
+• Investor gets 2× their money back PLUS their pro-rata share of remaining proceeds
+• This "double dip" significantly reduces founder payout at most exit sizes
+• Red flag: Push back hard. 1× non-participating is market standard at seed.
+
+FULL RATCHET / WEIGHTED AVERAGE ANTI-DILUTION (Complex — watch carefully)
+• Protects investors if you raise a "down round" (lower valuation than previous round)
+• Weighted average is standard and fair; full ratchet is extremely punitive to founders
+• Never accept full ratchet anti-dilution.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ PRO-RATA RIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Gives investors the right (not obligation) to invest in future rounds to maintain their ownership %.
+
+Founder-friendly: Limit pro-rata to lead investors only (not every angel in the round)
+Why it matters: Too many pro-rata rights make future rounds complicated for new investors
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏛️ BOARD COMPOSITION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Seed round (typical):
+• 3-person board: 2 founders + 1 investor
+• OR 5-person board: 2 founders + 1 investor + 2 independent directors
+
+Red flag: Investor wants majority board control at seed (unacceptable)
+Founder-friendly: Founders maintain board majority through Series A at minimum
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 INFORMATION RIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Standard: Monthly or quarterly investor updates
+Market standard: P&L, balance sheet, cash position, key metrics, strategic update
+
+Founders prefer: Informal updates (Notion/email) rather than formal audited financials
+Investor preference: Standardised reporting with audited financials (ask for this only at Series B+)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 VESTING SCHEDULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Standard: 4-year vesting with 1-year cliff
+• 0% vests in first 12 months (cliff)
+• 25% vests at month 12 (the cliff)
+• Remaining 75% vests monthly over 36 months
+
+Acceleration:
+• Single trigger: Vesting accelerates on acquisition (negotiate for this)
+• Double trigger: Vesting accelerates only if acquired AND you're fired (common compromise)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚩 RED FLAGS IN TERM SHEETS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ Full ratchet anti-dilution (extremely punitive)
+❌ 2× or 3× participating preferred (double/triple dip)
+❌ Investor board majority at seed
+❌ Pay-to-play provisions (forced pro-rata or lose rights)
+❌ Broad veto rights on business decisions (hiring, spending, pivots)
+❌ Drag-along rights held only by investors (you lose control of exit timing)
+❌ No acquisition without investor approval below $X amount
+
+💡 VOXORA RECOMMENDATION
+Always use a startup lawyer to review your term sheet (budget $1,500–$5,000 for this). The money spent here can save millions at exit. YC's SAFE note is the cleanest instrument for pre-seed — avoid priced rounds until Series A if possible.`;
+
+    case 'dueDiligence':
+      return `✅ DUE DILIGENCE CHECKLIST — ${subject}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 BUSINESS & STRATEGY [Critical]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Documents to Prepare:
+✅ One-pager executive summary
+✅ 12-slide investor pitch deck (PDF)
+✅ Market research supporting your TAM/SAM/SOM
+✅ Competitive landscape analysis (who they are, why you win)
+✅ 3-year strategic roadmap
+
+Questions Investors Will Ask:
+• "Why does this market need to exist now?" — Have a specific tailwind
+• "What's your unfair advantage?" — Be specific, not generic
+• "What happens if Google/Shopify builds this?" — Show defensibility
+• "What's your 5-year vision?" — Paint a credible big picture
+
+Strong Answer: Specific, data-backed, with evidence of market timing
+Weak Answer: "The market is huge and growing" (everyone says this)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👥 TEAM & HIRING [Critical]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Documents to Prepare:
+✅ Team bios (1 paragraph each, focus on relevant experience)
+✅ LinkedIn profiles current and public
+✅ Vesting agreements for all founders
+✅ Employment contracts / contractor agreements
+✅ List of first 5–10 planned hires with role descriptions
+
+Questions Investors Will Ask:
+• "Have the founders worked together before?" — Yes is better
+• "What's the split and why?" — Must be defensible (50/50 or merit-based split)
+• "Who does what?" — Clear role separation
+• "What's the biggest team risk?" — Answer honestly, then explain mitigation
+
+Strong Answer: Lived the problem, complementary skills, prior success together
+Weak Answer: "We're a rockstar team" with no evidence
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🛠️ PRODUCT & TECHNOLOGY [Critical]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Documents to Prepare:
+✅ Live product demo (or video if pre-launch)
+✅ Technical architecture overview (non-technical version for non-technical investors)
+✅ Product roadmap (12-month)
+✅ IP ownership confirmation (patents, trademarks, or "we own all code")
+✅ Security / data privacy policy
+
+Questions Investors Will Ask:
+• "Can I see it work?" — Have a polished 3-minute demo ready
+• "What's the tech stack?" — Explain in terms of speed, scalability, cost
+• "Do you own all your IP?" — Confirm no contractor disputes
+• "What's the biggest technical risk?" — Be honest
+
+Strong Answer: Working product, clear technical moat, fast iteration history
+Weak Answer: Slides about a product that doesn't exist yet
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💰 FINANCIAL & LEGAL [Critical]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Documents to Prepare:
+✅ Financial model (12–24 month projection with assumptions)
+✅ Current cap table (fully-diluted)
+✅ Bank statements (last 3–6 months)
+✅ P&L statement (actual vs projected)
+✅ All existing investor agreements (SAFEs, convertible notes)
+✅ Corporate structure (Delaware C-Corp preferred by VCs)
+✅ Any outstanding legal issues disclosed
+
+Questions Investors Will Ask:
+• "How much runway do you have?" — Know this to the day
+• "What's your burn rate and what drives it?" — Be specific
+• "Are there any legal issues we should know about?" — Disclose proactively
+• "Is the company incorporated in Delaware?" — Should be
+
+Strong Answer: Clean cap table, clear financials, Delaware C-Corp, no surprises
+Weak Answer: "We'll figure out the legal stuff later"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 MARKET & COMPETITION [Important]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Documents to Prepare:
+✅ Market size research with sources
+✅ Competitive matrix (features, pricing, positioning)
+✅ Customer interviews / discovery notes
+✅ Industry reports (even free ones from Statista, CB Insights)
+
+Questions Investors Will Ask:
+• "Who are your competitors and why do you win?" — Know all of them
+• "What do customers say when they compare you to X?" — Have real quotes
+• "What's the market tailwind?" — Specific regulatory, technology, or behaviour shift
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏆 CUSTOMER TRACTION [Critical if available]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Documents to Prepare:
+✅ Customer list (anonymised is fine)
+✅ Revenue/MRR chart (even if small — show the trend)
+✅ Key metrics dashboard (DAU, MAU, churn, NPS, etc.)
+✅ 3–5 customer reference contacts (investors WILL call them)
+✅ Case studies or testimonials
+
+Questions Investors Will Ask:
+• "What's your Month-1 retention?" — Target > 80%
+• "Why do customers churn?" — Know the answer
+• "Can we talk to your customers?" — Always say yes
+
+Strong Answer: Even $1K MRR growing 20% MoM tells a better story than zero
+Weak Answer: "We have 200 signups" with no engagement data
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 PRIORITY RANKING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MUST HAVE (Don't schedule meetings without these):
+• Working demo or prototype
+• Clean cap table
+• Incorporated company
+• Basic financial model
+• At least 3 customer conversations documented
+
+NICE TO HAVE (Have these by due diligence stage):
+• Revenue (even $1)
+• Audited financials
+• Full patent portfolio
+• Detailed tech architecture docs
+
+💡 VOXORA RECOMMENDATION
+Start building your data room on Day 1. Investors move fast when they're interested — the fastest way to lose momentum is "let me get you that document." Have everything ready before your first meeting.`;
+
+    case 'investorNarrative':
+      return `📖 INVESTOR NARRATIVE — ${subject}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE FOUNDING STORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Every great company starts with a founder who experienced the problem firsthand. Your narrative should answer: "Why are YOU the right person to build this?"
+
+Template narrative for ${subject}:
+
+"Two years ago, I was [doing the thing that led to the insight]. I needed to [specific task], and the existing solutions were either [too expensive / too complex / didn't exist]. I tried [competitor 1], [competitor 2], and [workaround]. None of them worked. So I asked the founders I knew — and they were all having the same problem.
+
+That's when I realised this wasn't my problem. This was the problem of every [target customer] trying to [desired outcome] without a dedicated team or $50,000 budget."
+
+Key elements:
+• Specific moment, not a general feeling
+• Named the failed alternatives (shows market research)
+• Validated it wasn't just your problem (shows market exists)
+• Clear target customer and desired outcome
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE INSIGHT OTHERS ARE MISSING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This is the most powerful part of your narrative. What do you know that the market hasn't figured out yet?
+
+The insight for ${subject}:
+
+"Here's what everyone gets wrong about this space: [conventional wisdom]. But the data shows [counter-intuitive truth]. This means [implication that opens a market opportunity]."
+
+Examples of strong insights:
+• "Everyone thinks [audience] won't pay for software. But they're already paying $X for [inferior alternative]."
+• "The real bottleneck isn't [obvious thing]. It's [non-obvious thing]."
+• "This market looks saturated, but all incumbents are built for [enterprise]. Nobody has built for [SMB/creator/solo]."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE MARKET TIMING ARGUMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Investors are pattern-matching for "why now?" You need a compelling answer.
+
+Timing arguments for ${subject}:
+
+TECHNOLOGY SHIFT: "AI model costs dropped 10× in 18 months. The compute that would have cost $5/query in 2022 now costs $0.05. This makes [product] economically viable for the first time."
+
+BEHAVIOR SHIFT: "Since [event/trend], [target customer] changed how they [behaviour]. They're now [doing new thing] which creates demand for [product]."
+
+REGULATORY SHIFT: "Upcoming [regulation] requires companies to [comply]. Nobody has built the tool that makes compliance easy for SMBs."
+
+MARKET MATURITY: "The enterprise market is now solved by [company]. But they priced out [SMB segment]. There's a $2.5B opportunity in the segment they abandoned."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE 5-YEAR VISION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Investors are betting on a future state. Paint it clearly.
+
+Vision arc for ${subject}:
+
+"In Year 1, we become the default tool for [specific niche]. In Year 3, we expand to [adjacent market] with [new capability]. In Year 5, we are the [operating system / platform / intelligence layer] for [market]. At that point, the company is worth [plausible multiple of current implied valuation]."
+
+The key: Your 5-year vision must be big enough to justify venture returns, but specific enough to be credible.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TEAM UNFAIR ADVANTAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"We are the right team because:
+1. [Founder 1] spent [X] years inside this problem — they've lived what our customers experience daily
+2. [Founder 2] has [specific technical/distribution/domain advantage] that took [X] years to build and can't be replicated in 6 months
+3. Together, we already have [specific early advantage — 1,000 customers, key partnerships, proprietary data, regulatory relationships]"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE BELIEF STATEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Close your narrative with what investors need to believe to say yes:
+
+"For this investment to make sense, you need to believe three things:
+1. [Market belief]: The [TAM] market will grow to $[X] by [year] — we think it will, here's why.
+2. [Execution belief]: We are the right team to capture [specific share] of this market — here's our unfair advantage.
+3. [Timing belief]: The next [18 months] is the critical window to build this — here's why waiting means losing."
+
+If an investor says no, ask which belief they don't share. That tells you what to work on.
+
+💡 VOXORA RECOMMENDATION
+Practise your narrative out loud until you can tell it in 3 minutes and 15 minutes. Investors will interrupt — you need to be able to re-enter the narrative from any point. Record yourself and watch it back. The founders who raise are the ones who can tell this story without reading it.`;
+
+    case 'capTable':
+      return `📊 CAP TABLE PLANNER — ${subject}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏗️ FOUNDER EQUITY SPLIT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The best founder splits are decided early and based on contribution, not future hopes.
+
+Framework for splitting equity:
+• Technical contribution (who built the product): 20–40%
+• Business contribution (who drives revenue/distribution): 20–40%
+• Idea generation (who had the insight): 10–20%
+• Risk taken (who quit their job first, who invested cash): 10–20%
+
+Common patterns:
+• 2 founders, equal contribution: 50/50 — simplest, prevents long-term conflict
+• 2 founders, technical lead: 60/40 — tech-heavy products
+• 3 founders: 40/30/30 — one clear CEO, two contributors
+• Solo founder: Start at 100%, create ESOP before fundraising
+
+Red flags investors watch for:
+❌ 3-way 33/33/33 split — suggests no clear leader
+❌ A founder with < 10% — they'll leave before exit, creates cap table mess
+❌ No vesting — if a founder leaves on Day 30, they shouldn't own 30%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎁 EMPLOYEE OPTION POOL (ESOP)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ESOP is the equity reserved for future employees and advisors.
+
+Standard pool sizes by stage:
+• Pre-seed: 10–15% (enough to hire first 3–5 key people)
+• Seed: 15–20% (expanded to attract senior hires)
+• Series A: 20% (institutional norm, refreshed at each round)
+
+Timing: Create the ESOP BEFORE your seed round. Investors will require one anyway, and creating it before means investors are diluted too — not just founders.
+
+Vesting for employees (standard):
+• 4-year vesting, 1-year cliff
+• Accelerate 12 months on acquisition (single trigger) if possible
+
+Advisory shares: 0.1–0.5% with 2-year monthly vesting — don't give more than 0.5% to any advisor without a clear deliverable
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📉 DILUTION SCENARIOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Starting point: 2 founders, 50/50 split, 10% ESOP created pre-seed
+
+┌─────────────────┬──────────┬──────────┬──────────┬──────────┐
+│ Stage           │ Founder1 │ Founder2 │ ESOP     │ Investors│
+├─────────────────┼──────────┼──────────┼──────────┼──────────┤
+│ Day 1           │ 45%      │ 45%      │ 10%      │ 0%       │
+│ After Pre-Seed  │ 36%      │ 36%      │ 8%       │ 20%      │
+│ After Seed      │ 28%      │ 28%      │ 6%       │ 38%      │
+│ After Series A  │ 22%      │ 22%      │ 18%      │ 38%      │
+│ After Series B  │ 18%      │ 18%      │ 14%      │ 50%      │
+└─────────────────┴──────────┴──────────┴──────────┴──────────┘
+
+Note: ESOP grows because each round typically includes an ESOP refresh/top-up.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚖️ LIQUIDATION PREFERENCE IMPACT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+How exit proceeds are distributed matters as much as ownership %.
+
+Example: $10M exit, post-seed (investors own 20%, 1× non-participating preferred)
+
+Scenario A — Investors convert to common (if exit > 5× their investment):
+• Investors invested $1M → 1× = $1M, but 20% of $10M = $2M → they convert
+• Investors: $2M | Founders: $8M (split by common share ownership)
+
+Scenario B — Investors take preference (if exit < 5× their investment):
+• Investors invested $1M → take $1M back first
+• Remaining $9M split by common: Founders keep ~$7.2M, investors get rest
+
+With participating preferred (investor-unfriendly):
+• Investors take $1M PLUS 20% of remaining $9M = $2.8M total
+• Founders receive less than 80% despite owning 80%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📈 FOUNDER PAYOUT SCENARIOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Assuming: 2 founders at 22% each after Series A, $15M raised total (1× non-participating)
+
+$10M ACQUISITION:
+• Investors (38%) take up to $15M preference → not covered → take $10M
+• Founders receive: ~$0 (liquidation preference wipes out common)
+• Lesson: At $10M, founders get nothing with $15M raised. Size your round carefully.
+
+$50M ACQUISITION:
+• Investors take $15M preference (or convert to 38% = $19M) → convert
+• Investors: $19M | Founders (44% combined): $22M
+• Each founder takes home: ~$11M
+
+$100M ACQUISITION:
+• Investors convert: 38% = $38M
+• Founders (44%): $44M | Each founder: ~$22M
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚩 CAP TABLE RED FLAGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ Too many small investors — 50 investors at $10K each creates management hell
+❌ Friends & family at strange valuations (creates pricing issues for institutional rounds)
+❌ No vesting on founder shares (if a founder leaves, they take equity with them)
+❌ Missing authorised share count — run out of shares and you can't close a round
+❌ Outstanding convertible notes with aggressive terms (high interest rate, short maturity)
+
+💡 VOXORA RECOMMENDATION
+Use SAFE notes (Y Combinator standard) for your first 3–5 investors. They're simple, cheap to execute ($0 legal), and delay valuation negotiation to your priced round. A cap table of < 15 investors is much easier to manage than 50. Quality investors over quantity always.`;
+
     case 'financialForecast':
       return `💰 FINANCIAL FORECAST — ${subject}
 

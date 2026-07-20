@@ -30,6 +30,13 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V4.4 Investor Studio ──────────────────────────────────────────────────────
+const InvestorHub          = lazy(() => import("../Workspaces/InvestorHub"));
+const FundraisingStrategy  = lazy(() => import("../Workspaces/FundraisingStrategy"));
+const InvestorNarrative    = lazy(() => import("../Workspaces/InvestorNarrative"));
+const TermSheetGuide       = lazy(() => import("../Workspaces/TermSheetGuide"));
+const DueDiligence         = lazy(() => import("../Workspaces/DueDiligence"));
+const CapTable             = lazy(() => import("../Workspaces/CapTable"));
 // ── V4.3 Financial Studio ─────────────────────────────────────────────────────
 const FinancialHub       = lazy(() => import("../Workspaces/FinancialHub"));
 const FinancialForecast  = lazy(() => import("../Workspaces/FinancialForecast"));
@@ -330,6 +337,14 @@ const Dashboard = () => {
           {workspace === "export"         && <ExportCenter       setWorkspace={setWorkspace} />}
           {workspace === "help"           && <HelpCenter         setWorkspace={setWorkspace} />}
           {workspace === "admin"          && <DevAdmin           setWorkspace={setWorkspace} />}
+
+          {/* V4.4 Investor Studio */}
+          {workspace === "investorHub"         && <InvestorHub         setWorkspace={setWorkspace} />}
+          {workspace === "fundraisingStrategy" && <FundraisingStrategy setWorkspace={setWorkspace} />}
+          {workspace === "investorNarrative"   && <InvestorNarrative   setWorkspace={setWorkspace} />}
+          {workspace === "termSheet"           && <TermSheetGuide      setWorkspace={setWorkspace} />}
+          {workspace === "dueDiligence"        && <DueDiligence        setWorkspace={setWorkspace} />}
+          {workspace === "capTable"            && <CapTable            setWorkspace={setWorkspace} />}
 
           {/* V4.3 Financial Studio */}
           {workspace === "financialHub"      && <FinancialHub      setWorkspace={setWorkspace} />}

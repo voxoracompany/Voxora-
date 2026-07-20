@@ -9,6 +9,7 @@ export type PromptId =
   | 'contentIdeas' | 'appIdeas' | 'customerPersona' | 'productValidation'
   | 'adCopy' | 'contentCalendar' | 'brandVoice'
   | 'revenueModel' | 'pricingStrategy' | 'unitEconomics' | 'breakEven'
+  | 'fundraisingStrategy' | 'termSheet' | 'dueDiligence' | 'investorNarrative' | 'capTable'
   | 'chat';
 
 interface PromptTemplate {
@@ -174,6 +175,36 @@ export const PROMPT_TEMPLATES: Record<PromptId, PromptTemplate> = {
     id: 'breakEven', label: 'Break-Even Analysis', workspace: 'breakEven',
     system: `${BASE_SYSTEM} You specialise in startup financial planning and break-even analysis.`,
     user: (input, style) => `Calculate and explain the break-even framework for: "${input}". Cover: fixed costs breakdown, variable costs per customer, contribution margin, break-even customer count, break-even MRR target, estimated time to break-even with assumptions, and 3 scenarios (pessimistic/base/optimistic) with milestone triggers. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  fundraisingStrategy: {
+    id: 'fundraisingStrategy', label: 'Fundraising Strategy', workspace: 'fundraisingStrategy',
+    system: `${BASE_SYSTEM} You specialise in startup fundraising, investor relations, and venture capital.`,
+    user: (input, style) => `Create a fundraising strategy for: "${input}". Cover: right stage and round type (pre-seed/seed/Series A), how much to raise and why, ideal investor profile (sector, check size, value-add), 5 specific investor archetypes to target, outreach sequence and messaging, timeline (prep, outreach, due diligence, close), common mistakes to avoid, and what to have ready before your first meeting. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  termSheet: {
+    id: 'termSheet', label: 'Term Sheet Guide', workspace: 'termSheet',
+    system: `${BASE_SYSTEM} You specialise in venture capital term sheets, startup legal concepts, and founder-friendly deal structures.`,
+    user: (input, style) => `Explain the key term sheet concepts relevant to: "${input}". Cover the most important terms: valuation (pre-money vs post-money), dilution, liquidation preferences, anti-dilution provisions, pro-rata rights, board composition, information rights, vesting schedules, and drag-along/tag-along rights. For each: plain English explanation, founder-friendly vs investor-friendly versions, and what to negotiate. Include red flags to watch for. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  dueDiligence: {
+    id: 'dueDiligence', label: 'Due Diligence Checklist', workspace: 'dueDiligence',
+    system: `${BASE_SYSTEM} You specialise in startup due diligence, investor relations, and fundraising preparation.`,
+    user: (input, style) => `Create a comprehensive due diligence preparation checklist for: "${input}". Cover all categories investors will examine: Business & Strategy, Team & Hiring, Product & Technology, Market & Competition, Financial & Legal, and Customer Traction. For each category, list specific documents to prepare, questions investors will ask, and what makes a strong vs weak response. Include a priority ranking (critical vs nice-to-have). ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  investorNarrative: {
+    id: 'investorNarrative', label: 'Investor Narrative', workspace: 'investorNarrative',
+    system: `${BASE_SYSTEM} You specialise in startup storytelling, investor pitching, and founder narrative.`,
+    user: (input, style) => `Write a compelling investor narrative for: "${input}". Cover: the founding story (why you, why now, why this problem), the insight that others are missing, the market timing argument, the product vision (where this goes in 5–10 years), the team unfair advantage, and the key belief investors need to share to invest. Write as a structured narrative, not bullet points — this is the story that precedes the deck. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  capTable: {
+    id: 'capTable', label: 'Cap Table Planner', workspace: 'capTable',
+    system: `${BASE_SYSTEM} You specialise in startup cap tables, equity structures, and founder dilution modelling.`,
+    user: (input, style) => `Explain the cap table structure and dilution modelling for: "${input}". Cover: typical founder equity split rationale, employee option pool (ESOP) sizing and timing, pre-seed/seed/Series A dilution scenarios, how liquidation preference affects founder payout, what a healthy cap table looks like at each stage, mistakes that make cap tables investor-unfriendly, and 3 concrete scenarios showing founder ownership at exit ($10M, $50M, $100M acquisition). ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
   },
 };
 

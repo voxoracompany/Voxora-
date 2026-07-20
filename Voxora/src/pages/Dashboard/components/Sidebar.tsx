@@ -37,6 +37,15 @@ const STRATEGY_TOOLS = [
   { id: "productRoadmap", icon: "🗺️", label: "Product Roadmap" },
 ];
 
+const INVESTOR_TOOLS = [
+  { id: "investorHub",         icon: "💼", label: "Investor Hub" },
+  { id: "fundraisingStrategy", icon: "🚀", label: "Fundraising Strategy" },
+  { id: "investorNarrative",   icon: "📖", label: "Investor Narrative" },
+  { id: "termSheet",           icon: "📋", label: "Term Sheet Guide" },
+  { id: "dueDiligence",        icon: "✅", label: "Due Diligence" },
+  { id: "capTable",            icon: "📊", label: "Cap Table" },
+];
+
 const FINANCIAL_TOOLS = [
   { id: "financialHub",      icon: "💰", label: "Financial Hub" },
   { id: "financialForecast", icon: "📊", label: "Financial Forecast" },
@@ -118,6 +127,20 @@ export default function Sidebar({ workspace, setWorkspace }: SidebarProps) {
       <div className="sidebar-section-label">Strategy</div>
       <nav className="sidebar-nav">
         {STRATEGY_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">Investor Studio</div>
+      <nav className="sidebar-nav">
+        {INVESTOR_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}

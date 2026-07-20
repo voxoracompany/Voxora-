@@ -191,6 +191,12 @@ class AIService {
       adCopy:            'adCopy',
       contentCalendar:   'contentCalendar',
       brandVoice:        'brandVoice',
+      // V4.4 Investor Studio
+      fundraisingStrategy: 'fundraisingStrategy',
+      termSheet:           'termSheet',
+      dueDiligence:        'dueDiligence',
+      investorNarrative:   'investorNarrative',
+      capTable:            'capTable',
       // V4.3 Financial Studio
       financialForecast: 'financialForecast',
       revenueModel:      'revenueModel',

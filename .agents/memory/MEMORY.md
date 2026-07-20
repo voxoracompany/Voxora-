@@ -1,1 +1,2 @@
 - [Voxora architecture](voxora-arch.md) — state-based routing (useState, no router), all workspace pages lazy-loaded, dark mode via `data-theme` on `<html>`.
+- [V4 AI Engine build state](v4-build-state.md) — V4.1 AI Engine, V4.2 Marketing Studio, V4.3 Financial Studio complete and pushed; building V4.4 Investor Studio next.
