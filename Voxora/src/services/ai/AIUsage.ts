@@ -76,6 +76,18 @@ export const AIUsage = {
     return load().reduce((s, r) => s + r.tokensUsed, 0);
   },
 
+  /** Timestamp (ms) of the most recent successful (non-mock) request, or 0. */
+  getLastSuccessfulTimestamp(): number {
+    const records = load().filter(r => r.provider !== 'mock');
+    return records.length > 0 ? records[0].timestamp : 0;
+  },
+
+  /** The provider used in the most recent successful request. */
+  getLastSuccessfulProvider(): string {
+    const records = load().filter(r => r.provider !== 'mock');
+    return records.length > 0 ? records[0].provider : '';
+  },
+
   clear(): void {
     localStorage.removeItem(STORAGE_KEY);
   },

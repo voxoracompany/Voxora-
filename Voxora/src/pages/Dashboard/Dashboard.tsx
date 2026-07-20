@@ -7,6 +7,7 @@ import { useProjects } from "../../context/ProjectContext";
 import { useAIContext } from "../../context/AIContext";
 import { useAuth } from "../../context/AuthContext";
 import { AIMemory } from "../../services/ai/AIMemory";
+import { AIUsage } from "../../services/ai/AIUsage";
 import "./Dashboard.css";
 
 // ── Lazy-loaded workspace pages ──────────────────────────────────────────────
@@ -139,7 +140,7 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
   const { projects, favorites, pinned } = useProjects();
   const { activities } = useActivity();
-  const { usage, isDemoMode } = useAIContext();
+  const { usage, isDemoMode, activeProvider, health } = useAIContext();
 
   const stats = useMemo(() => {
     const weekStart = new Date();
@@ -265,17 +266,40 @@ const Dashboard = () => {
                   )}
                 </h2>
                 <div className="stats">
+                  {/* V5.2 — Active AI Provider */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("aiSettings")}>
+                    <div className="stat-icon">🤖</div>
+                    <p className="stat-value" style={{ fontSize: 13, textTransform: "capitalize" }}>{activeProvider}</p>
+                    <h3 className="stat-label">Active AI Provider</h3>
+                  </div>
                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("aiSettings")}>
                     <div className="stat-icon">📡</div>
                     <p className="stat-value">{usage.todayCount}</p>
                     <h3 className="stat-label">AI Requests Today</h3>
                   </div>
-                  <div className="stat-card">
-                    <div className="stat-icon">🏆</div>
-                    <p className="stat-value" style={{ fontSize: usage.mostUsedWorkspace.length > 6 ? 13 : undefined }}>
-                      {usage.mostUsedWorkspace === "—" ? "—" : usage.mostUsedWorkspace}
+                  {/* V5.2 — Provider Status */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("aiSettings")}>
+                    <div className="stat-icon">
+                      {(() => {
+                        const h = health.find(x => x.provider === activeProvider);
+                        const s = h?.status ?? "unknown";
+                        return s === "healthy" ? "🟢" : s === "degraded" ? "🟡" : s === "unavailable" ? "🔴" : "⚪";
+                      })()}
+                    </div>
+                    <p className="stat-value" style={{ fontSize: 12, textTransform: "capitalize" }}>
+                      {isDemoMode ? "Demo" : (health.find(x => x.provider === activeProvider)?.status ?? "unknown")}
                     </p>
-                    <h3 className="stat-label">Top Workspace</h3>
+                    <h3 className="stat-label">Provider Status</h3>
+                  </div>
+                  {/* V5.2 — Last Successful AI Request */}
+                  <div className="stat-card">
+                    <div className="stat-icon">⏱️</div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>
+                      {AIUsage.getLastSuccessfulTimestamp() > 0
+                        ? timeAgo(new Date(AIUsage.getLastSuccessfulTimestamp()).toISOString())
+                        : "—"}
+                    </p>
+                    <h3 className="stat-label">Last AI Request</h3>
                   </div>
                   <div className="stat-card">
                     <div className="stat-icon">⚡</div>
@@ -283,19 +307,9 @@ const Dashboard = () => {
                     <h3 className="stat-label">Avg Response Time</h3>
                   </div>
                   <div className="stat-card">
-                    <div className="stat-icon">💬</div>
-                    <p className="stat-value">{usage.weeklyCount}</p>
-                    <h3 className="stat-label">This Week</h3>
-                  </div>
-                  <div className="stat-card">
                     <div className="stat-icon">🔢</div>
                     <p className="stat-value">{(usage.todayTokens / 1000).toFixed(1)}k</p>
                     <h3 className="stat-label">Tokens Today</h3>
-                  </div>
-                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("aiSettings")}>
-                    <div className="stat-icon">🧠</div>
-                    <p className="stat-value" style={{ fontSize: 13 }}>Configure</p>
-                    <h3 className="stat-label">AI Settings</h3>
                   </div>
                 </div>
 

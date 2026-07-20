@@ -1,0 +1,132 @@
+Continue Voxora from the latest GitHub commit.
+
+IMPORTANT
+
+- Analyze the existing codebase first.
+- Verify that V5.1 AI Integration Foundation exists.
+- Do NOT rebuild V1–V5.1.
+- Preserve all existing functionality.
+- Reuse the AI Integration Foundation created in V5.1.
+- Maintain the premium UI and responsive design.
+
+==================================================
+V5.2 — Google Gemini Integration
+==================================================
+
+Goal:
+
+Connect Voxora's AI Engine to Google Gemini using the existing provider architecture.
+
+Implement:
+
+1. Gemini Provider
+
+Complete GeminiProvider.ts.
+
+Support:
+
+- generateText()
+- generateIdeas()
+- analyzeBusiness()
+- generateMarketing()
+- generateFinancialAnalysis()
+- generateInvestorReport()
+
+2. AI Settings
+
+Allow users to:
+
+- Select Google Gemini
+- Enter API key
+- Save locally
+- Test connection
+- View connection status
+
+3. AI Engine
+
+Route all AI requests through Gemini when selected.
+
+If Gemini is unavailable:
+
+- Show a friendly message.
+- Automatically fall back to Mock Provider.
+- Never crash.
+
+4. Update Existing AI Workspaces
+
+Use the shared AI Engine in:
+
+- AI Assistant
+- Startup Studio
+- Marketing Studio
+- Financial Studio
+- Investor Studio
+- Growth Studio
+- Analytics Studio
+
+5. Conversation Improvements
+
+Add:
+
+- Streaming-ready response handling
+- Better loading indicators
+- Retry button on failed requests
+- Response timestamps
+
+6. Dashboard
+
+Add:
+
+- Active AI Provider
+- AI Requests Today
+- Provider Status
+- Last Successful AI Request
+
+==================================================
+Security
+==================================================
+
+- Do not hard-code API keys.
+- Store API keys only in local demo storage for now.
+- Structure the code so a secure backend can be added later.
+
+==================================================
+Validation
+==================================================
+
+Run a full production build.
+
+Fix all TypeScript errors.
+
+Fix all runtime errors.
+
+Verify:
+
+- No broken routes.
+- No blank pages.
+- Gemini Provider works correctly when configured.
+- Mock Provider is automatically used if no API key exists.
+- All AI workspaces use the shared AI Engine.
+
+==================================================
+Git
+==================================================
+
+Commit:
+
+V5.2 Google Gemini Integration
+
+Push to the connected GitHub repository.
+
+Verify the push succeeded.
+
+Report:
+
+- Build status
+- Latest Git commit hash
+- GitHub push status
+- Gemini integration status
+- Number of files changed
+- Summary of implemented features
+
+Do not finish until the build passes and the GitHub push has been confirmed.

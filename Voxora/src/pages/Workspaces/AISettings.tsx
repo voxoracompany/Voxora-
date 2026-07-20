@@ -1,7 +1,8 @@
-// ── V4.1 AI Engine — AI Settings Workspace ───────────────────────────────────
+// ── V5.2 AI Engine — AI Settings Workspace ───────────────────────────────────
 import { useState } from 'react';
 import { useAIContext } from '../../context/AIContext';
 import { PromptLibrary } from '../../services/ai/PromptLibrary';
+import { GeminiProvider } from '../../services/ai/providers/GeminiProvider';
 import { useToast } from '../../context/ToastContext';
 import './AISettings.css';
 
@@ -32,6 +33,8 @@ const WORKSPACES = [
   { value: 'business',   label: '🏢 Business Model'      },
 ];
 
+type TestStatus = 'idle' | 'testing' | 'ok' | 'error';
+
 interface Props { setWorkspace: (w: string) => void }
 
 export default function AISettings({ setWorkspace }: Props) {
@@ -51,6 +54,40 @@ export default function AISettings({ setWorkspace }: Props) {
     geminiKey:        '',
     anthropicKey:     '',
   }));
+
+  const [testStatus, setTestStatus] = useState<TestStatus>('idle');
+  const [testMsg, setTestMsg]       = useState('');
+
+  /** Test the Gemini API key currently in the draft or saved settings. */
+  const handleTestGemini = async () => {
+    const key = draft.geminiKey || settings.apiKeys.gemini;
+    if (!key) {
+      showToast('⚠️ Enter a Gemini API key first.', 'error');
+      return;
+    }
+    setTestStatus('testing');
+    setTestMsg('');
+    try {
+      const provider = new GeminiProvider(key);
+      const res = await provider.generate({
+        prompt:    'Reply with exactly: "Gemini connection successful."',
+        maxTokens: 32,
+        temperature: 0,
+      });
+      if (res.content.length > 0) {
+        setTestStatus('ok');
+        setTestMsg(`✅ Connected — ${res.responseTime}ms · model: ${res.model}`);
+        showToast('✅ Gemini connection successful!');
+      } else {
+        throw new Error('Empty response from Gemini');
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Connection failed';
+      setTestStatus('error');
+      setTestMsg(`❌ ${msg}`);
+      showToast('❌ Gemini connection failed. Check your API key.', 'error');
+    }
+  };
 
   const handleSave = () => {
     updateSettings({
@@ -141,9 +178,21 @@ export default function AISettings({ setWorkspace }: Props) {
             className="ai-key-input"
             placeholder={settings.apiKeys.gemini ? '••••••••••••••••••••' : 'AIza...'}
             value={draft.geminiKey}
-            onChange={e => setDraft(d => ({ ...d, geminiKey: e.target.value }))}
+            onChange={e => { setDraft(d => ({ ...d, geminiKey: e.target.value })); setTestStatus('idle'); setTestMsg(''); }}
           />
-          {settings.apiKeys.gemini && <span className="ai-key-status">✅ Key saved</span>}
+          <div className="ai-key-actions">
+            {settings.apiKeys.gemini && <span className="ai-key-status">✅ Key saved</span>}
+            <button
+              className={`ai-test-btn ${testStatus}`}
+              onClick={handleTestGemini}
+              disabled={testStatus === 'testing'}
+            >
+              {testStatus === 'testing' ? '⏳ Testing…' : '🔌 Test Connection'}
+            </button>
+          </div>
+          {testMsg && (
+            <p className={`ai-test-result ${testStatus}`}>{testMsg}</p>
+          )}
         </div>
 
         <div className="ai-key-row">

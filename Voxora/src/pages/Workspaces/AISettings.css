@@ -118,6 +118,32 @@
 .ai-key-input:focus { outline: none; border-color: #6C63FF; background: #fff; }
 .ai-key-status { font-size: 12px; color: #059669; font-weight: 600; white-space: nowrap; }
 
+/* Test connection */
+.ai-key-row { flex-direction: column; align-items: flex-start; }
+.ai-key-row label { min-width: unset; }
+.ai-key-row .ai-key-input { width: 100%; box-sizing: border-box; }
+.ai-key-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.ai-test-btn {
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1.5px solid #6C63FF;
+  background: transparent;
+  color: #6C63FF;
+  cursor: pointer;
+  transition: all .15s;
+}
+.ai-test-btn:hover:not(:disabled)  { background: #6C63FF; color: #fff; }
+.ai-test-btn:disabled { opacity: .6; cursor: not-allowed; }
+.ai-test-btn.ok    { border-color: #059669; color: #059669; }
+.ai-test-btn.ok:hover    { background: #059669; color: #fff; }
+.ai-test-btn.error { border-color: #dc2626; color: #dc2626; }
+.ai-test-btn.error:hover { background: #dc2626; color: #fff; }
+.ai-test-result { font-size: 12px; margin: 4px 0 0; line-height: 1.4; }
+.ai-test-result.ok    { color: #059669; }
+.ai-test-result.error { color: #dc2626; }
+
 [data-theme="dark"] .ai-key-row label { color: #d1d5db; }
 [data-theme="dark"] .ai-key-input     { background: #252535; border-color: #3d3d50; color: #f3f4f6; }
 [data-theme="dark"] .ai-key-input:focus { border-color: #7c6fd4; background: #1e1e2e; }
