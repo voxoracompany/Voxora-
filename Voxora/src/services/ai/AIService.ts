@@ -175,14 +175,22 @@ class AIService {
   /** Run a structured analysis by type (swot | competitor | market | etc). */
   async analyze(subject: string, type: string, workspace = 'general'): Promise<AIResponse> {
     const promptMap: Record<string, Parameters<typeof PromptLibrary.build>[0]> = {
-      swot:       'swot',
-      competitor: 'competitorAnalysis',
-      market:     'marketingStrategy',
-      business:   'businessModel',
-      validation: 'productValidation',
-      research:   'customerResearch',
-      persona:    'customerPersona',
-      startup:    'startupValidation',
+      swot:              'swot',
+      competitor:        'competitorAnalysis',
+      market:            'marketingStrategy',
+      business:          'businessModel',
+      validation:        'productValidation',
+      research:          'customerResearch',
+      persona:           'customerPersona',
+      startup:           'startupValidation',
+      apps:              'appIdeas',
+      seoPlanner:        'seoPlanning',
+      emailCampaign:     'emailCampaign',
+      socialMedia:       'socialMedia',
+      marketingStrategy: 'marketingStrategy',
+      adCopy:            'adCopy',
+      contentCalendar:   'contentCalendar',
+      brandVoice:        'brandVoice',
     };
     const id  = promptMap[type] ?? 'swot';
     const p   = PromptLibrary.build(id, subject, this._settings.promptStyle);

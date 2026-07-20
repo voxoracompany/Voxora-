@@ -30,6 +30,15 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V4.2 Marketing Studio ─────────────────────────────────────────────────────
+const MarketingHub       = lazy(() => import("../Workspaces/MarketingHub"));
+const MarketingStrategy  = lazy(() => import("../Workspaces/MarketingStrategy"));
+const EmailCampaign      = lazy(() => import("../Workspaces/EmailCampaign"));
+const SocialMediaPost    = lazy(() => import("../Workspaces/SocialMediaPost"));
+const SEOPlanner         = lazy(() => import("../Workspaces/SEOPlanner"));
+const AdCopy             = lazy(() => import("../Workspaces/AdCopy"));
+const ContentCalendar    = lazy(() => import("../Workspaces/ContentCalendar"));
+const BrandVoice         = lazy(() => import("../Workspaces/BrandVoice"));
 
 function timeAgo(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime();
@@ -312,6 +321,16 @@ const Dashboard = () => {
           {workspace === "export"         && <ExportCenter       setWorkspace={setWorkspace} />}
           {workspace === "help"           && <HelpCenter         setWorkspace={setWorkspace} />}
           {workspace === "admin"          && <DevAdmin           setWorkspace={setWorkspace} />}
+
+          {/* V4.2 Marketing Studio */}
+          {workspace === "marketingHub"      && <MarketingHub       setWorkspace={setWorkspace} />}
+          {workspace === "marketingStrategy" && <MarketingStrategy  setWorkspace={setWorkspace} />}
+          {workspace === "emailCampaign"     && <EmailCampaign      setWorkspace={setWorkspace} />}
+          {workspace === "socialMedia"       && <SocialMediaPost    setWorkspace={setWorkspace} />}
+          {workspace === "seoPlanner"        && <SEOPlanner         setWorkspace={setWorkspace} />}
+          {workspace === "adCopy"            && <AdCopy             setWorkspace={setWorkspace} />}
+          {workspace === "contentCalendar"   && <ContentCalendar    setWorkspace={setWorkspace} />}
+          {workspace === "brandVoice"        && <BrandVoice         setWorkspace={setWorkspace} />}
 
         </Suspense>
       </main>

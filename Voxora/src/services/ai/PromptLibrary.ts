@@ -7,6 +7,7 @@ export type PromptId =
   | 'financialForecast' | 'pitchDeck' | 'executiveSummary'
   | 'emailCampaign' | 'socialMedia' | 'productRoadmap'
   | 'contentIdeas' | 'appIdeas' | 'customerPersona' | 'productValidation'
+  | 'adCopy' | 'contentCalendar' | 'brandVoice'
   | 'chat';
 
 interface PromptTemplate {
@@ -130,6 +131,24 @@ export const PROMPT_TEMPLATES: Record<PromptId, PromptTemplate> = {
     id: 'productValidation', label: 'Product Validation', workspace: 'validation',
     system: `${BASE_SYSTEM} You specialise in product validation and lean experiments.`,
     user: (input, style) => `Validate this product concept: "${input}". Cover: demand signals, minimum viable test to run in 7 days, success/failure criteria, 5 questions to ask potential customers, and go/no-go recommendation framework. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  adCopy: {
+    id: 'adCopy', label: 'Ad Copy Generator', workspace: 'adCopy',
+    system: `${BASE_SYSTEM} You specialise in high-converting advertising copywriting for digital platforms.`,
+    user: (input, style) => `Generate compelling ad copy for: "${input}". Create variations for: 1) Google Search Ads (3 headlines + 2 descriptions), 2) Facebook/Instagram Ad (primary text, headline, CTA), 3) LinkedIn Ad (introductory text + headline), 4) Twitter/X Ad (short copy + CTA), 5) YouTube Pre-roll Script (15-second hook). Each should be conversion-focused with a strong CTA. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  contentCalendar: {
+    id: 'contentCalendar', label: 'Content Calendar', workspace: 'contentCalendar',
+    system: `${BASE_SYSTEM} You specialise in content marketing strategy and editorial planning.`,
+    user: (input, style) => `Build a 4-week content calendar for: "${input}". For each week provide: 2 long-form content pieces (blog/article), 5 social posts (LinkedIn/X), 1 email newsletter idea, 1 short-form video concept, and 1 lead magnet or download idea. Include topic angles, posting days, and content goals for each piece. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  brandVoice: {
+    id: 'brandVoice', label: 'Brand Voice Analyzer', workspace: 'brandVoice',
+    system: `${BASE_SYSTEM} You specialise in brand identity, tone of voice, and messaging strategy.`,
+    user: (input, style) => `Define the brand voice and messaging framework for: "${input}". Cover: brand personality (5 adjectives), tone of voice (formal vs casual, serious vs playful — with examples), core messaging pillars (3–4), tagline options (5 variations), what to always say and never say, writing style guide (sentence length, punctuation, word choice), and a before/after copy example demonstrating the voice. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
   },
 };
 
