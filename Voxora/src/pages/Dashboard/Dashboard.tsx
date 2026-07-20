@@ -4,6 +4,8 @@ import Sidebar from "./components/Sidebar";
 import TopBar from "./components/TopBar";
 import FeatureCard from "./components/FeatureCard";
 import { useProjects } from "../../context/ProjectContext";
+import { useAIContext } from "../../context/AIContext";
+import { AIMemory } from "../../services/ai/AIMemory";
 import "./Dashboard.css";
 
 // ── Lazy-loaded workspace pages ──────────────────────────────────────────────
@@ -15,6 +17,7 @@ const CustomerResearch   = lazy(() => import("../Workspaces/CustomerResearch"));
 const MarketResearch     = lazy(() => import("../Workspaces/MarketResearch"));
 const AIAssistant        = lazy(() => import("../Workspaces/AIAssistant"));
 const Settings           = lazy(() => import("../Workspaces/Settings"));
+const AISettings         = lazy(() => import("../Workspaces/AISettings"));
 const ProductValidation  = lazy(() => import("../Workspaces/ProductValidation"));
 const CustomerPersona    = lazy(() => import("../Workspaces/CustomerPersona"));
 const BusinessModelCanvas = lazy(() => import("../Workspaces/BusinessModelCanvas"));
@@ -38,6 +41,12 @@ function timeAgo(iso: string): string {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
+function msToDisplay(ms: number): string {
+  if (ms === 0) return "—";
+  if (ms < 1000) return `${ms}ms`;
+  return `${(ms / 1000).toFixed(1)}s`;
+}
+
 function WorkspaceLoader() {
   return (
     <div className="workspace-loader">
@@ -51,6 +60,7 @@ const Dashboard = () => {
   const [workspace, setWorkspace] = useState("dashboard");
   const { projects, favorites, pinned } = useProjects();
   const { activities } = useActivity();
+  const { usage, isDemoMode } = useAIContext();
 
   const stats = useMemo(() => {
     const weekStart = new Date();
@@ -63,40 +73,24 @@ const Dashboard = () => {
 
   const recentProjects = useMemo(() => [...projects].reverse().slice(0, 3), [projects]);
 
+  // Recent AI conversations from AIMemory
+  const recentConvs = useMemo(() => AIMemory.getRecent(3), []);
+
   // ── Keyboard shortcuts ───────────────────────────────────────────────────
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const ctrl = e.ctrlKey || e.metaKey;
       if (!ctrl) return;
-
-      // Don't intercept when typing in inputs
       const tag = (e.target as HTMLElement).tagName;
       if (tag === "INPUT" || tag === "TEXTAREA") return;
 
       const map: Record<string, string> = {
-        k: "search",
-        n: "assistant",
-        s: "saved",
-        e: "export",
-        h: "help",
+        k: "search", n: "assistant", s: "saved", e: "export", h: "help",
       };
 
-      if (e.key in map) {
-        e.preventDefault();
-        setWorkspace(map[e.key]);
-        return;
-      }
-
-      // Ctrl+Shift+D → developer panel
-      if (e.shiftKey && e.key === "D") {
-        e.preventDefault();
-        setWorkspace("admin");
-      }
-
-      // Escape → dashboard
-      if (e.key === "Escape") {
-        setWorkspace("dashboard");
-      }
+      if (e.key in map) { e.preventDefault(); setWorkspace(map[e.key]); return; }
+      if (e.shiftKey && e.key === "D") { e.preventDefault(); setWorkspace("admin"); }
+      if (e.key === "Escape") setWorkspace("dashboard");
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
@@ -118,7 +112,7 @@ const Dashboard = () => {
                 <p className="welcome-sub">Your AI-powered workspace for ideas, research, and strategy.</p>
               </div>
 
-              {/* Stats row */}
+              {/* Project stats row */}
               <div className="stats">
                 <div className="stat-card">
                   <div className="stat-icon">📁</div>
@@ -150,6 +144,74 @@ const Dashboard = () => {
                   <p className="stat-value">{stats.thisWeek}</p>
                   <h3 className="stat-label">This Week</h3>
                 </div>
+              </div>
+
+              {/* ── AI Overview Widgets ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  🧠 AI Overview
+                  {isDemoMode && (
+                    <span style={{ fontSize: 11, background: "#ede9fe", color: "#4c1d95", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>
+                      Demo Mode
+                    </span>
+                  )}
+                </h2>
+                <div className="stats">
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("aiSettings")}>
+                    <div className="stat-icon">📡</div>
+                    <p className="stat-value">{usage.todayCount}</p>
+                    <h3 className="stat-label">AI Requests Today</h3>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-icon">🏆</div>
+                    <p className="stat-value" style={{ fontSize: usage.mostUsedWorkspace.length > 6 ? 13 : undefined }}>
+                      {usage.mostUsedWorkspace === "—" ? "—" : usage.mostUsedWorkspace}
+                    </p>
+                    <h3 className="stat-label">Top Workspace</h3>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-icon">⚡</div>
+                    <p className="stat-value">{msToDisplay(usage.avgResponseTime)}</p>
+                    <h3 className="stat-label">Avg Response Time</h3>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-icon">💬</div>
+                    <p className="stat-value">{usage.weeklyCount}</p>
+                    <h3 className="stat-label">This Week</h3>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-icon">🔢</div>
+                    <p className="stat-value">{(usage.todayTokens / 1000).toFixed(1)}k</p>
+                    <h3 className="stat-label">Tokens Today</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("aiSettings")}>
+                    <div className="stat-icon">🧠</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Configure</p>
+                    <h3 className="stat-label">AI Settings</h3>
+                  </div>
+                </div>
+
+                {/* Recent AI Conversations */}
+                {recentConvs.length > 0 && (
+                  <div className="dashboard-panel" style={{ marginTop: 16 }}>
+                    <div className="panel-header">
+                      <h2>💬 Recent AI Conversations</h2>
+                      <button className="panel-link" onClick={() => setWorkspace("assistant")}>Open Chat →</button>
+                    </div>
+                    <div className="activity-mini-list">
+                      {recentConvs.map((c) => (
+                        <div key={c.id} className="activity-mini-item">
+                          <span className="activity-mini-icon">{c.pinned ? "📌" : "🤖"}</span>
+                          <div className="activity-mini-body">
+                            <span className="activity-mini-title">{c.title}</span>
+                            <span className="activity-mini-desc">{c.messages.length} messages · {c.workspace}</span>
+                          </div>
+                          <span className="activity-mini-time">{timeAgo(new Date(c.updatedAt).toISOString())}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Quick Actions */}
@@ -239,6 +301,7 @@ const Dashboard = () => {
           {workspace === "assistant"      && <AIAssistant        setWorkspace={setWorkspace} />}
           {workspace === "business"       && <BusinessModelCanvas setWorkspace={setWorkspace} />}
           {workspace === "settings"       && <Settings           setWorkspace={setWorkspace} />}
+          {workspace === "aiSettings"     && <AISettings         setWorkspace={setWorkspace} />}
           {workspace === "competitor"     && <CompetitorAnalysis setWorkspace={setWorkspace} />}
           {workspace === "market"         && <MarketResearch     setWorkspace={setWorkspace} />}
           {workspace === "swot"           && <SWOTAnalysis       setWorkspace={setWorkspace} />}

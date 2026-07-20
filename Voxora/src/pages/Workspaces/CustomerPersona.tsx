@@ -1,64 +1,29 @@
 import { useState } from "react";
 import { useProjects } from "../../context/ProjectContext";
 import { useActivity } from "../../context/ActivityContext";
-import { useToast } from "../../context/ToastContext";
+import { useToast }    from "../../context/ToastContext";
+import { useAI }       from "../../hooks/useAI";
+import DemoBanner      from "../../components/DemoBanner";
 import "./Workspace.css";
 
 export default function CustomerPersona({ setWorkspace }: { setWorkspace: (workspace: string) => void }) {
-  const { saveProject } = useProjects();
-  const { addActivity } = useActivity();
-  const { showToast } = useToast();
+  const { saveProject }  = useProjects();
+  const { addActivity }  = useActivity();
+  const { showToast }    = useToast();
   const [product, setProduct] = useState("");
   const [persona, setPersona] = useState("");
+  const { analyze, isLoading, isDemoMode } = useAI("persona");
 
-  const generatePersona = () => {
+  const generatePersona = async () => {
     if (!product.trim()) return;
-    const result = `👤 CUSTOMER PERSONA — ${product}
-
-📋 PERSONA PROFILE
-
-Name: Alex Chen
-Age: 28–38
-Role: Founder / Product Manager / Indie Hacker
-Location: Urban, tech-forward city or remote
-Income: $60,000–$150,000/year
-
-🎯 GOALS & MOTIVATIONS
-• Build and launch a product faster
-• Validate ideas without wasting months
-• Grow a sustainable, profitable business
-• Achieve financial independence through entrepreneurship
-
-😤 PAIN POINTS
-• Too many tools, not enough integration
-• Analysis paralysis — too much data, too little insight
-• Spending time on admin instead of building
-• Validating ideas is slow and expensive
-• Hard to get honest customer feedback
-
-📱 BEHAVIOR & PREFERENCES
-• Active on LinkedIn, Twitter/X, and indie hacker forums
-• Reads newsletters, listens to startup podcasts
-• Prefers self-serve SaaS (hates sales calls)
-• Will pay for tools that clearly save time
-• Trusts peer recommendations over ads
-
-💬 WHAT THEY SAY
-"I need to move fast. I can't afford to build the wrong thing."
-"I want tools that think like a founder, not an enterprise."
-"If I can't get value in the first 5 minutes, I'm gone."
-
-💡 HOW ${product.toUpperCase()} HELPS ALEX
-• Instant AI-generated insights (no setup required)
-• Clear action plans, not just data dumps
-• Saves 5–10 hours per week on research and strategy`;
-    setPersona(result);
+    const output = await analyze(product, "persona");
+    if (!output) return;
+    setPersona(output);
     addActivity({
       type: "persona_generated",
       title: "Customer Persona Created",
       description: `Customer persona generated for "${product}".`,
-      category: "Research",
-      icon: "👤",
+      category: "Research", icon: "👤",
     });
   };
 
@@ -80,6 +45,8 @@ Income: $60,000–$150,000/year
       <h1>👤 Customer Persona</h1>
       <p className="workspace-subtitle">Generate your ideal customer profile.</p>
 
+      {isDemoMode && <DemoBanner onConfigure={() => setWorkspace("aiSettings")} />}
+
       <div className="workspace-form">
         <input
           className="workspace-input"
@@ -88,9 +55,10 @@ Income: $60,000–$150,000/year
           value={product}
           onChange={(e) => setProduct(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && generatePersona()}
+          disabled={isLoading}
         />
-        <button className="workspace-btn" onClick={generatePersona} disabled={!product.trim()}>
-          👤 Generate Persona
+        <button className="workspace-btn" onClick={generatePersona} disabled={!product.trim() || isLoading}>
+          {isLoading ? "⏳ Generating…" : "👤 Generate Persona"}
         </button>
       </div>
 
@@ -103,7 +71,7 @@ Income: $60,000–$150,000/year
         </div>
       )}
 
-      {!persona && (
+      {!persona && !isLoading && (
         <div className="workspace-empty">
           <div className="workspace-empty-icon">👤</div>
           <p>Enter your product above to generate a detailed customer persona.</p>

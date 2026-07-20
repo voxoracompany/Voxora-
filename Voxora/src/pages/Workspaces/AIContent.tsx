@@ -1,43 +1,42 @@
 import { useState } from "react";
 import { useProjects } from "../../context/ProjectContext";
 import { useActivity } from "../../context/ActivityContext";
-import { useToast } from "../../context/ToastContext";
+import { useToast }    from "../../context/ToastContext";
+import { useAI }       from "../../hooks/useAI";
+import DemoBanner      from "../../components/DemoBanner";
 import "./Workspace.css";
 
 const AIContent = ({ setWorkspace }: { setWorkspace: (workspace: string) => void }) => {
   const [topic, setTopic] = useState("");
-  const [ideas, setIdeas] = useState<string[]>([]);
-  const { saveProject } = useProjects();
-  const { addActivity } = useActivity();
-  const { showToast } = useToast();
+  const [result, setResult] = useState("");
+  const { saveProject }  = useProjects();
+  const { addActivity }  = useActivity();
+  const { showToast }    = useToast();
+  const { brainstorm, isLoading, isDemoMode } = useAI("content");
 
-  const generateIdeas = () => {
+  const generateIdeas = async () => {
     if (!topic.trim()) return;
-    setIdeas([
-      `${topic} — Beginner's Complete Guide`,
-      `${topic} — Top 10 Strategies That Actually Work`,
-      `${topic} — Common Mistakes to Avoid`,
-      `${topic} — Advanced Tips for Experts`,
-      `${topic} — A Step-by-Step Tutorial`,
-    ]);
+    const output = await brainstorm(topic);
+    if (!output) return;
+    setResult(output);
     addActivity({
       type: "ai_content_generated",
       title: "AI Content Ideas Generated",
-      description: `Generated 5 content ideas for topic: "${topic}".`,
-      category: "AI",
-      icon: "✍️",
+      description: `Generated content ideas for topic: "${topic}".`,
+      category: "AI", icon: "✍️",
     });
   };
 
-  const saveIdea = (idea: string) => {
+  const saveIdeas = () => {
+    if (!result) return;
     saveProject({
       id: Date.now().toString(),
-      title: idea,
+      title: `AI Content Ideas — ${topic}`,
       category: "AI Content",
       createdAt: new Date().toISOString(),
-      notes: "",
+      notes: result,
     });
-    showToast(`💾 "${idea}" saved to projects!`);
+    showToast("💾 Content ideas saved to projects!");
   };
 
   return (
@@ -45,6 +44,8 @@ const AIContent = ({ setWorkspace }: { setWorkspace: (workspace: string) => void
       <button className="back-btn" onClick={() => setWorkspace("dashboard")}>← Back to Dashboard</button>
       <h1>✍️ AI Content Ideas</h1>
       <p className="workspace-subtitle">Generate creative content concepts with Voxora AI.</p>
+
+      {isDemoMode && <DemoBanner onConfigure={() => setWorkspace("aiSettings")} />}
 
       <div className="workspace-form">
         <input
@@ -54,27 +55,23 @@ const AIContent = ({ setWorkspace }: { setWorkspace: (workspace: string) => void
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && generateIdeas()}
+          disabled={isLoading}
         />
-        <button className="workspace-btn" onClick={generateIdeas} disabled={!topic.trim()}>
-          ✨ Generate Ideas
+        <button className="workspace-btn" onClick={generateIdeas} disabled={!topic.trim() || isLoading}>
+          {isLoading ? "⏳ Generating…" : "✨ Generate Ideas"}
         </button>
       </div>
 
-      {ideas.length > 0 && (
+      {result && (
         <div className="workspace-results">
-          <h3>Generated Ideas</h3>
-          <div className="idea-list">
-            {ideas.map((idea, i) => (
-              <div key={i} className="idea-card">
-                <span className="idea-text">{idea}</span>
-                <button className="idea-save-btn" onClick={() => saveIdea(idea)}>💾 Save</button>
-              </div>
-            ))}
-          </div>
+          <div className="report-box">{result}</div>
+          <button className="workspace-btn workspace-save-btn" onClick={saveIdeas}>
+            💾 Save Ideas
+          </button>
         </div>
       )}
 
-      {ideas.length === 0 && (
+      {!result && !isLoading && (
         <div className="workspace-empty">
           <div className="workspace-empty-icon">✍️</div>
           <p>Enter a topic above and generate instant AI content ideas.</p>

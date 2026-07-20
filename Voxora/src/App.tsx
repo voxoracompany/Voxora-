@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { ProjectProvider } from "./context/ProjectContext";
 import { ActivityProvider } from "./context/ActivityContext";
 import { ToastProvider } from "./context/ToastContext";
+import { AIProvider } from "./context/AIContext";
 
 // Public pages
 import LandingPage from "./pages/LandingPage";
@@ -82,7 +83,9 @@ export default function App() {
           <ToastProvider>
             <ActivityProvider>
               <ProjectProvider>
-                <Dashboard />
+                <AIProvider>
+                  <Dashboard />
+                </AIProvider>
               </ProjectProvider>
             </ActivityProvider>
           </ToastProvider>

@@ -1,85 +1,84 @@
 import { useState } from "react";
 import { useProjects } from "../../context/ProjectContext";
 import { useActivity } from "../../context/ActivityContext";
-import { useToast } from "../../context/ToastContext";
+import { useToast }    from "../../context/ToastContext";
+import { useAI }       from "../../hooks/useAI";
+import DemoBanner      from "../../components/DemoBanner";
 import "./Workspace.css";
 
-export default function AppIdeas({ setWorkspace }: { setWorkspace: (workspace: string) => void }) {
-  const { saveProject } = useProjects();
-  const { addActivity } = useActivity();
-  const { showToast } = useToast();
+const AppIdeas = ({ setWorkspace }: { setWorkspace: (workspace: string) => void }) => {
   const [topic, setTopic] = useState("");
-  const [ideas, setIdeas] = useState<string[]>([]);
+  const [result, setResult] = useState("");
+  const { saveProject }  = useProjects();
+  const { addActivity }  = useActivity();
+  const { showToast }    = useToast();
+  const { analyze, isLoading, isDemoMode } = useAI("apps");
 
-  const generateIdeas = () => {
+  const generateIdeas = async () => {
     if (!topic.trim()) return;
-    setIdeas([
-      `AI-powered app that solves ${topic} problems automatically`,
-      `Mobile platform helping users track and improve ${topic}`,
-      `Smart assistant focused on ${topic} optimization`,
-      `Community app connecting people around ${topic}`,
-      `Analytics dashboard for ${topic} insights`,
-    ]);
+    const output = await analyze(topic, "apps");
+    if (!output) return;
+    setResult(output);
     addActivity({
       type: "app_ideas_generated",
       title: "App Ideas Generated",
-      description: `Generated 5 app ideas for "${topic}".`,
-      category: "AI",
-      icon: "💡",
+      description: `Generated app ideas for: "${topic}".`,
+      category: "AI", icon: "💡",
     });
   };
 
-  const saveIdea = (idea: string) => {
+  const saveIdeas = () => {
+    if (!result) return;
     saveProject({
       id: Date.now().toString(),
-      title: idea,
-      category: "App Idea",
+      title: `App Ideas — ${topic}`,
+      category: "App Ideas",
       createdAt: new Date().toISOString(),
-      notes: "",
+      notes: result,
     });
-    showToast(`💾 App idea saved!`);
+    showToast("💾 App ideas saved to projects!");
   };
 
   return (
     <div className="workspace-container">
       <button className="back-btn" onClick={() => setWorkspace("dashboard")}>← Back to Dashboard</button>
-      <h1>💡 App Ideas Generator</h1>
-      <p className="workspace-subtitle">Discover new application concepts with Voxora AI.</p>
+      <h1>💡 App Ideas</h1>
+      <p className="workspace-subtitle">Discover and create new app concepts with Voxora AI.</p>
+
+      {isDemoMode && <DemoBanner onConfigure={() => setWorkspace("aiSettings")} />}
 
       <div className="workspace-form">
         <input
           className="workspace-input"
           type="text"
-          placeholder="Enter a topic or problem to solve..."
+          placeholder="Enter a problem space or market (e.g. remote work, fitness, finance)..."
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && generateIdeas()}
+          disabled={isLoading}
         />
-        <button className="workspace-btn" onClick={generateIdeas} disabled={!topic.trim()}>
-          ✨ Generate Ideas
+        <button className="workspace-btn" onClick={generateIdeas} disabled={!topic.trim() || isLoading}>
+          {isLoading ? "⏳ Generating…" : "💡 Generate App Ideas"}
         </button>
       </div>
 
-      {ideas.length > 0 && (
+      {result && (
         <div className="workspace-results">
-          <h3>Generated App Ideas</h3>
-          <div className="idea-list">
-            {ideas.map((idea, i) => (
-              <div key={i} className="idea-card">
-                <span className="idea-text">{idea}</span>
-                <button className="idea-save-btn" onClick={() => saveIdea(idea)}>💾 Save</button>
-              </div>
-            ))}
-          </div>
+          <div className="report-box">{result}</div>
+          <button className="workspace-btn workspace-save-btn" onClick={saveIdeas}>
+            💾 Save Ideas
+          </button>
         </div>
       )}
 
-      {ideas.length === 0 && (
+      {!result && !isLoading && (
         <div className="workspace-empty">
           <div className="workspace-empty-icon">💡</div>
-          <p>Enter a topic or problem above to generate innovative app ideas.</p>
+          <p>Enter a problem space above to generate app concepts.</p>
         </div>
       )}
     </div>
   );
-}
+};
+
+export default AppIdeas;

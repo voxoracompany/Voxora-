@@ -1,58 +1,29 @@
 import { useActivity } from "../../context/ActivityContext";
-import { useState } from "react";
+import { useState }    from "react";
 import { useProjects } from "../../context/ProjectContext";
-import { useToast } from "../../context/ToastContext";
+import { useToast }    from "../../context/ToastContext";
+import { useAI }       from "../../hooks/useAI";
+import DemoBanner      from "../../components/DemoBanner";
 import "./Workspace.css";
 
 export default function CompetitorAnalysis({ setWorkspace }: { setWorkspace: (workspace: string) => void }) {
-  const { saveProject } = useProjects();
-  const { addActivity } = useActivity();
-  const { showToast } = useToast();
-  const [idea, setIdea] = useState("");
+  const { saveProject }  = useProjects();
+  const { addActivity }  = useActivity();
+  const { showToast }    = useToast();
+  const [idea, setIdea]         = useState("");
   const [analysis, setAnalysis] = useState("");
+  const { analyze, isLoading, isDemoMode } = useAI("competitor");
 
-  const generateAnalysis = () => {
+  const generateAnalysis = async () => {
     if (!idea.trim()) return;
-    const report = `🏆 COMPETITOR ANALYSIS — ${idea}
-
-🎯 DIRECT COMPETITORS
-• Established Player A — strong brand, high pricing
-• Player B — good UX, limited features
-• Player C — wide feature set, poor support
-
-✅ COMPETITOR STRENGTHS
-• Strong brand recognition
-• Large existing customer base
-• Well-funded marketing budgets
-
-❌ COMPETITOR WEAKNESSES
-• Expensive pricing tiers
-• Complex onboarding experience
-• Poor customer support response times
-• Slow product iteration cycles
-
-🚀 YOUR OPPORTUNITIES
-• Simpler, more intuitive user experience
-• AI-native workflow automation
-• Competitive pricing (30-50% lower)
-• Faster support response times
-• Niche focus outperforming generalist tools
-
-⚠️ THREATS TO MONITOR
-• New market entrants with VC funding
-• Feature copying by large incumbents
-• Customer switching costs are low in SaaS
-• Rapid technology shifts in AI
-
-⭐ VOXORA RECOMMENDATION
-Differentiate by solving one customer problem dramatically better than everyone else. Avoid competing on features — compete on outcomes and speed to value.`;
-    setAnalysis(report);
+    const output = await analyze(idea, "competitor");
+    if (!output) return;
+    setAnalysis(output);
     addActivity({
       type: "competitor_generated",
       title: "Competitor Analysis Generated",
       description: `Competitor analysis generated for "${idea}".`,
-      category: "Research",
-      icon: "🏆",
+      category: "Research", icon: "🏆",
     });
   };
 
@@ -69,8 +40,7 @@ Differentiate by solving one customer problem dramatically better than everyone 
       type: "competitor_completed",
       title: "Competitor Analysis Saved",
       description: `Competitor analysis for "${idea}" saved to projects.`,
-      category: "Research",
-      icon: "🏆",
+      category: "Research", icon: "🏆",
     });
     showToast("🏆 Competitor Analysis saved!");
   };
@@ -81,6 +51,8 @@ Differentiate by solving one customer problem dramatically better than everyone 
       <h1>🏆 Competitor Analysis</h1>
       <p className="workspace-subtitle">Analyze competitors before building your product.</p>
 
+      {isDemoMode && <DemoBanner onConfigure={() => setWorkspace("aiSettings")} />}
+
       <div className="workspace-form">
         <input
           className="workspace-input"
@@ -89,9 +61,10 @@ Differentiate by solving one customer problem dramatically better than everyone 
           value={idea}
           onChange={(e) => setIdea(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && generateAnalysis()}
+          disabled={isLoading}
         />
-        <button className="workspace-btn" onClick={generateAnalysis} disabled={!idea.trim()}>
-          🔍 Analyze Competitors
+        <button className="workspace-btn" onClick={generateAnalysis} disabled={!idea.trim() || isLoading}>
+          {isLoading ? "⏳ Analyzing…" : "🔍 Analyze Competitors"}
         </button>
       </div>
 
@@ -104,7 +77,7 @@ Differentiate by solving one customer problem dramatically better than everyone 
         </div>
       )}
 
-      {!analysis && (
+      {!analysis && !isLoading && (
         <div className="workspace-empty">
           <div className="workspace-empty-icon">🏆</div>
           <p>Enter your idea above to generate a comprehensive competitor analysis.</p>

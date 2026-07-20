@@ -20,6 +20,7 @@ const AI_TOOLS = [
   { id: "content",        icon: "✍️", label: "AI Content" },
   { id: "apps",           icon: "💡", label: "App Ideas" },
   { id: "startup",        icon: "🚀", label: "Startup Ideas" },
+  { id: "aiSettings",    icon: "🧠", label: "AI Settings" },
 ];
 
 const RESEARCH_TOOLS = [

@@ -1,0 +1,240 @@
+Build Voxora V4.1 — AI Engine
+
+IMPORTANT
+
+Do NOT rebuild the application.
+
+Preserve all existing functionality.
+
+Reuse existing components.
+
+This is infrastructure for every AI workspace.
+
+==================================================
+GOAL
+==================================================
+
+Create a centralized AI Engine that powers every AI feature in Voxora.
+
+The AI Engine should be modular so future providers can be added without changing existing workspace code.
+
+==================================================
+Architecture
+==================================================
+
+Create:
+
+services/
+
+ai/
+
+AIService.ts
+
+providers/
+
+types/
+
+hooks/
+
+context/
+
+==================================================
+Provider System
+==================================================
+
+Create a provider interface supporting:
+
+OpenAI
+
+Google Gemini
+
+Anthropic Claude
+
+Mock Provider (fallback)
+
+The Mock Provider should remain the default until API keys are configured.
+
+==================================================
+AI Service
+==================================================
+
+Create a central AIService that supports:
+
+generate()
+
+stream()
+
+chat()
+
+summarize()
+
+brainstorm()
+
+analyze()
+
+rewrite()
+
+validate()
+
+Every workspace should call AIService instead of implementing AI directly.
+
+==================================================
+Prompt Library
+==================================================
+
+Create reusable prompt templates for:
+
+Startup Validation
+
+SWOT Analysis
+
+Business Model Canvas
+
+Customer Research
+
+Competitor Analysis
+
+Marketing Strategy
+
+SEO Planning
+
+Financial Forecast
+
+Pitch Deck
+
+Executive Summary
+
+Email Campaign
+
+Social Media
+
+Product Roadmap
+
+==================================================
+Conversation Memory
+==================================================
+
+Create AI Memory supporting:
+
+Conversation history
+
+Pinned conversations
+
+Conversation rename
+
+Archive
+
+Delete
+
+Recent prompts
+
+Favourite prompts
+
+Memory toggle
+
+==================================================
+Usage Tracking
+==================================================
+
+Track:
+
+Requests
+
+Tokens (estimated)
+
+Response time
+
+Provider used
+
+Workspace used
+
+Daily usage
+
+Weekly usage
+
+==================================================
+Dashboard
+==================================================
+
+Add widgets:
+
+AI Requests Today
+
+Most Used Workspace
+
+Average Response Time
+
+Favourite AI Tool
+
+Recent AI Conversations
+
+==================================================
+Settings
+==================================================
+
+Create an AI Settings page:
+
+Provider selector
+
+Temperature
+
+Max Tokens
+
+Streaming
+
+Memory On/Off
+
+Default Workspace
+
+Prompt Style
+
+API Key placeholders
+
+==================================================
+Error Handling
+==================================================
+
+If no API key exists:
+
+Automatically use the Mock Provider.
+
+Display:
+
+"Running in Demo Mode"
+
+Never crash.
+
+==================================================
+Developer Mode
+==================================================
+
+Create a hidden developer page showing:
+
+Current Provider
+
+API Status
+
+Registered Prompts
+
+Memory Status
+
+Usage Statistics
+
+==================================================
+Requirements
+==================================================
+
+No existing feature should break.
+
+All existing AI workspaces should continue functioning using the Mock Provider.
+
+Code must be modular and production-ready.
+
+Run production build.
+
+Fix any TypeScript errors.
+
+Commit:
+V4.1 AI Engine Infrastructure
+
+Push to GitHub.
