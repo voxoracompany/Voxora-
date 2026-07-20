@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /verify-email
+Disallow: /reset-password
+
+# Sitemap
+Sitemap: https://voxora.app/sitemap.xml

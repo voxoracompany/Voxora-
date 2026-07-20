@@ -136,6 +136,7 @@ const Dashboard = () => {
   const { user, getProfileCompletion } = useAuth();
   const userName = user?.name || localStorage.getItem("voxora-name") || "";
   const [workspace, setWorkspace] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
   const { projects, favorites, pinned } = useProjects();
   const { activities } = useActivity();
   const { usage, isDemoMode } = useAIContext();
@@ -174,11 +175,40 @@ const Dashboard = () => {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
+  const handleSidebarNav = (id: string) => {
+    setWorkspace(id);
+    if (window.innerWidth < 768) setSidebarOpen(false);
+  };
+
   return (
     <div className="dashboard">
-      <Sidebar setWorkspace={setWorkspace} workspace={workspace} />
+      {/* Mobile backdrop overlay */}
+      {sidebarOpen && (
+        <div
+          className="sidebar-backdrop-overlay"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <Sidebar
+        setWorkspace={handleSidebarNav}
+        workspace={workspace}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       <main className="main-content">
+        <div className="mobile-topbar">
+          <button
+            className="hamburger-btn"
+            onClick={() => setSidebarOpen(o => !o)}
+            aria-label="Toggle navigation"
+            aria-expanded={sidebarOpen}
+          >
+            <span /><span /><span />
+          </button>
+          <span className="mobile-brand">🚀 VOXORA</span>
+        </div>
         <TopBar setWorkspace={setWorkspace} />
 
         <Suspense fallback={<WorkspaceLoader />}>

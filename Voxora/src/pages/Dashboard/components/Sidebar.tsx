@@ -4,6 +4,8 @@ import "./Sidebar.css";
 interface SidebarProps {
   workspace: string;
   setWorkspace: (workspace: string) => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const MAIN_NAV = [
@@ -134,14 +136,36 @@ const BOTTOM_NAV = [
   { id: "settings",       icon: "⚙️", label: "Settings" },
 ];
 
-export default function Sidebar({ workspace, setWorkspace }: SidebarProps) {
+export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: SidebarProps) {
   const navigate = useNavigate();
 
   return (
-    <aside className="sidebar">
+    <>
+      {/* Mobile backdrop */}
+      {isOpen === false ? null : (
+        <div
+          className="sidebar-backdrop"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+      <aside
+        className={`sidebar${isOpen === false ? " sidebar--closed" : ""}`}
+        aria-label="Main navigation"
+        role="navigation"
+      >
       <div className="sidebar-brand" style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
         <span className="sidebar-logo">🚀</span>
         <span className="sidebar-title">VOXORA</span>
+        {onClose && (
+          <button
+            className="sidebar-close-btn"
+            onClick={onClose}
+            aria-label="Close navigation"
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       <nav className="sidebar-nav">
@@ -334,5 +358,6 @@ export default function Sidebar({ workspace, setWorkspace }: SidebarProps) {
         </button>
       </nav>
     </aside>
+    </>
   );
 }

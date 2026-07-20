@@ -1,3 +1,4 @@
+/* ── Sidebar ─────────────────────────────────────────────────────────────────── */
 .sidebar {
   width: 240px;
   min-height: 100vh;
@@ -8,6 +9,12 @@
   flex-direction: column;
   flex-shrink: 0;
   overflow-y: auto;
+  transition: transform 0.3s ease;
+  z-index: 200;
+}
+
+.sidebar-backdrop {
+  display: none;
 }
 
 .sidebar-brand {
@@ -19,14 +26,29 @@
   margin-bottom: 16px;
 }
 
-.sidebar-logo { font-size: 22px; }
-
+.sidebar-logo  { font-size: 22px; }
 .sidebar-title {
   font-size: 17px;
   font-weight: 800;
   color: #fff;
   letter-spacing: -0.3px;
+  flex: 1;
 }
+
+.sidebar-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+}
+.sidebar-close-btn:hover  { color: #fff; background: rgba(255,255,255,0.1); }
+.sidebar-close-btn:focus-visible { outline: 2px solid #a5b4fc; outline-offset: 2px; }
 
 .sidebar-section-label {
   font-size: 10px;
@@ -61,23 +83,59 @@
   text-align: left;
   width: 100%;
 }
+.sidebar-item:hover        { background: rgba(255,255,255,0.07); color: #e2e8f0; }
+.sidebar-item.active       { background: rgba(108,99,255,0.25); color: #a5b4fc; font-weight: 600; }
+.sidebar-item:focus-visible { outline: 2px solid #a5b4fc; outline-offset: 1px; border-radius: 9px; }
 
-.sidebar-item:hover {
-  background: rgba(255,255,255,0.07);
-  color: #e2e8f0;
-}
-
-.sidebar-item.active {
-  background: rgba(108,99,255,0.25);
-  color: #a5b4fc;
-  font-weight: 600;
-}
-
-.sidebar-item-icon { font-size: 15px; flex-shrink: 0; width: 20px; text-align: center; }
+.sidebar-item-icon  { font-size: 15px; flex-shrink: 0; width: 20px; text-align: center; }
 .sidebar-item-label { line-height: 1.2; }
 
 .sidebar-divider {
   height: 1px;
   background: rgba(255,255,255,0.08);
   margin: 8px 0 14px;
+}
+
+/* ── Mobile (< 768px) ─────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transform: translateX(0);
+    box-shadow: 4px 0 32px rgba(0,0,0,0.5);
+  }
+
+  /* Hide sidebar when closed */
+  .sidebar--closed {
+    transform: translateX(-100%);
+    pointer-events: none;
+  }
+
+  /* Show backdrop only when sidebar is open */
+  .sidebar:not(.sidebar--closed) ~ .sidebar-backdrop,
+  .sidebar-backdrop {
+    display: none;
+  }
+
+  /* Backdrop overlay — rendered before sidebar in DOM */
+  .sidebar:not(.sidebar--closed) + .main-content > .mobile-topbar ~ * {
+    /* doesn't work easily in CSS alone — handled via JS state */
+  }
+
+  .sidebar-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Backdrop: rendered as sibling */
+  .sidebar-backdrop-active {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 199;
+  }
 }

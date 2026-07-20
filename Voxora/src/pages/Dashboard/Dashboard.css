@@ -153,8 +153,84 @@
 }
 .back-btn:hover { background: #f1f5f9; }
 
-@media (max-width: 768px) {
+/* ── Mobile hamburger / brand bar ───────────────────────────────────────── */
+.mobile-topbar {
+  display: none;
+}
+
+.hamburger-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.hamburger-btn span {
+  display: block;
+  height: 2.5px;
+  width: 100%;
+  background: #374151;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+.hamburger-btn:hover span  { background: #6C63FF; }
+.hamburger-btn:focus-visible { outline: 2px solid #6C63FF; outline-offset: 4px; border-radius: 4px; }
+
+.mobile-brand {
+  font-size: 17px;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+}
+
+/* ── Sidebar backdrop (mobile) ──────────────────────────────────────────── */
+.sidebar-backdrop-overlay {
+  display: none;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px 8px;
+    margin: -16px -18px 8px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
   .main-content { padding: 16px 18px; }
   .dashboard-row { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+
+  .sidebar-backdrop-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 199;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+}
+
+@media (min-width: 768px) {
+  .mobile-topbar { display: none; }
+  .hamburger-btn { display: none; }
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+  .main-content { padding: 20px 24px; }
   .stats { grid-template-columns: repeat(3, 1fr); }
+  .cards { grid-template-columns: repeat(2, 1fr); }
 }

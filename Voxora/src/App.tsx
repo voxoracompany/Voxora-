@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { ProjectProvider } from "./context/ProjectContext";
 import { ActivityProvider } from "./context/ActivityContext";
@@ -35,8 +35,9 @@ import Entrepreneurs from "./pages/solutions/Entrepreneurs";
 import Businesses from "./pages/solutions/Businesses";
 import Developers from "./pages/solutions/Developers";
 
-// Dashboard (lazy)
+// Dashboard & 404 (lazy)
 const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
+const NotFound  = lazy(() => import("./pages/NotFound"));
 
 function PageLoader() {
   return (
@@ -102,8 +103,8 @@ export default function App() {
             </ProtectedRoute>
           } />
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* 404 */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </AuthProvider>

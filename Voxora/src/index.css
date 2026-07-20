@@ -78,3 +78,47 @@ input, textarea, select {
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+/* ── Accessibility — focus states ─────────────────────────────────────────── */
+/* Remove default outline only when using mouse; keep it for keyboard */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Skip navigation link (screen reader + keyboard users) */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 12px;
+  z-index: 9999;
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 0 0 8px 8px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-to-content:focus-visible {
+  top: 0;
+  outline: none;
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Print styles ─────────────────────────────────────────────────────────── */
+@media print {
+  .sidebar, .mobile-topbar, .hamburger-btn { display: none !important; }
+  .main-content { padding: 0 !important; }
+}
