@@ -6,6 +6,7 @@ import FeatureCard from "./components/FeatureCard";
 import { useProjects } from "../../context/ProjectContext";
 import { useAIContext } from "../../context/AIContext";
 import { useAuth } from "../../context/AuthContext";
+import { useCloud } from "../../context/CloudContext";
 import { AIMemory } from "../../services/ai/AIMemory";
 import { AIUsage } from "../../services/ai/AIUsage";
 import "./Dashboard.css";
@@ -141,6 +142,7 @@ const Dashboard = () => {
   const { projects, favorites, pinned } = useProjects();
   const { activities } = useActivity();
   const { usage, isDemoMode, activeProvider, health } = useAIContext();
+  const { status: cloudStatus, syncNow } = useCloud();
 
   const stats = useMemo(() => {
     const weekStart = new Date();
@@ -450,6 +452,93 @@ const Dashboard = () => {
                     <p className="stat-value" style={{ fontSize: 13 }}>Manage</p>
                     <h3 className="stat-label">Account Settings</h3>
                   </div>
+                </div>
+              </div>
+
+              {/* ── V5.3 Cloud & Backend Widgets ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  ☁️ Cloud & Backend
+                  {cloudStatus.isDemo && (
+                    <span style={{ fontSize: 11, background: "#fef3c7", color: "#92400e", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>
+                      Local Demo Mode
+                    </span>
+                  )}
+                  {!cloudStatus.isDemo && cloudStatus.isOnline && (
+                    <span style={{ fontSize: 11, background: "#d1fae5", color: "#065f46", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>
+                      Cloud Connected
+                    </span>
+                  )}
+                  {!cloudStatus.isDemo && !cloudStatus.isOnline && (
+                    <span style={{ fontSize: 11, background: "#fee2e2", color: "#991b1b", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>
+                      Offline
+                    </span>
+                  )}
+                </h2>
+                <div className="stats">
+                  {/* Current User */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("userProfile")}>
+                    <div className="stat-icon">{user?.avatarEmoji || "👤"}</div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>{user?.name?.split(" ")[0] || "Guest"}</p>
+                    <h3 className="stat-label">Current User</h3>
+                  </div>
+                  {/* Auth Status */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("securitySettings")}>
+                    <div className="stat-icon">{user ? "🔓" : "🔒"}</div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>{user ? "Authenticated" : "Guest"}</p>
+                    <h3 className="stat-label">Auth Status</h3>
+                  </div>
+                  {/* Cloud Sync Status */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => syncNow()}>
+                    <div className="stat-icon">
+                      {cloudStatus.isSyncing ? "🔄" : cloudStatus.isDemo ? "💾" : cloudStatus.isOnline ? "☁️" : "📴"}
+                    </div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>
+                      {cloudStatus.isSyncing
+                        ? "Syncing…"
+                        : cloudStatus.isDemo
+                        ? "Local"
+                        : cloudStatus.isOnline
+                        ? "In Sync"
+                        : "Offline"}
+                    </p>
+                    <h3 className="stat-label">Cloud Sync</h3>
+                  </div>
+                  {/* Last Sync */}
+                  <div className="stat-card">
+                    <div className="stat-icon">🕐</div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>
+                      {cloudStatus.lastSync
+                        ? timeAgo(cloudStatus.lastSync)
+                        : cloudStatus.isDemo
+                        ? "Local"
+                        : "Never"}
+                    </p>
+                    <h3 className="stat-label">Last Sync</h3>
+                  </div>
+                  {/* Pending Changes */}
+                  <div className="stat-card">
+                    <div className="stat-icon">{cloudStatus.pendingChanges > 0 ? "⏳" : "✅"}</div>
+                    <p className="stat-value">{cloudStatus.pendingChanges}</p>
+                    <h3 className="stat-label">Pending Changes</h3>
+                  </div>
+                  {/* Storage Usage */}
+                  <div className="stat-card">
+                    <div className="stat-icon">🗄️</div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>
+                      {cloudStatus.storageUsed < 1024
+                        ? `${cloudStatus.storageUsed}B`
+                        : cloudStatus.storageUsed < 1024 * 1024
+                        ? `${(cloudStatus.storageUsed / 1024).toFixed(1)}KB`
+                        : `${(cloudStatus.storageUsed / (1024 * 1024)).toFixed(1)}MB`}
+                    </p>
+                    <h3 className="stat-label">Storage Used</h3>
+                  </div>
+                </div>
+                {/* Backend provider badge */}
+                <div style={{ marginTop: 8, fontSize: 12, color: "var(--text-secondary, #64748b)" }}>
+                  Backend: <strong style={{ textTransform: "capitalize" }}>{cloudStatus.provider}</strong>
+                  {cloudStatus.isDemo && " — Set VITE_FIREBASE_* or VITE_SUPABASE_* env vars to connect a cloud backend."}
                 </div>
               </div>
 

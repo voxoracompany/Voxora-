@@ -1,0 +1,163 @@
+Continue Voxora from the latest GitHub commit.
+
+IMPORTANT
+
+- Analyze the existing codebase first.
+- Verify V5.2 Google Gemini Integration exists.
+- Do NOT rebuild V1–V5.2.
+- Preserve all existing functionality.
+- Reuse the existing architecture.
+- Maintain the premium UI and responsive design.
+
+==================================================
+V5.3 — Authentication & Cloud Backend
+==================================================
+
+Goal:
+
+Transform Voxora from a local application into a cloud-ready SaaS platform.
+
+==================================================
+Authentication
+==================================================
+
+Implement a modular authentication layer.
+
+Support:
+
+- Email Sign Up
+- Email Login
+- Logout
+- Forgot Password
+- Password Reset
+- Email Verification (placeholder if backend unavailable)
+- Session Persistence
+- Protected Routes
+
+==================================================
+Backend Service Layer
+==================================================
+
+Create a backend abstraction that supports:
+
+- Firebase
+- Supabase
+
+Structure the code so additional providers can be added later.
+
+==================================================
+Cloud Data
+==================================================
+
+Move these resources from local storage into the backend layer:
+
+- Projects
+- AI Conversations
+- Favorites
+- Pins
+- Dashboard Preferences
+- Settings
+- Activity History
+
+==================================================
+Offline Mode
+==================================================
+
+If the backend is unavailable:
+
+- Continue using local storage.
+- Automatically synchronize when the connection returns.
+- Never lose user data.
+
+==================================================
+User Profile
+==================================================
+
+Support:
+
+- Avatar (placeholder)
+- Full Name
+- Username
+- Company
+- Bio
+- Language
+- Time Zone
+
+==================================================
+Dashboard
+==================================================
+
+Add widgets:
+
+- Current User
+- Authentication Status
+- Cloud Sync Status
+- Last Sync
+- Storage Usage
+
+==================================================
+Security
+==================================================
+
+Implement:
+
+- Environment variable support
+- Secure backend abstraction
+- Session management
+- Input validation
+- No hard-coded secrets
+
+==================================================
+Developer Mode
+==================================================
+
+If Firebase or Supabase is not configured:
+
+Display:
+
+"Running in Local Demo Mode"
+
+The application must continue working normally.
+
+==================================================
+Validation
+==================================================
+
+Run a full production build.
+
+Fix all TypeScript errors.
+
+Fix all runtime errors.
+
+Verify:
+
+- Authentication works.
+- Demo Mode works.
+- Offline synchronization works.
+- No broken routes.
+- No blank pages.
+- No console errors.
+
+==================================================
+Git
+==================================================
+
+Commit:
+
+V5.3 Authentication & Cloud Backend
+
+Push to the connected GitHub repository.
+
+Verify the push succeeded.
+
+Report:
+
+- Build status
+- Latest Git commit hash
+- GitHub push confirmation
+- Authentication status
+- Cloud backend status
+- Offline mode status
+- Number of files changed
+
+Do not finish until the production build passes and the GitHub push has been confirmed.

@@ -1,4 +1,6 @@
+// ── V5.3 Activity Context — Cloud-backed with offline fallback ────────────────
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { syncManager } from "../services/backend/SyncManager";
 
 export type ActivityCategory = "Projects" | "AI" | "Research" | "Roadmaps" | "Favorites" | "General";
 
@@ -69,6 +71,8 @@ export const ActivityProvider = ({ children }: { children: React.ReactNode }) =>
       projectId: activity.projectId ? String(activity.projectId).slice(0, 100) : undefined,
     };
     setActivities((prev) => [newActivity, ...prev].slice(0, MAX_ACTIVITIES));
+    // Enqueue to cloud sync
+    syncManager.enqueue("activityHistory", "upsert", newActivity.id, newActivity);
   };
 
   const clearActivities = () => {

@@ -1,5 +1,10 @@
+// ── V5.3 Project Context — Cloud-backed with offline fallback ─────────────────
+// Primary store: backend provider (Firebase / Supabase / localStorage).
+// Writes are also enqueued in SyncManager so offline changes survive.
+
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useActivity } from "./ActivityContext";
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { syncManager } from "../services/backend/SyncManager";
 
 export type Project = {
   id: string;
@@ -54,7 +59,6 @@ function sanitizeProject(p: unknown): Project | null {
   };
 }
 
-// ── Validation ──────────────────────────────────────────────────────────────
 function validateProject(project: Project): { valid: boolean; error?: string } {
   const title = project.title?.trim();
   if (!title) return { valid: false, error: "Project title cannot be empty." };
@@ -80,6 +84,7 @@ export const ProjectProvider = ({ children }: { children: React.ReactNode }) => 
 
   const { addActivity } = useActivity();
 
+  // ── Persist to localStorage (primary offline store) ──────────────────────
   useEffect(() => {
     try { localStorage.setItem("voxora-projects", JSON.stringify(projects)); } catch (e) {
       console.warn("[Voxora] Could not save projects:", e);
@@ -98,6 +103,20 @@ export const ProjectProvider = ({ children }: { children: React.ReactNode }) => 
     }
   }, [pinned]);
 
+  // ── Cloud sync helper ─────────────────────────────────────────────────────
+  const cloudUpsertProject = useCallback((p: Project) => {
+    syncManager.enqueue("projects", "upsert", p.id, p);
+  }, []);
+
+  const cloudUpsertFavorites = useCallback((ids: string[]) => {
+    syncManager.enqueue("favorites", "upsert", "favorites-list", { id: "favorites-list", items: ids });
+  }, []);
+
+  const cloudUpsertPins = useCallback((ids: string[]) => {
+    syncManager.enqueue("pins", "upsert", "pins-list", { id: "pins-list", items: ids });
+  }, []);
+
+  // ── CRUD operations ───────────────────────────────────────────────────────
   const saveProject = (project: Project): { success: boolean; error?: string } => {
     const validation = validateProject(project);
     if (!validation.valid) return { success: false, error: validation.error };
@@ -107,11 +126,11 @@ export const ProjectProvider = ({ children }: { children: React.ReactNode }) => 
 
     const isUpdate = projects.some((p) => p.id === sanitized.id);
 
-    // Prevent duplicate titles (new projects only)
     if (!isUpdate) {
       const duplicate = projects.find(
-        (p) => p.title.trim().toLowerCase() === sanitized.title.trim().toLowerCase() &&
-               p.category === sanitized.category
+        (p) =>
+          p.title.trim().toLowerCase() === sanitized.title.trim().toLowerCase() &&
+          p.category === sanitized.category
       );
       if (duplicate) {
         return { success: false, error: `A project named "${sanitized.title}" already exists in ${sanitized.category}.` };
@@ -121,6 +140,7 @@ export const ProjectProvider = ({ children }: { children: React.ReactNode }) => 
     setProjects((prev) =>
       isUpdate ? prev.map((p) => (p.id === sanitized.id ? sanitized : p)) : [...prev, sanitized]
     );
+    cloudUpsertProject(sanitized);
 
     addActivity({
       type: isUpdate ? "project_updated" : "project_created",
@@ -139,6 +159,7 @@ export const ProjectProvider = ({ children }: { children: React.ReactNode }) => 
     setProjects((prev) => prev.filter((p) => p.id !== id));
     setFavorites((prev) => prev.filter((fid) => fid !== id));
     setPinned((prev) => prev.filter((pid) => pid !== id));
+    syncManager.enqueue("projects", "delete", id, { id });
     if (project) {
       addActivity({
         type: "project_deleted",
@@ -161,6 +182,7 @@ export const ProjectProvider = ({ children }: { children: React.ReactNode }) => 
       createdAt: new Date().toISOString(),
     };
     setProjects((prev) => [...prev, copy]);
+    cloudUpsertProject(copy);
     addActivity({
       type: "project_created",
       title: "Project Duplicated",
@@ -174,7 +196,9 @@ export const ProjectProvider = ({ children }: { children: React.ReactNode }) => 
   const favoriteProject = (id: string) => {
     const project = projects.find((p) => p.id === id);
     const isFav = favorites.includes(id);
-    setFavorites((prev) => isFav ? prev.filter((pid) => pid !== id) : [...prev, id]);
+    const next = isFav ? favorites.filter((pid) => pid !== id) : [...favorites, id];
+    setFavorites(next);
+    cloudUpsertFavorites(next);
     addActivity({
       type: isFav ? "project_unfavorited" : "project_favorited",
       title: isFav ? "Removed from Favorites" : "Added to Favorites",
@@ -190,7 +214,9 @@ export const ProjectProvider = ({ children }: { children: React.ReactNode }) => 
   const pinProject = (id: string) => {
     const project = projects.find((p) => p.id === id);
     const isPinned = pinned.includes(id);
-    setPinned((prev) => isPinned ? prev.filter((pid) => pid !== id) : [...prev, id]);
+    const next = isPinned ? pinned.filter((pid) => pid !== id) : [...pinned, id];
+    setPinned(next);
+    cloudUpsertPins(next);
     addActivity({
       type: isPinned ? "project_unpinned" : "project_pinned",
       title: isPinned ? "Project Unpinned" : "Project Pinned",
@@ -205,11 +231,18 @@ export const ProjectProvider = ({ children }: { children: React.ReactNode }) => 
 
   const updateNotes = (id: string, notes: string) => {
     const trimmed = notes.slice(0, 50000);
-    setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, notes: trimmed } : p)));
+    setProjects((prev) => {
+      const next = prev.map((p) => (p.id === id ? { ...p, notes: trimmed } : p));
+      const updated = next.find(p => p.id === id);
+      if (updated) cloudUpsertProject(updated);
+      return next;
+    });
   };
 
   return (
-    <ProjectContext.Provider value={{ projects, favorites, pinned, saveProject, deleteProject, favoriteProject, pinProject, updateNotes, duplicateProject }}>
+    <ProjectContext.Provider
+      value={{ projects, favorites, pinned, saveProject, deleteProject, favoriteProject, pinProject, updateNotes, duplicateProject }}
+    >
       {children}
     </ProjectContext.Provider>
   );
@@ -217,6 +250,6 @@ export const ProjectProvider = ({ children }: { children: React.ReactNode }) => 
 
 export const useProjects = () => {
   const context = useContext(ProjectContext);
-  if (!context) throw new Error("useProjects must be used inside ProjectProvider");
+  if (!context) throw new Error("useProjects must be inside ProjectProvider");
   return context;
 };

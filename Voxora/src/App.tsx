@@ -4,7 +4,8 @@ import { ProjectProvider } from "./context/ProjectContext";
 import { ActivityProvider } from "./context/ActivityContext";
 import { ToastProvider } from "./context/ToastContext";
 import { AIProvider } from "./context/AIContext";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { CloudProvider } from "./context/CloudContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Public pages
@@ -55,58 +56,68 @@ function PageLoader() {
   );
 }
 
+// CloudProvider needs userId from AuthContext, so it lives inside AuthProvider
+function CloudWrapper({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  return <CloudProvider userId={user?.id ?? null}>{children}</CloudProvider>;
+}
+
+import React from "react";
+
 export default function App() {
   return (
     <AuthProvider>
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          {/* Public */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/verify-email" element={<EmailVerification />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/careers" element={<Careers />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsOfService />} />
+      <CloudWrapper>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* Public */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/verify-email" element={<EmailVerification />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/careers" element={<Careers />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
 
-          {/* Platforms */}
-          <Route path="/platforms/ai-command-center" element={<AICommandCenter />} />
-          <Route path="/platforms/startup-studio" element={<StartupStudio />} />
-          <Route path="/platforms/marketing-studio" element={<MarketingStudio />} />
-          <Route path="/platforms/financial-studio" element={<FinancialStudio />} />
-          <Route path="/platforms/investor-studio" element={<InvestorStudio />} />
+            {/* Platforms */}
+            <Route path="/platforms/ai-command-center" element={<AICommandCenter />} />
+            <Route path="/platforms/startup-studio" element={<StartupStudio />} />
+            <Route path="/platforms/marketing-studio" element={<MarketingStudio />} />
+            <Route path="/platforms/financial-studio" element={<FinancialStudio />} />
+            <Route path="/platforms/investor-studio" element={<InvestorStudio />} />
 
-          {/* Solutions */}
-          <Route path="/solutions/creators" element={<Creators />} />
-          <Route path="/solutions/entrepreneurs" element={<Entrepreneurs />} />
-          <Route path="/solutions/businesses" element={<Businesses />} />
-          <Route path="/solutions/developers" element={<Developers />} />
+            {/* Solutions */}
+            <Route path="/solutions/creators" element={<Creators />} />
+            <Route path="/solutions/entrepreneurs" element={<Entrepreneurs />} />
+            <Route path="/solutions/businesses" element={<Businesses />} />
+            <Route path="/solutions/developers" element={<Developers />} />
 
-          {/* App — protected, wrapped with all context providers */}
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <ToastProvider>
-                <ActivityProvider>
-                  <ProjectProvider>
-                    <AIProvider>
-                      <Dashboard />
-                    </AIProvider>
-                  </ProjectProvider>
-                </ActivityProvider>
-              </ToastProvider>
-            </ProtectedRoute>
-          } />
+            {/* App — protected, wrapped with all context providers */}
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <ToastProvider>
+                  <ActivityProvider>
+                    <ProjectProvider>
+                      <AIProvider>
+                        <Dashboard />
+                      </AIProvider>
+                    </ProjectProvider>
+                  </ActivityProvider>
+                </ToastProvider>
+              </ProtectedRoute>
+            } />
 
-          {/* 404 */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
+            {/* 404 */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </CloudWrapper>
     </AuthProvider>
   );
 }
