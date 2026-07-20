@@ -83,6 +83,19 @@ const GROWTH_TOOLS = [
   { id: "aiGrowthRecommendations",icon: "🤖", label: "AI Recommendations" },
 ];
 
+const TEAM_TOOLS = [
+  { id: "teamHub",            icon: "🤝", label: "Team Hub" },
+  { id: "teamMembers",        icon: "👥", label: "Team Members" },
+  { id: "taskBoard",          icon: "📋", label: "Task Board" },
+  { id: "meetingNotes",       icon: "📝", label: "Meeting Notes" },
+  { id: "teamGoals",          icon: "🎯", label: "Team Goals" },
+  { id: "roleAssignment",     icon: "🏷️", label: "Roles & Responsibilities" },
+  { id: "teamAnnouncements",  icon: "📢", label: "Announcements" },
+  { id: "teamBrief",          icon: "📡", label: "Team Brief" },
+  { id: "collaborationPlan",  icon: "🤝", label: "Collaboration Plan" },
+  { id: "teamRetrospective",  icon: "🔁", label: "Retrospective" },
+];
+
 const ANALYTICS_TOOLS = [
   { id: "analyticsHub",        icon: "📊", label: "Analytics Hub" },
   { id: "executiveDashboard",  icon: "🏢", label: "Executive Dashboard" },
@@ -197,6 +210,20 @@ export default function Sidebar({ workspace, setWorkspace }: SidebarProps) {
       <div className="sidebar-section-label">Marketing Studio</div>
       <nav className="sidebar-nav">
         {MARKETING_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">Team Collaboration</div>
+      <nav className="sidebar-nav">
+        {TEAM_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}

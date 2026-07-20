@@ -30,6 +30,17 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V4.7 Team Collaboration ───────────────────────────────────────────────────
+const TeamHub             = lazy(() => import("../Workspaces/TeamHub"));
+const TeamMembers         = lazy(() => import("../Workspaces/TeamMembers"));
+const TaskBoard           = lazy(() => import("../Workspaces/TaskBoard"));
+const MeetingNotes        = lazy(() => import("../Workspaces/MeetingNotes"));
+const TeamGoals           = lazy(() => import("../Workspaces/TeamGoals"));
+const RoleAssignment      = lazy(() => import("../Workspaces/RoleAssignment"));
+const TeamAnnouncements   = lazy(() => import("../Workspaces/TeamAnnouncements"));
+const TeamBrief           = lazy(() => import("../Workspaces/TeamBrief"));
+const CollaborationPlan   = lazy(() => import("../Workspaces/CollaborationPlan"));
+const TeamRetrospective   = lazy(() => import("../Workspaces/TeamRetrospective"));
 // ── V4.6 Advanced Analytics Studio ───────────────────────────────────────────
 const AnalyticsHub         = lazy(() => import("../Workspaces/AnalyticsHub"));
 const ExecutiveDashboard   = lazy(() => import("../Workspaces/ExecutiveDashboard"));
@@ -263,6 +274,45 @@ const Dashboard = () => {
                 )}
               </div>
 
+              {/* ── Team Collaboration Widgets ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  🤝 Team Collaboration
+                </h2>
+                <div className="stats">
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("teamMembers")}>
+                    <div className="stat-icon">👥</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Manage</p>
+                    <h3 className="stat-label">Team Members</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("taskBoard")}>
+                    <div className="stat-icon">📋</div>
+                    <p className="stat-value">{projects.filter(p => p.category === "Task").length}</p>
+                    <h3 className="stat-label">Task Board</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("meetingNotes")}>
+                    <div className="stat-icon">📝</div>
+                    <p className="stat-value">{projects.filter(p => p.category === "Meeting Notes").length}</p>
+                    <h3 className="stat-label">Meeting Notes</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("teamGoals")}>
+                    <div className="stat-icon">🎯</div>
+                    <p className="stat-value">{projects.filter(p => p.category === "Team Goal").length}</p>
+                    <h3 className="stat-label">Team Goals</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("teamRetrospective")}>
+                    <div className="stat-icon">🔁</div>
+                    <p className="stat-value">{projects.filter(p => p.category === "Retrospective").length}</p>
+                    <h3 className="stat-label">Retros</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("teamHub")}>
+                    <div className="stat-icon">🤝</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Open</p>
+                    <h3 className="stat-label">Team Hub</h3>
+                  </div>
+                </div>
+              </div>
+
               {/* ── Growth Studio Widgets ── */}
               <div style={{ margin: "28px 0 4px" }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
@@ -442,6 +492,18 @@ const Dashboard = () => {
           {workspace === "export"         && <ExportCenter       setWorkspace={setWorkspace} />}
           {workspace === "help"           && <HelpCenter         setWorkspace={setWorkspace} />}
           {workspace === "admin"          && <DevAdmin           setWorkspace={setWorkspace} />}
+
+          {/* V4.7 Team Collaboration */}
+          {workspace === "teamHub"            && <TeamHub            setWorkspace={setWorkspace} />}
+          {workspace === "teamMembers"        && <TeamMembers        setWorkspace={setWorkspace} />}
+          {workspace === "taskBoard"          && <TaskBoard          setWorkspace={setWorkspace} />}
+          {workspace === "meetingNotes"       && <MeetingNotes       setWorkspace={setWorkspace} />}
+          {workspace === "teamGoals"          && <TeamGoals          setWorkspace={setWorkspace} />}
+          {workspace === "roleAssignment"     && <RoleAssignment     setWorkspace={setWorkspace} />}
+          {workspace === "teamAnnouncements"  && <TeamAnnouncements  setWorkspace={setWorkspace} />}
+          {workspace === "teamBrief"          && <TeamBrief          setWorkspace={setWorkspace} />}
+          {workspace === "collaborationPlan"  && <CollaborationPlan  setWorkspace={setWorkspace} />}
+          {workspace === "teamRetrospective"  && <TeamRetrospective  setWorkspace={setWorkspace} />}
 
           {/* V4.6 Advanced Analytics Studio */}
           {workspace === "analyticsHub"        && <AnalyticsHub        setWorkspace={setWorkspace} />}
