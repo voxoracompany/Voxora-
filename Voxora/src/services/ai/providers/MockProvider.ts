@@ -1014,6 +1014,567 @@ Headlines: Sentence case, not Title Case. Action-oriented.
 💡 VOXORA RECOMMENDATION
 Lead with Pillar 1 (Speed) in top-of-funnel content. Shift to Pillar 3 (Confidence) closer to conversion. The tagline "#3" should appear in your bio, email footer, and paid ads immediately.`;
 
+    case 'financialForecast':
+      return `💰 FINANCIAL FORECAST — ${subject}
+
+📊 REVENUE MODEL ASSUMPTIONS
+• Pricing: $29/mo (Starter), $79/mo (Pro), $199/mo (Team)
+• Average Revenue Per User (ARPU): $45/mo blended
+• Monthly churn rate target: 3–5% (industry benchmark: 5–8%)
+• Conversion rate: free trial → paid: 8–12%
+• Growth rate assumption: 15–25% MoM in months 1–6, 10–15% in months 7–12
+
+📈 12-MONTH REVENUE PROJECTION MILESTONES
+
+Month 1–2: FOUNDATION
+• Target: 10–25 paying customers
+• MRR target: $450–$1,125
+• Focus: First 10 customers at any price, collect testimonials
+
+Month 3–4: EARLY TRACTION
+• Target: 50–100 customers
+• MRR target: $2,250–$4,500
+• Focus: Referral program, first paid channel test
+
+Month 5–6: GROWTH
+• Target: 150–250 customers
+• MRR target: $6,750–$11,250
+• Focus: Content marketing flywheel, first $10K MRR milestone
+
+Month 7–9: SCALING
+• Target: 400–600 customers
+• MRR target: $18,000–$27,000
+• Focus: Team hire, expand acquisition channels
+
+Month 10–12: OPTIMISATION
+• Target: 700–1,000 customers
+• MRR target: $31,500–$45,000
+• Focus: Retention improvements, annual plan push, upsell
+
+⚡ UNIT ECONOMICS TARGETS
+• CAC (Customer Acquisition Cost): < $150 (organic), < $300 (paid)
+• LTV (Lifetime Value): $900–$1,800 (20–40 month retention at $45 ARPU)
+• LTV:CAC Ratio: Target > 3:1 (healthy SaaS benchmark)
+• Payback Period: 3–7 months
+
+🔑 KEY COST DRIVERS
+• AI API costs: $0.50–$2.00/customer/month (variable, optimize aggressively)
+• Infrastructure (hosting, CDN): $50–$500/month (scales slowly)
+• Team: $0 (founder-only) → $12,000/month (first hire at Month 8)
+• Marketing: $0–$500/month (content-led), $500–$2,000/month (paid)
+• Tools & software: $200–$500/month
+
+💡 BREAK-EVEN ESTIMATE
+• Total monthly fixed costs (months 1–6): ~$1,000–$2,000/month
+• Break-even MRR: $2,000–$3,000
+• Break-even customer count: ~50–70 customers
+• Estimated time to break-even: Month 4–6 (with consistent growth)
+
+⚠️ FINANCIAL RISKS
+1. AI API cost spike — set hard limits per user, monitor daily
+2. High churn before product-market fit — focus on onboarding quality
+3. Premature scaling — don't hire before $10K MRR
+4. Pricing too low — raise prices after first 25 customers
+
+💡 VOXORA RECOMMENDATION
+Hit $10K MRR before optimising margins. Revenue solves most early-stage problems. Focus on customer acquisition and retention, not unit economics perfection.`;
+
+    case 'revenueModel':
+      return `💵 REVENUE MODEL — ${subject}
+
+💡 PRIMARY REVENUE STREAMS
+
+STREAM 1: Subscription SaaS (Primary — 80% of revenue)
+• Model: Monthly/Annual subscription with tiered access
+• Pricing tiers:
+  - Free: 3 uses/month, no export — growth engine, not revenue
+  - Starter ($19/mo): 50 uses/month, PDF export, email support
+  - Pro ($49/mo): Unlimited uses, all features, priority support ← CORE TIER
+  - Team ($129/mo): 5 seats, collaboration, admin dashboard
+  - Enterprise (custom, $500+/mo): SSO, SLA, custom integrations
+
+• Annual plan discount: 20% (converts 30–40% of monthly subscribers)
+• Pricing rationale: Pro at $49 is below the "I'll think about it" threshold for the target customer, above "too cheap to trust"
+
+STREAM 2: Usage-Based Add-Ons (Secondary — 15% of revenue)
+• AI Credits top-up: $9 for 100 extra uses (high-margin)
+• Premium report exports: $4.99/report for non-subscribers
+• White-label exports: $19/month add-on
+
+STREAM 3: Marketplace / Affiliate (Future — 5% of revenue)
+• Refer customers to partner tools (Notion, Linear, Stripe) — 20% revenue share
+• Template marketplace: community-created templates at $9–29 each, 70/30 split
+
+💰 EXPANSION REVENUE OPPORTUNITIES
+
+Upsell triggers (when to prompt upgrade):
+• User hits 80% of monthly limit → prompt Starter → Pro upgrade
+• User adds second team member → prompt Team plan
+• User requests API access → prompt Enterprise conversation
+
+Cross-sell opportunities:
+• Pro user buying AI Credits → bundle into Team plan pitch
+• Content Calendar user → pitch Email Campaign + Social Media bundle
+• SWOT user → pitch full Strategy Bundle (SWOT + Market + Competitor)
+
+📈 12-MONTH REVENUE WATERFALL
+Month 3: First $1K MRR (proof of concept)
+Month 6: $5K MRR (product-market fit signal)
+Month 9: $15K MRR (scalable acquisition working)
+Month 12: $30K+ MRR (path to $1M ARR visible)
+
+⚠️ REVENUE RISKS
+• Free tier cannibalises paid if limits are too generous → review quarterly
+• Annual plans create cash flow spikes — plan around renewal cohorts
+• Enterprise deals take 3–6 months to close — don't count until signed
+
+💡 VOXORA RECOMMENDATION
+Anchor on the Pro tier at $49/month. Test raising to $59 after Month 6 — most SaaS tools are underpriced early. The goal is 200 Pro users ($9,800 MRR) within 12 months.`;
+
+    case 'pricingStrategy':
+      return `🏷️ PRICING STRATEGY — ${subject}
+
+✅ RECOMMENDED PRICING MODEL: Tiered Flat-Rate + Usage Top-Ups
+
+Why: Tiered pricing gives predictable revenue, usage top-ups capture high-value users without friction. Best for AI SaaS tools with variable usage patterns.
+
+💰 SUGGESTED PRICE POINTS
+
+FREE TIER (Lead Generation)
+• Price: $0/month
+• Limits: 3 AI generations/month, no export, no history
+• Goal: Acquisition, not revenue. Convert 8–12% to paid.
+
+STARTER ($19/month or $152/year — save 33%)
+• 50 AI generations/month
+• PDF + Notion export
+• 30-day history
+• Email support (48h response)
+• Positioning: "Try it seriously without full commitment"
+
+PRO ($49/month or $390/year — save 33%)
+• Unlimited AI generations
+• All workspace tools unlocked
+• Export to PDF, Markdown, Notion, Google Docs
+• Full conversation history + AI Memory
+• Priority support (24h response)
+• Positioning: "The serious founder tier" ← PRIMARY REVENUE TARGET
+
+TEAM ($129/month or $1,032/year — save 33%)
+• Everything in Pro × 5 seats
+• Team workspace + shared projects
+• Admin dashboard + usage analytics
+• Slack integration
+• Onboarding call
+• Positioning: "For founding teams and small agencies"
+
+ENTERPRISE (Custom, $500–$2,000+/month)
+• Everything in Team, custom seat count
+• SSO (Okta, Google Workspace)
+• SLA (99.9% uptime guarantee)
+• Custom AI model integration
+• Dedicated account manager
+• Positioning: "For companies that need control"
+
+🎯 COMPETITOR PRICE BENCHMARKING
+• Notion AI: $10/month add-on (narrow feature set)
+• Jasper: $49–$125/month (content-focused, broader)
+• Copy.ai: $49–$186/month (similar positioning)
+• Consultant alternative: $5,000–$50,000/project
+• Your positioning: Better than Notion AI, more focused than Jasper, 100× cheaper than consultants
+
+📊 VALUE METRIC ANALYSIS
+Charge on: AI generations (most predictable, easiest to explain)
+Alternative: Seat-based (simpler), Project-based (ties value directly to output)
+Recommendation: Generation-based for Starter, unlimited for Pro+ (removes anxiety)
+
+🎁 FREE TRIAL / FREEMIUM STRATEGY
+• Offer 14-day Pro trial, no credit card required
+• Show the "you would have used X generations" counter during trial
+• Day 3: "You've already saved 2 hours this week" email
+• Day 10: Upgrade prompt with one-click (card already saved from previous trial if returning user)
+• Trial conversion target: 12–20%
+
+📅 ANNUAL DISCOUNT RECOMMENDATION
+• Offer 33% discount for annual (equivalent to 4 months free)
+• Push annual at signup, at 30-day anniversary, and at Month 6
+• Annual goal: 35% of subscribers on annual plans by Month 12
+• Cash flow benefit: $390 upfront vs $49×12 = $588 (better retention, worse cash timing)
+
+🧪 3 PRICING EXPERIMENTS (Days 1–90)
+1. Test $39 vs $49 vs $59 Pro (A/B test checkout page) — find elasticity
+2. Test "Most Popular" badge on Pro vs Team — which converts higher?
+3. Test lifetime deal via AppSumo ($197 one-time) — captures early adopters, validates demand
+
+💡 VOXORA RECOMMENDATION
+Launch at $49 Pro. Raise to $59 after 100 paying customers. Add annual plans from Day 1 — they reduce churn by 70% vs monthly.`;
+
+    case 'unitEconomics':
+      return `📊 UNIT ECONOMICS — ${subject}
+
+🎯 CUSTOMER ACQUISITION COST (CAC)
+
+CAC Breakdown by Channel:
+┌─────────────────────┬──────────┬──────────────┬────────────┐
+│ Channel             │ Conv Rate│ Cost/Lead    │ CAC        │
+├─────────────────────┼──────────┼──────────────┼────────────┤
+│ Organic/SEO         │ 3–6%     │ $5–20 (time) │ $50–200    │
+│ Content Marketing   │ 2–4%     │ $10–30 (time)│ $75–300    │
+│ LinkedIn Ads        │ 1–2%     │ $30–80       │ $300–800   │
+│ Google Search Ads   │ 3–5%     │ $15–40       │ $200–600   │
+│ Referral Program    │ 15–25%   │ $20–40       │ $40–150    │
+│ Community/Word-of-Mouth│ 20–30%│ ~$0          │ $10–50     │
+└─────────────────────┴──────────┴──────────────┴────────────┘
+
+Blended CAC Target: < $150 (months 1–6), < $250 (months 7–12)
+
+💰 LIFETIME VALUE (LTV)
+
+LTV Calculation:
+• Average MRR (ARPU): $45/month (blended free/paid conversion)
+• Average customer lifespan: 18–24 months (3–5% monthly churn)
+• Gross margin: 70–80% (after AI API costs)
+• LTV = ARPU × Gross Margin × Average Lifespan
+• LTV = $45 × 0.75 × 20 = $675 (conservative)
+• LTV = $45 × 0.75 × 30 = $1,013 (base)
+• LTV = $45 × 0.80 × 40 = $1,440 (optimistic)
+
+⚡ LTV:CAC RATIO
+
+┌────────────────┬──────────┬──────────┬────────────┐
+│ Scenario       │ LTV      │ CAC      │ LTV:CAC    │
+├────────────────┼──────────┼──────────┼────────────┤
+│ Pessimistic    │ $675     │ $300     │ 2.25:1 ⚠️  │
+│ Base Case      │ $1,013   │ $150     │ 6.75:1 ✅  │
+│ Optimistic     │ $1,440   │ $80      │ 18:1 🚀    │
+└────────────────┴──────────┴──────────┴────────────┘
+
+Target: > 3:1 (sustainable), > 5:1 (healthy growth), > 10:1 (exceptional)
+
+📅 PAYBACK PERIOD
+
+Payback = CAC ÷ (ARPU × Gross Margin)
+• $150 CAC ÷ ($45 × 0.75) = 4.4 months ✅
+• $300 CAC ÷ ($45 × 0.75) = 8.9 months ⚠️
+• Target payback: < 12 months (investors love < 6 months)
+
+📉 CHURN IMPACT ANALYSIS
+
+Monthly Churn vs LTV:
+• 2% churn → 50-month retention → LTV = $1,688 🚀
+• 3% churn → 33-month retention → LTV = $1,013 ✅
+• 5% churn → 20-month retention → LTV = $675 ⚠️
+• 8% churn → 12-month retention → LTV = $405 ❌
+
+Every 1% reduction in churn = +$300+ in LTV per customer.
+
+💡 5 ACTIONS TO IMPROVE UNIT ECONOMICS
+
+1. REDUCE CAC: Build SEO moat — content marketing CAC of $50–100 vs $300+ for paid ads. Publish 4 articles/month targeting high-intent keywords.
+
+2. INCREASE LTV: Add annual plan option. Annual subscribers churn 70% less than monthly. Moving 30% to annual adds 6+ months to average lifespan.
+
+3. EXPAND ARPU: Build upsell flow. Pro users who hit usage limits and upgrade add $30–80/month. Target: 15% of Pro users upgrade to Team within 6 months.
+
+4. LOWER CHURN: Improve onboarding. Users who complete 3+ tasks in Week 1 churn 60% less. Build a "Quick Win" sequence (Day 1: first generation, Day 3: save project, Day 7: second use case).
+
+5. REDUCE AI API COSTS: Implement caching for identical or near-identical prompts. Potential to reduce AI costs by 30–40%, improving gross margin from 70% to 78%.
+
+💡 VOXORA RECOMMENDATION
+Fix churn before scaling acquisition. A leaky bucket problem makes every marketing dollar less efficient. Get Month-1 retention above 85% before investing in paid acquisition.`;
+
+    case 'breakEven':
+      return `📈 BREAK-EVEN ANALYSIS — ${subject}
+
+💸 FIXED COSTS BREAKDOWN
+
+Monthly Fixed Costs (Founder-Only Stage):
+┌─────────────────────────┬──────────────┐
+│ Cost Category           │ Monthly Cost │
+├─────────────────────────┼──────────────┤
+│ Hosting (Vercel/AWS)    │ $20–$100     │
+│ Domain + Email          │ $10–$20      │
+│ AI API (base tier)      │ $50–$200     │
+│ Analytics & monitoring  │ $30–$100     │
+│ Design tools (Figma)    │ $15          │
+│ Email marketing (ConvertKit/etc)│ $29–$99 │
+│ Other SaaS tools        │ $50–$100     │
+│ TOTAL FIXED             │ $204–$634/mo │
+└─────────────────────────┴──────────────┘
+
+Conservative estimate: $400/month fixed costs
+With first hire (Month 8+): $12,000–$15,000/month
+
+📊 VARIABLE COSTS PER CUSTOMER
+
+Cost per paying customer/month:
+• AI API usage: $0.50–$2.00 (depends on feature usage)
+• Support time: $2–$5 (amortised, scales with volume)
+• Payment processing (Stripe): 2.9% + $0.30 per transaction
+• Total variable cost: ~$4–$8/customer/month
+
+At $45 ARPU: Contribution margin per customer = $45 – $6 = $39 (87%)
+
+📐 CONTRIBUTION MARGIN
+
+Revenue per customer: $45 ARPU
+Variable cost per customer: $6
+Contribution Margin: $39/customer/month (87% CM ratio)
+
+💡 BREAK-EVEN CALCULATION
+
+Formula: Break-Even Units = Fixed Costs ÷ Contribution Margin per Unit
+
+Break-even customers = $400 ÷ $39 = ~11 paying customers ← Immediately achievable!
+Break-even MRR = 11 × $45 = $495/month
+
+With first hire ($12,000 fixed costs):
+Break-even customers = $12,000 ÷ $39 = 308 customers
+Break-even MRR = $13,860
+
+📅 TIME TO BREAK-EVEN SCENARIOS
+
+PESSIMISTIC (5% MoM growth):
+Month 1: 5 customers → $225 MRR
+Month 6: 30 customers → $1,350 MRR
+Break-even: Month 8–10
+
+BASE CASE (15% MoM growth):
+Month 1: 5 customers → $225 MRR
+Month 4: 25 customers → $1,125 MRR ← Break-even milestone!
+Month 6: 50 customers → $2,250 MRR
+Break-even: Month 3–4
+
+OPTIMISTIC (25% MoM growth):
+Month 1: 10 customers → $450 MRR ← Already break-even!
+Month 3: 40 customers → $1,800 MRR
+Month 6: 122 customers → $5,490 MRR
+Break-even: Month 1–2
+
+🏁 MILESTONE TRIGGERS
+
+Milestone 1 — Break-Even (11 customers / $495 MRR)
+→ Action: Increase content output, launch referral program
+
+Milestone 2 — Ramen Profitable (50 customers / $2,250 MRR)
+→ Action: First paid marketing test ($500 budget)
+
+Milestone 3 — Default Alive (150 customers / $6,750 MRR)
+→ Action: Plan first hire, expand to new acquisition channels
+
+Milestone 4 — Hire-Ready (308 customers / $13,860 MRR)
+→ Action: Make first hire (engineer or marketer)
+
+💡 VOXORA RECOMMENDATION
+Your break-even point is just 11 customers — an achievable goal in Week 1 if you pre-sell. Focus on getting to 50 customers (ramen profitability) before spending on paid acquisition. Every customer below 50 is existential; every customer above 150 is strategic.`;
+
+    case 'pitchDeck':
+      return `🎯 INVESTOR PITCH DECK OUTLINE — ${subject}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 1: COVER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Company name + tagline + logo
+"${subject} — [one-line value proposition]"
+Presenter name, title, date
+Contact: [email] | [website]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 2: PROBLEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Headline: "[Target customer] spends [X hours/dollars] on [painful task] every [week/month]"
+• Pain Point 1: Specific, quantified, relatable to investors
+• Pain Point 2: Shows urgency — why this matters NOW
+• Pain Point 3: Reveals the gap current solutions leave
+Visual: Customer quote or photo showing the problem in real life
+Key stat: Market pain signal (search volume, consultant fees, workaround adoption)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 3: SOLUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Headline: "${subject} [does specific thing] in [timeframe]"
+• Simple 1-2 sentence product description
+• 3 core benefits (not features) — tie directly to pain points
+• Screenshot or demo GIF of the product in action
+• "Before vs After" framing if possible
+Investor takeaway: "This is the obvious solution to the problem on slide 2"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 4: MARKET SIZE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TAM (Total Addressable Market): $X billion — full market if everyone adopted
+SAM (Serviceable Addressable Market): $X billion — realistic target with current product
+SOM (Serviceable Obtainable Market): $X million — what you can win in 3 years
+Source your numbers — investors fact-check these immediately
+Insight: Why this market is growing now (tailwind driving demand)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 5: PRODUCT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Product walkthrough — 3 key screens that show the magic moment
+Feature 1: [Name] — solves [specific pain point] — proof: [metric or customer quote]
+Feature 2: [Name] — differentiates from [specific competitor]
+Feature 3: [Name] — creates retention / switching cost
+Technical moat (if any): proprietary data, model fine-tuning, patent pending
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 6: BUSINESS MODEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Revenue streams: Subscription SaaS (primary), usage add-ons (secondary)
+Pricing: Free / $19 / $49 / $129 / Enterprise
+Key metric: ARPU $45/month, targeting $49 Pro as primary tier
+Unit economics: CAC < $150, LTV > $900, LTV:CAC > 6:1, Payback < 6 months
+Gross margin: 70–80%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 7: TRACTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Show your best metrics — be honest, spin is obvious to investors]
+• MRR: $X (or "pre-revenue — here's why that's okay")
+• Customers: X paying / X free users / X waitlist
+• Growth rate: X% MoM
+• Retention: X% Month-1 retention
+• NPS or qualitative: "[quote from best customer]"
+• Key milestones hit: Product Hunt launch, first enterprise customer, etc.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 8: COMPETITION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Positioning matrix: 2x2 grid (e.g. "Ease of Use" vs "AI-Native")
+• Show 3–4 competitors + your position
+• Never say "we have no competitors" — it signals poor market research
+• Differentiation: What you do that no one else does, and why it's hard to copy
+• The real competition: "Status quo / doing nothing" is often the biggest competitor
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 9: TEAM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Most important slide for early-stage — investors bet on people]
+Founder 1: Name, photo, 3-bullet credibility (domain expertise + execution proof)
+Founder 2: Name, photo, 3-bullet credibility (complementary skills)
+Key Hires / Advisors: 1–2 relevant names with credibility signals
+Why us: "We are the right team because [unfair advantage — lived the problem, built similar thing, domain expertise]"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 10: FINANCIALS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3-year projection (conservative/base/aggressive):
+• Year 1: $X ARR (X customers)
+• Year 2: $X ARR (X customers, first hire)
+• Year 3: $X ARR (X customers, team of X)
+Key assumptions: Clearly state growth rate, churn rate, ARPU
+Current burn: $X/month | Runway: X months
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 11: USE OF FUNDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Raising: $X [Seed/Pre-seed/Series A]
+Runway: X months
+Allocation:
+• 50% — Engineering (X hire)
+• 30% — Marketing & Growth (content, paid, community)
+• 15% — Operations (tools, legal, accounting)
+• 5%  — Reserve
+Milestones this funding unlocks: "$10K MRR, 500 customers, [feature] shipped"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 12: VISION & ASK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Vision: "[Where does this go in 5 years?]" — paint the big picture
+The ask: "We are raising $[X] at $[Y] valuation. We have [X] committed."
+Why now: The specific tailwinds making this the right moment
+Next step: "We'd love to schedule a follow-up call. Here are 3 things we'll show you."
+
+💡 VOXORA RECOMMENDATION
+Lead with traction on Slide 7 if you have it — rearrange the deck. Investors make up their mind by Slide 4. Get to the point fast. Your job is one meeting, not the close.`;
+
+    case 'executiveSummary':
+      return `📄 EXECUTIVE SUMMARY — ${subject}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMPANY OVERVIEW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${subject} is an AI-powered SaaS platform that helps founders and early-stage operators make faster, better business decisions. We replace expensive consultants and manual research with instant, structured AI insights — delivered in minutes, not weeks.
+
+Founded: [Date] | Stage: [Pre-seed/Seed] | Location: [Remote/City]
+Website: [URL] | Contact: [Email]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE PROBLEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Founders and SMB operators spend 8–15 hours per week on research, strategy, and planning tasks that generate zero revenue. The alternatives are either too expensive ($5,000–$50,000 for consultants) or too generic (templates that don't account for their specific context). This results in slower decisions, wasted resources, and preventable mistakes.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE SOLUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${subject} provides a suite of 20+ AI-powered workspaces that generate professional-grade strategic output — SWOT analyses, market research, competitor intelligence, financial forecasts, pitch decks, and more — in under 2 minutes. Founders describe their idea once; ${subject} delivers the same quality analysis a consultant would charge $5,000 to produce.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TARGET MARKET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Primary: Solo founders and early-stage startup teams (1–10 employees)
+Secondary: SMB owners (10–50 employees) without dedicated strategy functions
+TAM: $12B+ (AI tools for business intelligence)
+SAM: $2.5B (SMB-focused AI strategy tools)
+SOM: $25M (achievable 3-year target with current GTM)
+Market tailwind: AI adoption accelerating 40%+ YoY among SMBs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BUSINESS MODEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Subscription SaaS with freemium entry point:
+• Free: 3 uses/month (growth engine)
+• Starter: $19/month
+• Pro: $49/month (primary revenue tier)
+• Team: $129/month (5 seats)
+• Enterprise: Custom
+
+Gross margin: 72–80% | ARPU: $45/month blended
+LTV: $900–$1,440 | CAC target: < $150 | Payback: < 6 months
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRACTION HIGHLIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Update with actual metrics — placeholder framework:]
+• MRR: $X growing X% month-over-month
+• Customers: X paying, X free trial users
+• Month-1 retention: X%
+• NPS: X
+• Key milestone: [First enterprise customer / Product Hunt #1 / $10K MRR]
+• Customer quote: "This replaced our $3,000/month strategy consultant."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TEAM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Founder 1 Name] — CEO | [Background: domain expertise + execution proof]
+[Founder 2 Name] — CTO | [Background: technical + product]
+Advisors: [Name, credibility signal], [Name, credibility signal]
+Why us: [Specific unfair advantage — lived the problem, domain expertise, prior exit]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FUNDING ASK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Raising: $[X] [Pre-seed/Seed] Round
+Current committed: $[X]
+Use of funds:
+• 50% Engineering — [specific hires]
+• 30% Growth — content marketing, paid acquisition
+• 20% Operations — legal, tools, reserve
+
+Milestones this round unlocks:
+• $10K MRR (Month 6)
+• 500 paying customers (Month 9)
+• Series A metrics ready (Month 18)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTACT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Founder Name] — [email] — [LinkedIn]
+One-pager: [URL] | Deck: [URL] | Demo: [URL]
+
+💡 VOXORA RECOMMENDATION
+Keep executive summaries to one page when printed. The goal is one meeting, not a full sale. Lead with your best traction metric in the first sentence.`;
+
     case 'marketingStrategy':
       return `📣 MARKETING STRATEGY — ${subject}
 

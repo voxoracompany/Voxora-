@@ -191,6 +191,14 @@ class AIService {
       adCopy:            'adCopy',
       contentCalendar:   'contentCalendar',
       brandVoice:        'brandVoice',
+      // V4.3 Financial Studio
+      financialForecast: 'financialForecast',
+      revenueModel:      'revenueModel',
+      pricingStrategy:   'pricingStrategy',
+      unitEconomics:     'unitEconomics',
+      breakEven:         'breakEven',
+      pitchDeck:         'pitchDeck',
+      executiveSummary:  'executiveSummary',
     };
     const id  = promptMap[type] ?? 'swot';
     const p   = PromptLibrary.build(id, subject, this._settings.promptStyle);

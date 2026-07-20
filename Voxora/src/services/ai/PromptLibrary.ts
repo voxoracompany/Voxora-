@@ -8,6 +8,7 @@ export type PromptId =
   | 'emailCampaign' | 'socialMedia' | 'productRoadmap'
   | 'contentIdeas' | 'appIdeas' | 'customerPersona' | 'productValidation'
   | 'adCopy' | 'contentCalendar' | 'brandVoice'
+  | 'revenueModel' | 'pricingStrategy' | 'unitEconomics' | 'breakEven'
   | 'chat';
 
 interface PromptTemplate {
@@ -149,6 +150,30 @@ export const PROMPT_TEMPLATES: Record<PromptId, PromptTemplate> = {
     id: 'brandVoice', label: 'Brand Voice Analyzer', workspace: 'brandVoice',
     system: `${BASE_SYSTEM} You specialise in brand identity, tone of voice, and messaging strategy.`,
     user: (input, style) => `Define the brand voice and messaging framework for: "${input}". Cover: brand personality (5 adjectives), tone of voice (formal vs casual, serious vs playful — with examples), core messaging pillars (3–4), tagline options (5 variations), what to always say and never say, writing style guide (sentence length, punctuation, word choice), and a before/after copy example demonstrating the voice. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  revenueModel: {
+    id: 'revenueModel', label: 'Revenue Model Builder', workspace: 'revenueModel',
+    system: `${BASE_SYSTEM} You specialise in SaaS revenue modelling and business model design.`,
+    user: (input, style) => `Design a comprehensive revenue model for: "${input}". Cover: primary revenue streams, pricing tiers (Free/Starter/Pro/Enterprise), pricing rationale, expansion revenue opportunities (upsell, cross-sell, add-ons), annual vs monthly pricing strategy, revenue projections for Month 1/6/12, and key revenue risks and mitigations. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  pricingStrategy: {
+    id: 'pricingStrategy', label: 'Pricing Strategy', workspace: 'pricingStrategy',
+    system: `${BASE_SYSTEM} You specialise in SaaS pricing strategy and value-based pricing.`,
+    user: (input, style) => `Build a pricing strategy for: "${input}". Cover: pricing model recommendation (per-seat, usage-based, flat-rate, tiered), suggested price points with rationale, competitor price benchmarking, value metric to charge on, free trial/freemium strategy, annual discount recommendation, and 3 pricing experiments to run in the first 90 days. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  unitEconomics: {
+    id: 'unitEconomics', label: 'Unit Economics', workspace: 'unitEconomics',
+    system: `${BASE_SYSTEM} You specialise in SaaS unit economics, CAC, LTV, and growth efficiency.`,
+    user: (input, style) => `Analyse the unit economics framework for: "${input}". Cover: Customer Acquisition Cost (CAC) breakdown by channel, Lifetime Value (LTV) calculation with assumptions, LTV:CAC ratio target and current estimate, payback period calculation, churn rate impact analysis, and 5 specific actions to improve unit economics. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  breakEven: {
+    id: 'breakEven', label: 'Break-Even Analysis', workspace: 'breakEven',
+    system: `${BASE_SYSTEM} You specialise in startup financial planning and break-even analysis.`,
+    user: (input, style) => `Calculate and explain the break-even framework for: "${input}". Cover: fixed costs breakdown, variable costs per customer, contribution margin, break-even customer count, break-even MRR target, estimated time to break-even with assumptions, and 3 scenarios (pessimistic/base/optimistic) with milestone triggers. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
   },
 };
 

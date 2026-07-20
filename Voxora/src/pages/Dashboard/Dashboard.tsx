@@ -30,6 +30,15 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V4.3 Financial Studio ─────────────────────────────────────────────────────
+const FinancialHub       = lazy(() => import("../Workspaces/FinancialHub"));
+const FinancialForecast  = lazy(() => import("../Workspaces/FinancialForecast"));
+const RevenueModel       = lazy(() => import("../Workspaces/RevenueModel"));
+const PricingStrategy    = lazy(() => import("../Workspaces/PricingStrategy"));
+const UnitEconomics      = lazy(() => import("../Workspaces/UnitEconomics"));
+const BreakEven          = lazy(() => import("../Workspaces/BreakEven"));
+const PitchDeck          = lazy(() => import("../Workspaces/PitchDeck"));
+const ExecutiveSummary   = lazy(() => import("../Workspaces/ExecutiveSummary"));
 // ── V4.2 Marketing Studio ─────────────────────────────────────────────────────
 const MarketingHub       = lazy(() => import("../Workspaces/MarketingHub"));
 const MarketingStrategy  = lazy(() => import("../Workspaces/MarketingStrategy"));
@@ -321,6 +330,16 @@ const Dashboard = () => {
           {workspace === "export"         && <ExportCenter       setWorkspace={setWorkspace} />}
           {workspace === "help"           && <HelpCenter         setWorkspace={setWorkspace} />}
           {workspace === "admin"          && <DevAdmin           setWorkspace={setWorkspace} />}
+
+          {/* V4.3 Financial Studio */}
+          {workspace === "financialHub"      && <FinancialHub      setWorkspace={setWorkspace} />}
+          {workspace === "financialForecast" && <FinancialForecast setWorkspace={setWorkspace} />}
+          {workspace === "revenueModel"      && <RevenueModel      setWorkspace={setWorkspace} />}
+          {workspace === "pricingStrategy"   && <PricingStrategy   setWorkspace={setWorkspace} />}
+          {workspace === "unitEconomics"     && <UnitEconomics     setWorkspace={setWorkspace} />}
+          {workspace === "breakEven"         && <BreakEven         setWorkspace={setWorkspace} />}
+          {workspace === "pitchDeck"         && <PitchDeck         setWorkspace={setWorkspace} />}
+          {workspace === "executiveSummary"  && <ExecutiveSummary  setWorkspace={setWorkspace} />}
 
           {/* V4.2 Marketing Studio */}
           {workspace === "marketingHub"      && <MarketingHub       setWorkspace={setWorkspace} />}

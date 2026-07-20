@@ -1,3 +1,4 @@
+/* @refresh reset */
 // ── V4.1 AI Engine — AIContext ────────────────────────────────────────────────
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import { aiService }  from '../services/ai/AIService';
