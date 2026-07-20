@@ -123,6 +123,12 @@ const ANALYTICS_TOOLS = [
   { id: "analyticsReports",    icon: "📄", label: "Reports" },
 ];
 
+const ACCOUNT_TOOLS = [
+  { id: "userProfile",      icon: "👤", label: "My Profile" },
+  { id: "accountSettings",  icon: "⚙️", label: "Account Settings" },
+  { id: "securitySettings", icon: "🔐", label: "Security" },
+];
+
 const BOTTOM_NAV = [
   { id: "help",           icon: "❓", label: "Help Center" },
   { id: "settings",       icon: "⚙️", label: "Settings" },
@@ -252,6 +258,20 @@ export default function Sidebar({ workspace, setWorkspace }: SidebarProps) {
       <div className="sidebar-section-label">Growth Studio</div>
       <nav className="sidebar-nav">
         {GROWTH_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">My Account</div>
+      <nav className="sidebar-nav">
+        {ACCOUNT_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}

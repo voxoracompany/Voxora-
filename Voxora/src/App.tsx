@@ -4,6 +4,8 @@ import { ProjectProvider } from "./context/ProjectContext";
 import { ActivityProvider } from "./context/ActivityContext";
 import { ToastProvider } from "./context/ToastContext";
 import { AIProvider } from "./context/AIContext";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Public pages
 import LandingPage from "./pages/LandingPage";
@@ -16,6 +18,9 @@ import Contact from "./pages/public/Contact";
 import Pricing from "./pages/public/Pricing";
 import PrivacyPolicy from "./pages/public/PrivacyPolicy";
 import TermsOfService from "./pages/public/TermsOfService";
+import ForgotPassword from "./pages/public/ForgotPassword";
+import ResetPassword from "./pages/public/ResetPassword";
+import EmailVerification from "./pages/public/EmailVerification";
 
 // Platform pages
 import AICommandCenter from "./pages/platforms/AICommandCenter";
@@ -51,49 +56,56 @@ function PageLoader() {
 
 export default function App() {
   return (
-    <Suspense fallback={<PageLoader />}>
-      <Routes>
-        {/* Public */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/careers" element={<Careers />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/terms" element={<TermsOfService />} />
+    <AuthProvider>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          {/* Public */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/verify-email" element={<EmailVerification />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
 
-        {/* Platforms */}
-        <Route path="/platforms/ai-command-center" element={<AICommandCenter />} />
-        <Route path="/platforms/startup-studio" element={<StartupStudio />} />
-        <Route path="/platforms/marketing-studio" element={<MarketingStudio />} />
-        <Route path="/platforms/financial-studio" element={<FinancialStudio />} />
-        <Route path="/platforms/investor-studio" element={<InvestorStudio />} />
+          {/* Platforms */}
+          <Route path="/platforms/ai-command-center" element={<AICommandCenter />} />
+          <Route path="/platforms/startup-studio" element={<StartupStudio />} />
+          <Route path="/platforms/marketing-studio" element={<MarketingStudio />} />
+          <Route path="/platforms/financial-studio" element={<FinancialStudio />} />
+          <Route path="/platforms/investor-studio" element={<InvestorStudio />} />
 
-        {/* Solutions */}
-        <Route path="/solutions/creators" element={<Creators />} />
-        <Route path="/solutions/entrepreneurs" element={<Entrepreneurs />} />
-        <Route path="/solutions/businesses" element={<Businesses />} />
-        <Route path="/solutions/developers" element={<Developers />} />
+          {/* Solutions */}
+          <Route path="/solutions/creators" element={<Creators />} />
+          <Route path="/solutions/entrepreneurs" element={<Entrepreneurs />} />
+          <Route path="/solutions/businesses" element={<Businesses />} />
+          <Route path="/solutions/developers" element={<Developers />} />
 
-        {/* App — wrapped with all required context providers */}
-        <Route path="/dashboard" element={
-          <ToastProvider>
-            <ActivityProvider>
-              <ProjectProvider>
-                <AIProvider>
-                  <Dashboard />
-                </AIProvider>
-              </ProjectProvider>
-            </ActivityProvider>
-          </ToastProvider>
-        } />
+          {/* App — protected, wrapped with all context providers */}
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <ToastProvider>
+                <ActivityProvider>
+                  <ProjectProvider>
+                    <AIProvider>
+                      <Dashboard />
+                    </AIProvider>
+                  </ProjectProvider>
+                </ActivityProvider>
+              </ToastProvider>
+            </ProtectedRoute>
+          } />
 
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Suspense>
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
+    </AuthProvider>
   );
 }

@@ -1,18 +1,27 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import PublicNav from "../../components/PublicNav";
 import PublicFooter from "../../components/PublicFooter";
 import "./public-pages.css";
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const { signUp } = useAuth();
+  const [form, setForm] = useState({ name: "", email: "", username: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [googleNote, setGoogleNote] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name.trim()) localStorage.setItem("voxora-name", form.name.trim());
-    navigate("/dashboard");
+    setError("");
+    if (form.password.length < 8) { setError("Password must be at least 8 characters."); return; }
+    setLoading(true);
+    const result = await signUp(form.name, form.email, form.password, form.username);
+    setLoading(false);
+    if (!result.ok) { setError(result.error || "Sign up failed."); return; }
+    navigate("/verify-email");
   };
 
   return (
@@ -26,6 +35,15 @@ export default function SignUp() {
 
           <h2>Create your account</h2>
 
+          {error && (
+            <div style={{
+              background: "#fef2f2", border: "1.5px solid #fecaca", borderRadius: 10,
+              padding: "10px 14px", fontSize: 13, color: "#dc2626", marginBottom: 16, textAlign: "center",
+            }}>
+              ⚠️ {error}
+            </div>
+          )}
+
           <form className="pub-auth-form" onSubmit={handleSubmit}>
             <div>
               <label className="pub-auth-label">Full name</label>
@@ -34,9 +52,20 @@ export default function SignUp() {
                 type="text"
                 placeholder="Jane Smith"
                 value={form.name}
-                onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                 required
                 autoComplete="name"
+              />
+            </div>
+            <div>
+              <label className="pub-auth-label">Username</label>
+              <input
+                className="pub-auth-input"
+                type="text"
+                placeholder="janesmith"
+                value={form.username}
+                onChange={e => setForm(f => ({ ...f, username: e.target.value.replace(/\s/g, "").toLowerCase() }))}
+                autoComplete="username"
               />
             </div>
             <div>
@@ -46,7 +75,7 @@ export default function SignUp() {
                 type="email"
                 placeholder="you@example.com"
                 value={form.email}
-                onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                 required
                 autoComplete="email"
               />
@@ -58,13 +87,15 @@ export default function SignUp() {
                 type="password"
                 placeholder="Min. 8 characters"
                 value={form.password}
-                onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+                onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
                 required
                 minLength={8}
                 autoComplete="new-password"
               />
             </div>
-            <button className="pub-auth-submit" type="submit">Create Account →</button>
+            <button className="pub-auth-submit" type="submit" disabled={loading}>
+              {loading ? "Creating account…" : "Create Account →"}
+            </button>
           </form>
 
           <div className="pub-auth-divider" style={{ marginTop: 20 }}>or</div>

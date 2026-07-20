@@ -5,6 +5,7 @@ import TopBar from "./components/TopBar";
 import FeatureCard from "./components/FeatureCard";
 import { useProjects } from "../../context/ProjectContext";
 import { useAIContext } from "../../context/AIContext";
+import { useAuth } from "../../context/AuthContext";
 import { AIMemory } from "../../services/ai/AIMemory";
 import "./Dashboard.css";
 
@@ -30,6 +31,10 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V4.9 Authentication & User Accounts ──────────────────────────────────────
+const UserProfile        = lazy(() => import("../Workspaces/UserProfile"));
+const AccountSettings    = lazy(() => import("../Workspaces/AccountSettings"));
+const SecuritySettings   = lazy(() => import("../Workspaces/SecuritySettings"));
 // ── V4.8 Integrations Studio ─────────────────────────────────────────────────
 const IntegrationsHub      = lazy(() => import("../Workspaces/IntegrationsHub"));
 const IntOpenAI            = lazy(() => import("../Workspaces/IntOpenAI"));
@@ -128,7 +133,8 @@ function WorkspaceLoader() {
 }
 
 const Dashboard = () => {
-  const userName = localStorage.getItem("voxora-name") || "";
+  const { user, getProfileCompletion } = useAuth();
+  const userName = user?.name || localStorage.getItem("voxora-name") || "";
   const [workspace, setWorkspace] = useState("dashboard");
   const { projects, favorites, pinned } = useProjects();
   const { activities } = useActivity();
@@ -364,6 +370,45 @@ const Dashboard = () => {
                 </div>
               </div>
 
+              {/* ── Account & Security Widgets ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  👤 Account
+                </h2>
+                <div className="stats">
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("userProfile")}>
+                    <div className="stat-icon">{user?.avatarEmoji || "🚀"}</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>{user?.name ? user.name.split(" ")[0] : "You"}</p>
+                    <h3 className="stat-label">Logged In As</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("userProfile")}>
+                    <div className="stat-icon">✅</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>{user?.emailVerified ? "Verified" : "Pending"}</p>
+                    <h3 className="stat-label">Account Status</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("userProfile")}>
+                    <div className="stat-icon">📊</div>
+                    <p className="stat-value">{getProfileCompletion()}%</p>
+                    <h3 className="stat-label">Profile Complete</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("securitySettings")}>
+                    <div className="stat-icon">🔐</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>{user?.twoFAEnabled ? "Strong" : "Fair"}</p>
+                    <h3 className="stat-label">Security</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("securitySettings")}>
+                    <div className="stat-icon">💻</div>
+                    <p className="stat-value">1</p>
+                    <h3 className="stat-label">Active Sessions</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("accountSettings")}>
+                    <div className="stat-icon">⚙️</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Manage</p>
+                    <h3 className="stat-label">Account Settings</h3>
+                  </div>
+                </div>
+              </div>
+
               {/* ── Integrations Studio Widgets ── */}
               <div style={{ margin: "28px 0 4px" }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
@@ -543,6 +588,11 @@ const Dashboard = () => {
           {workspace === "export"         && <ExportCenter       setWorkspace={setWorkspace} />}
           {workspace === "help"           && <HelpCenter         setWorkspace={setWorkspace} />}
           {workspace === "admin"          && <DevAdmin           setWorkspace={setWorkspace} />}
+
+          {/* V4.9 Authentication & User Accounts */}
+          {workspace === "userProfile"      && <UserProfile        setWorkspace={setWorkspace} />}
+          {workspace === "accountSettings"  && <AccountSettings    setWorkspace={setWorkspace} />}
+          {workspace === "securitySettings" && <SecuritySettings   setWorkspace={setWorkspace} />}
 
           {/* V4.8 Integrations Studio */}
           {workspace === "integrationsHub" && <IntegrationsHub     setWorkspace={setWorkspace} />}

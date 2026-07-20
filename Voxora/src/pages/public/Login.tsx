@@ -1,18 +1,25 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import PublicNav from "../../components/PublicNav";
 import PublicFooter from "../../components/PublicFooter";
 import "./public-pages.css";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [googleNote, setGoogleNote] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Store a name for dashboard welcome; in a real app this would be authenticated
-    localStorage.setItem("voxora-name", form.email.split("@")[0]);
+    setError("");
+    setLoading(true);
+    const result = await login(form.email, form.password);
+    setLoading(false);
+    if (!result.ok) { setError(result.error || "Sign in failed."); return; }
     navigate("/dashboard");
   };
 
@@ -27,6 +34,15 @@ export default function Login() {
 
           <h2>Welcome back</h2>
 
+          {error && (
+            <div style={{
+              background: "#fef2f2", border: "1.5px solid #fecaca", borderRadius: 10,
+              padding: "10px 14px", fontSize: 13, color: "#dc2626", marginBottom: 16, textAlign: "center",
+            }}>
+              ⚠️ {error}
+            </div>
+          )}
+
           <form className="pub-auth-form" onSubmit={handleSubmit}>
             <div>
               <label className="pub-auth-label">Email address</label>
@@ -35,7 +51,7 @@ export default function Login() {
                 type="email"
                 placeholder="you@example.com"
                 value={form.email}
-                onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                 required
                 autoComplete="email"
               />
@@ -43,19 +59,21 @@ export default function Login() {
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
                 <label className="pub-auth-label" style={{ margin: 0 }}>Password</label>
-                <a href="#" style={{ fontSize: 12, color: "#6C63FF" }}>Forgot password?</a>
+                <Link to="/forgot-password" style={{ fontSize: 12, color: "#6C63FF" }}>Forgot password?</Link>
               </div>
               <input
                 className="pub-auth-input"
                 type="password"
                 placeholder="••••••••"
                 value={form.password}
-                onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+                onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
                 required
                 autoComplete="current-password"
               />
             </div>
-            <button className="pub-auth-submit" type="submit">Sign In →</button>
+            <button className="pub-auth-submit" type="submit" disabled={loading}>
+              {loading ? "Signing in…" : "Sign In →"}
+            </button>
           </form>
 
           <div className="pub-auth-divider" style={{ marginTop: 20 }}>or</div>
@@ -78,6 +96,10 @@ export default function Login() {
               Google sign-in is coming soon. Please use email &amp; password above.
             </p>
           )}
+
+          <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: 10, padding: "10px 14px", marginTop: 16, fontSize: 12, color: "#1d4ed8" }}>
+            💡 <strong>Demo mode:</strong> Enter any email &amp; password to sign in. A demo account is created automatically.
+          </div>
 
           <div className="pub-auth-footer">
             Don't have an account?{" "}
