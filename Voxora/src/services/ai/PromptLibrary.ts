@@ -10,6 +10,9 @@ export type PromptId =
   | 'adCopy' | 'contentCalendar' | 'brandVoice'
   | 'revenueModel' | 'pricingStrategy' | 'unitEconomics' | 'breakEven'
   | 'fundraisingStrategy' | 'termSheet' | 'dueDiligence' | 'investorNarrative' | 'capTable'
+  // V5.1 — Growth & Analytics prompts
+  | 'growthPlanner' | 'growthOpportunity' | 'aiGrowthRecommendations'
+  | 'analyticsReports' | 'collaborationPlan'
   | 'chat';
 
 interface PromptTemplate {
@@ -205,6 +208,39 @@ export const PROMPT_TEMPLATES: Record<PromptId, PromptTemplate> = {
     id: 'capTable', label: 'Cap Table Planner', workspace: 'capTable',
     system: `${BASE_SYSTEM} You specialise in startup cap tables, equity structures, and founder dilution modelling.`,
     user: (input, style) => `Explain the cap table structure and dilution modelling for: "${input}". Cover: typical founder equity split rationale, employee option pool (ESOP) sizing and timing, pre-seed/seed/Series A dilution scenarios, how liquidation preference affects founder payout, what a healthy cap table looks like at each stage, mistakes that make cap tables investor-unfriendly, and 3 concrete scenarios showing founder ownership at exit ($10M, $50M, $100M acquisition). ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  // ── V5.1 — Growth Studio prompts ────────────────────────────────────────────
+  growthPlanner: {
+    id: 'growthPlanner', label: 'Growth Planner', workspace: 'growthPlanner',
+    system: `${BASE_SYSTEM} You specialise in startup growth strategy, acquisition channels, and sustainable scaling.`,
+    user: (input, style) => `Create a 90-day growth plan for: "${input}". Cover: top 3 acquisition channels to prioritise (with rationale), conversion funnel improvements, retention tactics, key metrics to track weekly, and one bold growth experiment to run. For each item include a concrete action, expected impact, and resource requirement. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  growthOpportunity: {
+    id: 'growthOpportunity', label: 'Growth Opportunity Analysis', workspace: 'growthOpportunity',
+    system: `${BASE_SYSTEM} You specialise in identifying untapped growth opportunities for startups and SMBs.`,
+    user: (input, style) => `Identify the top growth opportunities for: "${input}". Analyse: underserved customer segments, adjacent markets, product expansion options, partnership opportunities, pricing model improvements, and viral/referral mechanics. For each opportunity rate the effort (low/medium/high) and potential impact (low/medium/high). Prioritise the top 3 with a recommended first action. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  aiGrowthRecommendations: {
+    id: 'aiGrowthRecommendations', label: 'AI Growth Recommendations', workspace: 'aiGrowthRecommendations',
+    system: `${BASE_SYSTEM} You are a data-driven growth advisor who gives specific, prioritised recommendations.`,
+    user: (input, style) => `Generate AI-powered growth recommendations for: "${input}". Provide: 5 prioritised growth actions ranked by ROI potential, the one metric to move this quarter, a 30-day quick win, a 90-day strategic move, and a 12-month compounding play. For each recommendation include why it works, what success looks like, and a risk to watch. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  // ── V5.1 — Analytics Studio prompts ─────────────────────────────────────────
+  analyticsReports: {
+    id: 'analyticsReports', label: 'Analytics Report', workspace: 'analyticsReports',
+    system: `${BASE_SYSTEM} You specialise in business analytics, KPI interpretation, and executive reporting.`,
+    user: (input, style) => `Create an analytics report framework for: "${input}". Cover: key metrics to track (with benchmarks), how to interpret trends, leading vs lagging indicators, recommended reporting cadence, and 3 data-driven insights to act on immediately. Include a simple dashboard structure with the 5 most important numbers. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
+  },
+
+  // ── V5.1 — Team Studio prompts ───────────────────────────────────────────────
+  collaborationPlan: {
+    id: 'collaborationPlan', label: 'Collaboration Plan', workspace: 'collaborationPlan',
+    system: `${BASE_SYSTEM} You specialise in team collaboration, remote work best practices, and async communication.`,
+    user: (input, style) => `Create a collaboration plan for: "${input}". Cover: team communication cadence (daily/weekly/monthly rituals), decision-making framework (who decides what), async-first principles, shared documentation standards, conflict resolution process, and onboarding checklist for new team members. Make it practical and immediately actionable. ${style === 'concise' ? CONCISE_INSTRUCTION : style === 'creative' ? CREATIVE_INSTRUCTION : ''}`,
   },
 };
 

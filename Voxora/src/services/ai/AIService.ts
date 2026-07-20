@@ -1,15 +1,21 @@
-// ── V4.1 AI Engine — Central AI Service ──────────────────────────────────────
-// Singleton service. Selects provider from settings, falls back to Mock
-// automatically when no API key is configured. Never crashes.
+// ── V5.1 AI Engine — Central AI Service ──────────────────────────────────────
+// Singleton orchestrator. Routes every AI request through:
+//   AIRequestManager → AICache → AIContextManager → Provider
+//   → AIHealthMonitor + AIUsage (recording)
+// Falls back to MockProvider automatically. Never crashes.
 
 import type { AIProvider, AIRequest, AIResponse, AIMessage, AISettings } from './types/AITypes';
 import { DEFAULT_AI_SETTINGS } from './types/AITypes';
-import { MockProvider }      from './providers/MockProvider';
-import { OpenAIProvider }    from './providers/OpenAIProvider';
-import { GeminiProvider }    from './providers/GeminiProvider';
-import { AnthropicProvider } from './providers/AnthropicProvider';
-import { PromptLibrary }     from './PromptLibrary';
-import { AIUsage }           from './AIUsage';
+import { MockProvider }        from './providers/MockProvider';
+import { OpenAIProvider }      from './providers/OpenAIProvider';
+import { GeminiProvider }      from './providers/GeminiProvider';
+import { AnthropicProvider }   from './providers/AnthropicProvider';
+import { PromptLibrary }       from './PromptLibrary';
+import { AIUsage }             from './AIUsage';
+import { AICache }             from './AICache';
+import { AIHealthMonitor }     from './AIHealthMonitor';
+import { AIRequestManager }    from './AIRequestManager';
+import { AIContextManager }    from './AIContextManager';
 
 const SETTINGS_KEY = 'voxora-ai-settings';
 
@@ -31,7 +37,6 @@ function saveSettings(s: AISettings): void {
 // ── Provider factory ──────────────────────────────────────────────────────────
 function buildProvider(settings: AISettings): AIProvider {
   const mock = new MockProvider();
-
   switch (settings.provider) {
     case 'openai': {
       const p = new OpenAIProvider(settings.apiKeys.openai);
@@ -76,7 +81,7 @@ class AIService {
     return !this._provider.isAvailable();
   }
 
-  // ─ Core request builder ────────────────────────────────────────────────────
+  // ─ Internal helpers ────────────────────────────────────────────────────────
   private mergeReq(req: AIRequest): AIRequest {
     return {
       temperature: this._settings.temperature,
@@ -85,7 +90,7 @@ class AIService {
     };
   }
 
-  private record(req: AIRequest, res: AIResponse): void {
+  private recordUsage(req: AIRequest, res: AIResponse): void {
     AIUsage.record({
       timestamp:    Date.now(),
       provider:     res.provider,
@@ -96,38 +101,82 @@ class AIService {
     });
   }
 
-  // ─ Public API ──────────────────────────────────────────────────────────────
+  // ── Core generate — full V5.1 pipeline ────────────────────────────────────
+  // Cache → RequestManager → ContextManager → Provider → Health + Usage
 
   /** Generate a single completion. */
   async generate(req: AIRequest): Promise<AIResponse> {
-    const merged = this.mergeReq(req);
+    const merged   = this.mergeReq(req);
+    const provider = this._provider;
+    const workspace = merged.workspace ?? 'general';
+
+    // 1. Cache lookup (skip for streaming-destined calls that have messages)
+    if (!merged.messages || merged.messages.length === 0) {
+      const cached = AICache.get(merged.prompt, workspace, provider.name);
+      if (cached) return cached;
+    }
+
+    // 2. Inject conversation context
+    const withCtx = AIContextManager.injectContext(merged);
+
+    // 3. Enqueue through request manager
+    const managed = AIRequestManager.enqueue(
+      merged.prompt,
+      workspace,
+      async () => {
+        const start = Date.now();
+        try {
+          const res = await provider.generate(withCtx);
+          AIHealthMonitor.recordSuccess(provider.name, res.responseTime);
+          return res;
+        } catch (err) {
+          AIHealthMonitor.recordError(provider.name, Date.now() - start);
+          throw err;
+        }
+      },
+    );
+
     try {
-      const res = await this._provider.generate(merged);
-      this.record(merged, res);
+      const res = await managed.promise;
+      this.recordUsage(merged, res);
+
+      // 4. Store in cache (only non-contextual single-turn responses)
+      if (!merged.messages || merged.messages.length === 0) {
+        AICache.set(merged.prompt, workspace, provider.name, res);
+      }
+
+      // 5. Record exchange in context manager
+      AIContextManager.record(workspace, merged.prompt, res.content);
+
       return res;
     } catch {
       // Auto-fallback to mock
-      const mock = new MockProvider();
-      const res  = await mock.generate(merged);
-      this.record(merged, res);
+      const mock  = new MockProvider();
+      const res   = await mock.generate(merged);
+      this.recordUsage(merged, res);
+      AIHealthMonitor.recordSuccess('mock', res.responseTime);
       return res;
     }
   }
 
   /** Stream a completion, calling onChunk for each token. */
   async stream(req: AIRequest, onChunk: (chunk: string) => void): Promise<AIResponse> {
-    const merged = this.mergeReq(req);
+    const merged    = this.mergeReq(req);
     const useStream = this._settings.streaming;
+    const start     = Date.now();
     try {
       const res = useStream
         ? await this._provider.stream(merged, onChunk)
         : await this._provider.generate(merged).then(r => { onChunk(r.content); return r; });
-      this.record(merged, res);
+      this.recordUsage(merged, res);
+      AIHealthMonitor.recordSuccess(this._provider.name, res.responseTime);
+      AIContextManager.record(merged.workspace ?? 'general', merged.prompt, res.content);
       return res;
     } catch {
+      AIHealthMonitor.recordError(this._provider.name, Date.now() - start);
       const mock = new MockProvider();
       const res  = await mock.stream(merged, onChunk);
-      this.record(merged, res);
+      this.recordUsage(merged, res);
       return res;
     }
   }
@@ -145,7 +194,11 @@ class AIService {
   }
 
   /** Stream multi-turn chat. */
-  async chatStream(messages: AIMessage[], onChunk: (chunk: string) => void, workspace = 'assistant'): Promise<AIResponse> {
+  async chatStream(
+    messages: AIMessage[],
+    onChunk:  (chunk: string) => void,
+    workspace = 'assistant',
+  ): Promise<AIResponse> {
     const lastUser = messages.filter(m => m.role === 'user').at(-1)?.content ?? '';
     const prompt   = PromptLibrary.build('chat', lastUser);
     return this.stream({
@@ -205,6 +258,12 @@ class AIService {
       breakEven:         'breakEven',
       pitchDeck:         'pitchDeck',
       executiveSummary:  'executiveSummary',
+      // V4.5–V4.6 Growth & Analytics
+      growthPlanner:           'growthPlanner',
+      growthOpportunity:       'growthOpportunity',
+      aiGrowthRecommendations: 'aiGrowthRecommendations',
+      analyticsReports:        'analyticsReports',
+      collaborationPlan:       'collaborationPlan',
     };
     const id  = promptMap[type] ?? 'swot';
     const p   = PromptLibrary.build(id, subject, this._settings.promptStyle);
@@ -226,11 +285,23 @@ class AIService {
     return this.generate({ prompt: p.user, systemPrompt: p.system, workspace, promptId: 'productValidation' });
   }
 
+  // ─ V5.1 Engine accessors ──────────────────────────────────────────────────
+  get cache()          { return AICache; }
+  get healthMonitor()  { return AIHealthMonitor; }
+  get requestManager() { return AIRequestManager; }
+  get contextManager() { return AIContextManager; }
+
   // ─ Settings management ────────────────────────────────────────────────────
   updateSettings(patch: Partial<AISettings>): void {
+    const prevProvider = this._settings.provider;
     this._settings = { ...this._settings, ...patch };
     saveSettings(this._settings);
     this.reload();
+    // Invalidate cache when provider changes
+    if (patch.provider && patch.provider !== prevProvider) {
+      AICache.invalidateProvider(prevProvider);
+      AIHealthMonitor.reset(prevProvider);
+    }
   }
 
   getPromptLibrary() { return PromptLibrary; }
