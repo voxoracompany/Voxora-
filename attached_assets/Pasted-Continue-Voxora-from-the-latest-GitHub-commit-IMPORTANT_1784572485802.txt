@@ -1,0 +1,122 @@
+Continue Voxora from the latest GitHub commit.
+
+IMPORTANT
+
+Do NOT rebuild V1–V5.
+
+Preserve all existing functionality.
+
+Maintain the current premium UI.
+
+==================================================
+V5.1 — Real AI Integration Foundation
+==================================================
+
+Goal:
+Replace the mock AI architecture with a provider-based AI engine that can support multiple AI services.
+
+Build an AI Service Layer.
+
+Architecture:
+
+src/
+  services/
+    ai/
+      AIProvider.ts
+      AIEngine.ts
+      providers/
+        MockProvider.ts
+        OpenAIProvider.ts
+        GeminiProvider.ts
+        AnthropicProvider.ts
+
+Requirements:
+
+1. Create a common AIProvider interface.
+
+Methods:
+
+- generateText()
+- generateIdeas()
+- analyzeBusiness()
+- generateMarketing()
+- generateFinancialAnalysis()
+- generateInvestorReport()
+
+2. AI Engine
+
+Create a single AI Engine that routes every AI request through the selected provider.
+
+3. Provider Manager
+
+Allow switching providers.
+
+Supported:
+
+- Mock (default)
+- OpenAI
+- Google Gemini
+- Anthropic Claude
+
+4. Settings
+
+Add an AI Settings page.
+
+Allow users to:
+
+- Select AI provider
+- Enter API key (stored locally for now)
+- Test connection
+- Choose default model (placeholder if unavailable)
+
+5. Refactor Existing AI Tools
+
+Update every AI-powered workspace to use the AI Engine instead of directly calling mock logic.
+
+This includes:
+
+- AI Assistant
+- Startup Studio
+- Marketing Studio
+- Financial Studio
+- Investor Studio
+- Growth Studio
+- Analytics Studio
+
+6. Error Handling
+
+If no API key is configured:
+
+Show a clear message:
+
+"No AI provider configured. Using Demo Mode."
+
+Automatically fall back to the Mock Provider.
+
+Never leave blank pages or crash.
+
+7. Dashboard
+
+Add:
+
+- Current AI Provider
+- AI Status
+- AI Requests (session)
+
+8. Validation
+
+Run production build.
+
+Fix all TypeScript errors.
+
+Fix runtime errors.
+
+Verify every AI workspace still works.
+
+Commit:
+
+V5.1 AI Integration Foundation
+
+Push to GitHub.
+
+Do NOT implement real API calls yet—build the provider architecture and keep MockProvider as the default.
