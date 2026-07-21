@@ -16,6 +16,7 @@ import { AutomationEngine } from "../../services/automation/AutomationEngine";
 import { MonitoringService } from "../../services/admin/MonitoringService";
 import { NotificationService } from "../../services/admin/NotificationService";
 import { AuditLogService } from "../../services/admin/AuditLogService";
+import { ErrorReportingService } from "../../services/admin/ErrorReportingService";
 import WelcomeWizard from "../../components/WelcomeWizard";
 import "./Dashboard.css";
 
@@ -44,6 +45,12 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V5.9 Launch Preparation & Production Readiness ───────────────────────────
+const ErrorReporting     = lazy(() => import("../Workspaces/ErrorReporting"));
+const HealthCheck        = lazy(() => import("../Workspaces/HealthCheck"));
+const DeploymentChecklist = lazy(() => import("../Workspaces/DeploymentChecklist"));
+const DocumentationCenter = lazy(() => import("../Workspaces/DocumentationCenter"));
+const LaunchChecklist    = lazy(() => import("../Workspaces/LaunchChecklist"));
 // ── V5.8 Admin & Monitoring ───────────────────────────────────────────────────
 const AdminDashboard     = lazy(() => import("../Workspaces/AdminDashboard"));
 const UserManagement     = lazy(() => import("../Workspaces/UserManagement"));
@@ -214,6 +221,22 @@ const Dashboard = () => {
   const sysMetrics    = useMemo(() => MonitoringService.getMetrics(), []);
   const unreadNotifs  = useMemo(() => NotificationService.getUnreadCount(), []);
   const recentAudits  = useMemo(() => AuditLogService.getAll().slice(0, 3), []);
+
+  // V5.9 — Launch Preparation stats
+  useMemo(() => { ErrorReportingService.seed(); }, []);
+  const errStats = useMemo(() => ErrorReportingService.getStats(), []);
+  const launchChecklistDone = useMemo(() => {
+    try { return (JSON.parse(localStorage.getItem("voxora-launch-checklist-v59") || "[]") as string[]).length; }
+    catch { return 0; }
+  }, []);
+  const launchChecklistTotal = 37;
+  const launchReadinessScore = useMemo(() => {
+    const checklistScore = Math.round((launchChecklistDone / launchChecklistTotal) * 50);
+    const healthScore    = sysMetrics.services.filter((s) => s.status === "operational").length /
+      Math.max(1, sysMetrics.services.length) * 30;
+    const errScore       = errStats.unresolved === 0 ? 20 : errStats.unresolved < 3 ? 15 : 5;
+    return Math.min(100, Math.round(checklistScore + healthScore + errScore));
+  }, [launchChecklistDone, sysMetrics, errStats]);
 
   // V5.6 — AI suggestions based on project context
   const aiSuggestions = useMemo(() => {
@@ -891,6 +914,54 @@ const Dashboard = () => {
                 )}
               </div>
 
+                  {/* ── V5.9 Launch Readiness ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  🚀 Launch Readiness
+                  <span style={{ fontSize: 11, background: "#ede9fe", color: "#6c63ff", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>V5.9</span>
+                </h2>
+                <div className="stats">
+                  {/* Launch Readiness Score */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("launchChecklist")}>
+                    <div className="stat-icon">🎯</div>
+                    <p className="stat-value" style={{ color: launchReadinessScore >= 80 ? "#10b981" : launchReadinessScore >= 50 ? "#f59e0b" : "#ef4444" }}>{launchReadinessScore}%</p>
+                    <h3 className="stat-label">Launch Readiness</h3>
+                  </div>
+                  {/* Launch Checklist */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("launchChecklist")}>
+                    <div className="stat-icon">✅</div>
+                    <p className="stat-value">{launchChecklistDone}/{launchChecklistTotal}</p>
+                    <h3 className="stat-label">Checklist Items</h3>
+                  </div>
+                  {/* Health Summary */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("healthCheck")}>
+                    <div className="stat-icon">🏥</div>
+                    <p className="stat-value" style={{ fontSize: 13, color: sysMetrics.services.every(s => s.status === "operational") ? "#10b981" : "#f59e0b" }}>
+                      {sysMetrics.services.every(s => s.status === "operational") ? "All OK" : "Warning"}
+                    </p>
+                    <h3 className="stat-label">Health Status</h3>
+                  </div>
+                  {/* Deployment Status */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("deploymentChecklist")}>
+                    <div className="stat-icon">🚀</div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>Check</p>
+                    <h3 className="stat-label">Deployment</h3>
+                  </div>
+                  {/* Error Log */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("errorReporting")}>
+                    <div className="stat-icon">{errStats.unresolved > 0 ? "🔴" : "🟢"}</div>
+                    <p className="stat-value" style={{ color: errStats.unresolved > 0 ? "#ef4444" : "#10b981" }}>{errStats.unresolved}</p>
+                    <h3 className="stat-label">Open Errors</h3>
+                  </div>
+                  {/* Documentation */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("documentationCenter")}>
+                    <div className="stat-icon">📚</div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>6 Guides</p>
+                    <h3 className="stat-label">Documentation</h3>
+                  </div>
+                </div>
+              </div>
+
               {/* ── Analytics Studio Widgets ── */}
               <div style={{ margin: "28px 0 4px" }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
@@ -1114,6 +1185,13 @@ const Dashboard = () => {
           {workspace === "userProfile"      && <UserProfile        setWorkspace={setWorkspace} />}
           {workspace === "accountSettings"  && <AccountSettings    setWorkspace={setWorkspace} />}
           {workspace === "securitySettings" && <SecuritySettings   setWorkspace={setWorkspace} />}
+
+          {/* V5.9 Launch Preparation & Production Readiness */}
+          {workspace === "errorReporting"      && <ErrorReporting      setWorkspace={setWorkspace} />}
+          {workspace === "healthCheck"         && <HealthCheck         setWorkspace={setWorkspace} />}
+          {workspace === "deploymentChecklist" && <DeploymentChecklist setWorkspace={setWorkspace} />}
+          {workspace === "documentationCenter" && <DocumentationCenter setWorkspace={setWorkspace} />}
+          {workspace === "launchChecklist"     && <LaunchChecklist     setWorkspace={setWorkspace} />}
 
           {/* V5.8 Admin & Monitoring */}
           {workspace === "adminDashboard"     && <AdminDashboard     setWorkspace={setWorkspace} />}

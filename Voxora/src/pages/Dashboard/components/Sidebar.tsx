@@ -152,6 +152,14 @@ const ADMIN_TOOLS = [
   { id: "admin",              icon: "🛠️", label: "Dev Panel"           },
 ];
 
+const LAUNCH_TOOLS = [
+  { id: "launchChecklist",     icon: "✅", label: "Launch Checklist"    },
+  { id: "healthCheck",         icon: "🏥", label: "Health Check"        },
+  { id: "deploymentChecklist", icon: "🚀", label: "Deployment Checklist"},
+  { id: "errorReporting",      icon: "🚨", label: "Error Reporting"     },
+  { id: "documentationCenter", icon: "📚", label: "Documentation"       },
+];
+
 const BOTTOM_NAV = [
   { id: "help",           icon: "❓", label: "Help Center" },
   { id: "settings",       icon: "⚙️", label: "Settings" },
@@ -345,6 +353,20 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
       <div className="sidebar-section-label">Analytics Studio</div>
       <nav className="sidebar-nav">
         {ANALYTICS_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">Launch & Quality</div>
+      <nav className="sidebar-nav">
+        {LAUNCH_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
