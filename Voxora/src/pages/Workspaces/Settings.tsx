@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useActivity } from "../../context/ActivityContext";
 import { useToast } from "../../context/ToastContext";
 import { useProjects } from "../../context/ProjectContext";
+import { useSubscription } from "../../context/SubscriptionContext";
 import "./Workspace.css";
 import "./Settings.css";
 
@@ -34,6 +35,7 @@ export default function Settings({ setWorkspace }: { setWorkspace: (workspace: s
   const { addActivity } = useActivity();
   const { showToast } = useToast();
   const { projects } = useProjects();
+  const { currentPlan, subscription, daysUntilRenewal, isDemoBillingMode, isTrial, trialDaysRemaining } = useSubscription();
   const importRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState(() => localStorage.getItem("voxora-name") || "");
@@ -165,6 +167,49 @@ export default function Settings({ setWorkspace }: { setWorkspace: (workspace: s
       <button className="back-btn" onClick={() => setWorkspace("dashboard")}>← Back to Dashboard</button>
       <h1>⚙️ Settings</h1>
       <p className="workspace-subtitle">Customize your Voxora experience.</p>
+
+      {/* ─── Subscription ─── */}
+      <div className="settings-card">
+        <h3>💳 Subscription</h3>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
+          <div style={{ background: "var(--accent,#6C63FF)", color: "#fff", borderRadius: 10, padding: "6px 16px", fontWeight: 700, fontSize: 14 }}>
+            {currentPlan.name} Plan
+          </div>
+          {isDemoBillingMode && (
+            <span style={{ fontSize: 12, background: "#ede9fe", color: "#4c1d95", borderRadius: 8, padding: "4px 12px", fontWeight: 600 }}>
+              Demo Billing Mode
+            </span>
+          )}
+          {isTrial && (
+            <span style={{ fontSize: 12, background: "#fef3c7", color: "#92400e", borderRadius: 8, padding: "4px 12px", fontWeight: 600 }}>
+              🎉 Trial — {trialDaysRemaining} days remaining
+            </span>
+          )}
+        </div>
+        <p style={{ fontSize: 13, color: "var(--text-secondary,#64748b)", margin: "0 0 12px" }}>
+          <strong>Status:</strong>{" "}
+          <span style={{ textTransform: "capitalize" }}>{subscription.status.replace("_", " ")}</span>
+          {" "}·{" "}
+          <strong>Renewal:</strong> {new Date(subscription.currentPeriodEnd).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+          {" "}({daysUntilRenewal} days)
+          {" "}·{" "}
+          <strong>Billing:</strong>{" "}
+          <span style={{ textTransform: "capitalize" }}>{subscription.interval}</span>
+        </p>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <button className="workspace-btn" onClick={() => setWorkspace("billing")}>
+            ⚡ {currentPlan.id === "free" ? "Upgrade Plan" : "Manage Subscription"}
+          </button>
+          {currentPlan.id !== "free" && (
+            <button
+              style={{ padding: "10px 18px", borderRadius: 10, border: "1px solid var(--border,#e5e7eb)", background: "transparent", color: "var(--text-secondary,#64748b)", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
+              onClick={() => setWorkspace("billing")}
+            >
+              View Billing →
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* ─── User Profile ─── */}
       <div className="settings-card">

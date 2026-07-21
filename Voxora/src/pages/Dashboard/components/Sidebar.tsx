@@ -129,6 +129,7 @@ const ACCOUNT_TOOLS = [
   { id: "userProfile",      icon: "👤", label: "My Profile" },
   { id: "accountSettings",  icon: "⚙️", label: "Account Settings" },
   { id: "securitySettings", icon: "🔐", label: "Security" },
+  { id: "billing",          icon: "💳", label: "Billing & Plans" },
 ];
 
 const BOTTOM_NAV = [

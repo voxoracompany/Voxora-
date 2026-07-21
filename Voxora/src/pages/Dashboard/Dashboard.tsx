@@ -7,6 +7,7 @@ import { useProjects } from "../../context/ProjectContext";
 import { useAIContext } from "../../context/AIContext";
 import { useAuth } from "../../context/AuthContext";
 import { useCloud } from "../../context/CloudContext";
+import { useSubscription } from "../../context/SubscriptionContext";
 import { AIMemory } from "../../services/ai/AIMemory";
 import { AIUsage } from "../../services/ai/AIUsage";
 import "./Dashboard.css";
@@ -33,6 +34,8 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V5.4 Payments & Subscription ─────────────────────────────────────────────
+const Billing            = lazy(() => import("../Workspaces/Billing"));
 // ── V4.9 Authentication & User Accounts ──────────────────────────────────────
 const UserProfile        = lazy(() => import("../Workspaces/UserProfile"));
 const AccountSettings    = lazy(() => import("../Workspaces/AccountSettings"));
@@ -143,6 +146,11 @@ const Dashboard = () => {
   const { activities } = useActivity();
   const { usage, isDemoMode, activeProvider, health } = useAIContext();
   const { status: cloudStatus, syncNow } = useCloud();
+  const {
+    currentPlan, subscription, usage: subUsage,
+    isTrial, trialDaysRemaining, daysUntilRenewal,
+    isDemoBillingMode, isActive: subIsActive,
+  } = useSubscription();
 
   const stats = useMemo(() => {
     const weekStart = new Date();
@@ -455,6 +463,74 @@ const Dashboard = () => {
                 </div>
               </div>
 
+              {/* ── V5.4 Subscription & Billing Widgets ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  💳 Subscription
+                  {isDemoBillingMode && (
+                    <span style={{ fontSize: 11, background: "#ede9fe", color: "#4c1d95", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>
+                      Demo Billing Mode
+                    </span>
+                  )}
+                  {isTrial && (
+                    <span style={{ fontSize: 11, background: "#fef3c7", color: "#92400e", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>
+                      Trial
+                    </span>
+                  )}
+                </h2>
+                <div className="stats">
+                  {/* Current Plan */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("billing")}>
+                    <div className="stat-icon">⚡</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>{currentPlan.name}</p>
+                    <h3 className="stat-label">Current Plan</h3>
+                  </div>
+                  {/* Trial / Renewal */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("billing")}>
+                    <div className="stat-icon">{isTrial ? "🎉" : "📅"}</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>
+                      {isTrial ? `${trialDaysRemaining}d` : `${daysUntilRenewal}d`}
+                    </p>
+                    <h3 className="stat-label">{isTrial ? "Trial Days Left" : "Days to Renewal"}</h3>
+                  </div>
+                  {/* AI Usage */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("billing")}>
+                    <div className="stat-icon">🤖</div>
+                    <p className="stat-value">
+                      {subUsage.aiRequests}
+                      {currentPlan.limits.aiRequests !== -1 && (
+                        <span style={{ fontSize: 11, color: "var(--text-secondary,#64748b)", fontWeight: 400 }}>
+                          /{currentPlan.limits.aiRequests}
+                        </span>
+                      )}
+                    </p>
+                    <h3 className="stat-label">AI Requests</h3>
+                  </div>
+                  {/* Storage */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("billing")}>
+                    <div className="stat-icon">🗄️</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>
+                      {currentPlan.limits.storageGB === -1 ? "∞" : `${currentPlan.limits.storageGB} GB`}
+                    </p>
+                    <h3 className="stat-label">Storage Limit</h3>
+                  </div>
+                  {/* Subscription Status */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("billing")}>
+                    <div className="stat-icon">{subIsActive ? "✅" : "⚠️"}</div>
+                    <p className="stat-value" style={{ fontSize: 12, textTransform: "capitalize" }}>
+                      {subscription.status.replace("_", " ")}
+                    </p>
+                    <h3 className="stat-label">Status</h3>
+                  </div>
+                  {/* Billing Shortcut */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("billing")}>
+                    <div className="stat-icon">💳</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Manage</p>
+                    <h3 className="stat-label">Billing</h3>
+                  </div>
+                </div>
+              </div>
+
               {/* ── V5.3 Cloud & Backend Widgets ── */}
               <div style={{ margin: "28px 0 4px" }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
@@ -731,6 +807,9 @@ const Dashboard = () => {
           {workspace === "export"         && <ExportCenter       setWorkspace={setWorkspace} />}
           {workspace === "help"           && <HelpCenter         setWorkspace={setWorkspace} />}
           {workspace === "admin"          && <DevAdmin           setWorkspace={setWorkspace} />}
+
+          {/* V5.4 Payments & Subscription */}
+          {workspace === "billing" && <Billing setWorkspace={setWorkspace} />}
 
           {/* V4.9 Authentication & User Accounts */}
           {workspace === "userProfile"      && <UserProfile        setWorkspace={setWorkspace} />}

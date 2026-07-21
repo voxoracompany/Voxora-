@@ -1,0 +1,173 @@
+Continue Voxora from the latest GitHub commit.
+
+IMPORTANT
+
+- Analyze the existing codebase first.
+- Verify V5.3 Firebase Authentication & Cloud Backend exists.
+- Do NOT rebuild V1–V5.3.
+- Preserve all existing functionality.
+- Maintain the premium UI and responsive design.
+- Reuse existing contexts, services, dashboard widgets, and routing.
+
+==================================================
+V5.4 — Payments & Subscription System
+==================================================
+
+Goal:
+
+Create a complete subscription and billing system that is production-ready.
+
+Do NOT connect to a real payment provider yet.
+
+Instead, build a modular payment architecture with demo mode support.
+
+==================================================
+Subscription Plans
+==================================================
+
+Create four plans:
+
+• Free
+• Pro
+• Team
+• Enterprise (Contact Sales)
+
+Each plan should include:
+
+- Name
+- Description
+- Monthly price
+- Yearly price
+- Features
+- Usage limits
+- AI request limits
+- Storage limits
+- Team limits
+
+==================================================
+Billing Dashboard
+==================================================
+
+Create a Billing workspace containing:
+
+- Current Plan
+- Upgrade Plan
+- Downgrade Plan
+- Usage Statistics
+- AI Usage
+- Storage Usage
+- Team Usage
+- Billing History
+- Invoices (placeholder)
+- Payment Methods (placeholder)
+
+==================================================
+Subscription Engine
+==================================================
+
+Implement:
+
+- Current subscription
+- Trial mode
+- Expired subscription state
+- Feature gating
+- Usage tracking
+- Upgrade flow
+- Downgrade flow
+
+==================================================
+Payment Provider Layer
+==================================================
+
+Create a modular provider architecture.
+
+Include placeholder providers for:
+
+- Stripe
+- Flutterwave
+- Paystack
+
+Do NOT connect live APIs.
+
+The architecture must allow easy integration later.
+
+==================================================
+Dashboard
+==================================================
+
+Add widgets:
+
+- Current Plan
+- Trial Days Remaining
+- AI Usage
+- Storage Usage
+- Subscription Status
+- Billing Shortcut
+
+==================================================
+Settings
+==================================================
+
+Add:
+
+Subscription tab
+
+Display:
+
+- Current Plan
+- Renewal Date
+- Upgrade button
+- Manage Subscription
+
+==================================================
+Developer Mode
+==================================================
+
+If no payment provider is configured:
+
+Display:
+
+"Demo Billing Mode"
+
+Everything should continue working normally.
+
+==================================================
+Validation
+==================================================
+
+Run a production build.
+
+Fix all TypeScript errors.
+
+Fix all runtime errors.
+
+Verify:
+
+- No broken routes.
+- No blank pages.
+- Subscription engine works.
+- Demo Billing Mode works.
+- Dashboard widgets update correctly.
+
+==================================================
+Git
+==================================================
+
+Commit:
+
+V5.4 Payments & Subscription System
+
+Push to GitHub.
+
+Verify the push succeeded.
+
+Report:
+
+- Build status
+- Commit hash
+- Push confirmation
+- Subscription system status
+- Billing dashboard status
+- Demo Billing status
+
+Do not finish until the production build passes and the GitHub push has been confirmed.

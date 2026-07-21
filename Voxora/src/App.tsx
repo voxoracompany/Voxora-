@@ -6,6 +6,7 @@ import { ToastProvider } from "./context/ToastContext";
 import { AIProvider } from "./context/AIContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { CloudProvider } from "./context/CloudContext";
+import { SubscriptionProvider } from "./context/SubscriptionContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Public pages
@@ -105,7 +106,9 @@ export default function App() {
                   <ActivityProvider>
                     <ProjectProvider>
                       <AIProvider>
-                        <Dashboard />
+                        <SubscriptionProvider>
+                          <Dashboard />
+                        </SubscriptionProvider>
                       </AIProvider>
                     </ProjectProvider>
                   </ActivityProvider>
