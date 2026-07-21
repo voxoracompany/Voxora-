@@ -1,3 +1,4 @@
 - [Voxora architecture](voxora-arch.md) — state-based routing (useState, no router), all workspace pages lazy-loaded, dark mode via `data-theme` on `<html>`.
 - [V4 AI Engine build state](v4-build-state.md) — V4.1–V4.9 all complete; V4.9 added AuthContext (localStorage demo mode, backend-swappable), ProtectedRoute, 3 workspace pages (UserProfile, AccountSettings, SecuritySettings), 3 public pages (ForgotPassword, ResetPassword, EmailVerification).
 - [V5.1 AI Engine modules](v51-ai-engine.md) — 4 new service modules added: AICache, AIHealthMonitor, AIRequestManager, AIContextManager; AIService, AIContext, useAI, PromptLibrary, AITypes all updated to wire them in.
+- [V5.9 Launch Prep](v59-launch-prep.md) — 5 new workspaces: ErrorReporting, HealthCheck, DeploymentChecklist, DocumentationCenter, LaunchChecklist; ErrorReportingService; Sidebar "Launch & Quality" section.
