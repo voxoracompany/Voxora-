@@ -333,6 +333,60 @@ export default function Settings({ setWorkspace }: { setWorkspace: (workspace: s
           {confirmClear ? "⚠️ Click Again to Confirm — This Cannot Be Undone" : "🗑️ Clear All Data"}
         </button>
       </div>
+
+      {/* ─── Admin (V5.8) ─── */}
+      <div className="settings-card">
+        <h3>🏛️ Admin <span style={{ fontSize: 11, background: "#ede9fe", color: "#4c1d95", borderRadius: 8, padding: "2px 8px", fontWeight: 700, marginLeft: 6 }}>V5.8</span></h3>
+        <p className="settings-desc">Administration, monitoring, and platform management tools.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 10 }}>
+          {[
+            { icon: "🏛️", label: "Admin Dashboard",    desc: "Platform overview and key metrics.",   ws: "adminDashboard"     },
+            { icon: "👥", label: "User Management",    desc: "View and manage platform users.",       ws: "userManagement"     },
+            { icon: "📡", label: "System Monitoring",  desc: "Service health and system metrics.",    ws: "systemMonitoring"   },
+            { icon: "📋", label: "Audit Logs",         desc: "Platform event and activity log.",      ws: "auditLogs"          },
+            { icon: "🔔", label: "Notification Center",desc: "System and app notifications.",         ws: "notificationCenter" },
+            { icon: "🚩", label: "Feature Flags",      desc: "Enable or disable platform features.",  ws: "featureFlags"       },
+            { icon: "🛠️", label: "Dev Panel",          desc: "Developer diagnostics and debug info.", ws: "admin"              },
+          ].map((item) => (
+            <button
+              key={item.ws}
+              onClick={() => setWorkspace(item.ws)}
+              style={{
+                display: "flex", alignItems: "flex-start", gap: 10,
+                padding: "12px 14px", background: "var(--bg-secondary,#f8fafc)",
+                border: "1.5px solid var(--border,#e2e8f0)", borderRadius: 10,
+                cursor: "pointer", textAlign: "left", transition: "border-color 0.15s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = "#6C63FF")}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border,#e2e8f0)")}
+            >
+              <span style={{ fontSize: 22 }}>{item.icon}</span>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 13, color: "var(--text-primary,#111827)" }}>{item.label}</div>
+                <div style={{ fontSize: 12, color: "var(--text-secondary,#64748b)", marginTop: 2 }}>{item.desc}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ─── System Information (V5.8) ─── */}
+      <div className="settings-card">
+        <h3>🖥️ System Information <span style={{ fontSize: 11, background: "#ede9fe", color: "#4c1d95", borderRadius: 8, padding: "2px 8px", fontWeight: 700, marginLeft: 6 }}>V5.8</span></h3>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13 }}>
+          {[
+            { label: "Platform Version", value: "V5.8 Admin & Monitoring" },
+            { label: "Environment",      value: "Demo Mode" },
+            { label: "Browser",          value: navigator.language },
+            { label: "Network",          value: navigator.onLine ? "Online" : "Offline" },
+          ].map((f) => (
+            <div key={f.label} style={{ display: "flex", justifyContent: "space-between", padding: "8px 12px", background: "var(--bg-secondary,#f8fafc)", borderRadius: 8, border: "1px solid var(--border,#f1f5f9)" }}>
+              <span style={{ color: "var(--text-secondary,#64748b)", fontWeight: 600 }}>{f.label}</span>
+              <span style={{ color: "var(--text-primary,#111827)", fontWeight: 700 }}>{f.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

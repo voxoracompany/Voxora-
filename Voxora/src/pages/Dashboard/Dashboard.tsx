@@ -13,6 +13,9 @@ import { AIUsage } from "../../services/ai/AIUsage";
 import { MemoryService } from "../../services/memory/MemoryService";
 import { IntegrationService } from "../../services/integrations/IntegrationService";
 import { AutomationEngine } from "../../services/automation/AutomationEngine";
+import { MonitoringService } from "../../services/admin/MonitoringService";
+import { NotificationService } from "../../services/admin/NotificationService";
+import { AuditLogService } from "../../services/admin/AuditLogService";
 import WelcomeWizard from "../../components/WelcomeWizard";
 import "./Dashboard.css";
 
@@ -41,6 +44,13 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V5.8 Admin & Monitoring ───────────────────────────────────────────────────
+const AdminDashboard     = lazy(() => import("../Workspaces/AdminDashboard"));
+const UserManagement     = lazy(() => import("../Workspaces/UserManagement"));
+const SystemMonitoring   = lazy(() => import("../Workspaces/SystemMonitoring"));
+const AuditLogs          = lazy(() => import("../Workspaces/AuditLogs"));
+const NotificationCenter = lazy(() => import("../Workspaces/NotificationCenter"));
+const FeatureFlags       = lazy(() => import("../Workspaces/FeatureFlags"));
 // ── V5.7 Integrations & Automation ───────────────────────────────────────────
 const AutomationWorkspace = lazy(() => import("../Workspaces/AutomationWorkspace"));
 const IntGoogleCal        = lazy(() => import("../Workspaces/IntGoogleCal"));
@@ -198,6 +208,12 @@ const Dashboard = () => {
   // V5.7 — Integration & Automation stats
   const intStats  = useMemo(() => IntegrationService.getStats(), []);
   const autoStats = useMemo(() => AutomationEngine.getStats(), []);
+
+  // V5.8 — Admin & Monitoring stats
+  useMemo(() => { AuditLogService.seed(); NotificationService.seed(); }, []);
+  const sysMetrics    = useMemo(() => MonitoringService.getMetrics(), []);
+  const unreadNotifs  = useMemo(() => NotificationService.getUnreadCount(), []);
+  const recentAudits  = useMemo(() => AuditLogService.getAll().slice(0, 3), []);
 
   // V5.6 — AI suggestions based on project context
   const aiSuggestions = useMemo(() => {
@@ -737,6 +753,79 @@ const Dashboard = () => {
                 </div>
               </div>
 
+              {/* ── V5.8 Admin & Monitoring Widgets ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  🏛️ Admin & Monitoring
+                  <span style={{ fontSize: 11, background: "#ede9fe", color: "#6c63ff", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>V5.8</span>
+                </h2>
+                <div className="stats">
+                  {/* System Health */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("systemMonitoring")}>
+                    <div className="stat-icon">
+                      {sysMetrics.services.every(s => s.status === "operational") ? "💚" : sysMetrics.services.some(s => s.status === "down") ? "🔴" : "🟡"}
+                    </div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>
+                      {sysMetrics.services.every(s => s.status === "operational") ? "All OK" : sysMetrics.services.some(s => s.status === "down") ? "Down" : "Degraded"}
+                    </p>
+                    <h3 className="stat-label">System Health</h3>
+                  </div>
+                  {/* Services */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("systemMonitoring")}>
+                    <div className="stat-icon">🔧</div>
+                    <p className="stat-value">{sysMetrics.services.filter(s => s.status === "operational").length}/{sysMetrics.services.length}</p>
+                    <h3 className="stat-label">Services OK</h3>
+                  </div>
+                  {/* Active Users */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("userManagement")}>
+                    <div className="stat-icon">👥</div>
+                    <p className="stat-value">{sysMetrics.activeUsers}</p>
+                    <h3 className="stat-label">Active Users</h3>
+                  </div>
+                  {/* Audit Events */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("auditLogs")}>
+                    <div className="stat-icon">📋</div>
+                    <p className="stat-value">{recentAudits.length}</p>
+                    <h3 className="stat-label">Audit Events</h3>
+                  </div>
+                  {/* Notifications */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("notificationCenter")}>
+                    <div className="stat-icon">🔔</div>
+                    <p className="stat-value">{unreadNotifs}</p>
+                    <h3 className="stat-label">Unread Notifs</h3>
+                  </div>
+                  {/* Admin Panel */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("adminDashboard")}>
+                    <div className="stat-icon">🏛️</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Open</p>
+                    <h3 className="stat-label">Admin Panel</h3>
+                  </div>
+                </div>
+                {/* Recent Audit Events mini-list */}
+                {recentAudits.length > 0 && (
+                  <div className="dashboard-panel" style={{ marginTop: 16 }}>
+                    <div className="panel-header">
+                      <h2>📋 Recent Audit Events</h2>
+                      <button className="panel-link" onClick={() => setWorkspace("auditLogs")}>View All →</button>
+                    </div>
+                    <div className="activity-mini-list">
+                      {recentAudits.map((e) => (
+                        <div key={e.id} className="activity-mini-item">
+                          <span className="activity-mini-icon">{e.icon}</span>
+                          <div className="activity-mini-body">
+                            <span className="activity-mini-title">{e.description}</span>
+                            <span className="activity-mini-desc">{e.userName} · {e.type.replace(/_/g, " ")}</span>
+                          </div>
+                          <span className="activity-mini-time" style={{ color: e.severity === "critical" ? "#ef4444" : e.severity === "warning" ? "#f59e0b" : "#64748b" }}>
+                            {e.severity}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* ── V5.7 Integrations & Automation Widgets ── */}
               <div style={{ margin: "28px 0 4px" }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
@@ -1025,6 +1114,14 @@ const Dashboard = () => {
           {workspace === "userProfile"      && <UserProfile        setWorkspace={setWorkspace} />}
           {workspace === "accountSettings"  && <AccountSettings    setWorkspace={setWorkspace} />}
           {workspace === "securitySettings" && <SecuritySettings   setWorkspace={setWorkspace} />}
+
+          {/* V5.8 Admin & Monitoring */}
+          {workspace === "adminDashboard"     && <AdminDashboard     setWorkspace={setWorkspace} />}
+          {workspace === "userManagement"     && <UserManagement     setWorkspace={setWorkspace} />}
+          {workspace === "systemMonitoring"   && <SystemMonitoring   setWorkspace={setWorkspace} />}
+          {workspace === "auditLogs"          && <AuditLogs          setWorkspace={setWorkspace} />}
+          {workspace === "notificationCenter" && <NotificationCenter setWorkspace={setWorkspace} />}
+          {workspace === "featureFlags"       && <FeatureFlags       setWorkspace={setWorkspace} />}
 
           {/* V5.7 Integrations & Automation */}
           {workspace === "automation"      && <AutomationWorkspace setWorkspace={setWorkspace} />}

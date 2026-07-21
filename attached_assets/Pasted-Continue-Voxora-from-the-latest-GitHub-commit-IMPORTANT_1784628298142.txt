@@ -1,0 +1,226 @@
+Continue Voxora from the latest GitHub commit.
+
+IMPORTANT
+
+- Analyze the existing codebase first.
+- Verify V5.7 Integrations & Automation exists.
+- Continue from Git commit: 13e7907.
+- Do NOT rebuild V1–V5.7.
+- Preserve all existing functionality.
+- Reuse the existing AI Engine, Firebase Backend, Gemini Integration, Subscription System, Memory Engine, Integrations, and Automation Engine.
+- Maintain the premium UI, responsive design, accessibility, and TypeScript quality.
+
+==================================================
+V5.8 — Admin & Monitoring
+==================================================
+
+Goal:
+
+Build a complete administration and monitoring system for Voxora while remaining fully compatible with Demo Mode.
+
+==================================================
+1. Admin Dashboard
+==================================================
+
+Create an Admin Dashboard workspace.
+
+Display:
+
+- Total Users
+- Active Users
+- New Users
+- Projects Created
+- AI Requests
+- Revenue Overview
+- Storage Usage
+- Integration Status
+- System Health
+- Subscription Breakdown
+
+==================================================
+2. User Management
+==================================================
+
+Create a User Management workspace.
+
+Support:
+
+- View users
+- Search users
+- Filter users
+- View profile
+- Edit role
+- Suspend user (demo)
+- Reactivate user
+- Delete user (demo)
+
+Roles:
+
+- Owner
+- Admin
+- Team
+- User
+
+==================================================
+3. System Monitoring
+==================================================
+
+Create monitoring services.
+
+Track:
+
+- CPU usage (demo)
+- Memory usage
+- Storage usage
+- API requests
+- AI requests
+- Firebase status
+- Gemini status
+- Payment provider status
+- Integration status
+
+Show live status indicators.
+
+==================================================
+4. Audit Logs
+==================================================
+
+Create an Audit Log workspace.
+
+Record:
+
+- Login
+- Logout
+- AI requests
+- Project creation
+- Billing changes
+- Integration events
+- Automation events
+- Settings changes
+
+Support:
+
+- Search
+- Filter
+- Export JSON
+- Export CSV
+
+==================================================
+5. Notifications Center
+==================================================
+
+Create a notification service.
+
+Support:
+
+- Success
+- Warning
+- Error
+- Information
+
+Include:
+
+- Mark as read
+- Mark all read
+- Delete
+- Archive
+
+==================================================
+6. Feature Flags
+==================================================
+
+Create Feature Flag management.
+
+Allow enabling/disabling features such as:
+
+- Gemini AI
+- Firebase
+- Payments
+- Integrations
+- Automation
+- AI Memory
+
+Persist settings locally.
+
+==================================================
+7. Dashboard Improvements
+==================================================
+
+Add widgets:
+
+- System Health
+- Active Users
+- Audit Events
+- Notifications
+- Admin Shortcuts
+- Service Status
+
+==================================================
+8. Settings
+==================================================
+
+Add an Admin section.
+
+Include:
+
+- Maintenance Mode (demo)
+- Feature Flags
+- Monitoring
+- Logs
+- System Information
+- Environment Status
+
+==================================================
+Validation
+==================================================
+
+Run:
+
+- Production build
+- TypeScript
+- Route verification
+- Dashboard verification
+- Admin verification
+- Monitoring verification
+- Notification verification
+
+Verify:
+
+- Zero TypeScript errors
+- Zero runtime errors
+- No blank pages
+- No broken routes
+- Existing V1–V5.7 functionality preserved
+
+==================================================
+Git
+==================================================
+
+Commit:
+
+V5.8 Admin & Monitoring
+
+Push to GitHub.
+
+Verify the push succeeded.
+
+Report:
+
+- Production build status
+- TypeScript status
+- Commit hash
+- Push status
+- Admin Dashboard status
+- Monitoring status
+- Audit Log status
+- Notification Center status
+
+IMPORTANT
+
+When V5.8 is complete:
+
+STOP.
+
+Do NOT begin V5.9 automatically.
+
+Wait for my instruction.
