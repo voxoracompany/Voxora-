@@ -1,5 +1,5 @@
 import { useActivity } from "../../context/ActivityContext";
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState, useCallback } from "react";
 import Sidebar from "./components/Sidebar";
 import TopBar from "./components/TopBar";
 import FeatureCard from "./components/FeatureCard";
@@ -10,7 +10,11 @@ import { useCloud } from "../../context/CloudContext";
 import { useSubscription } from "../../context/SubscriptionContext";
 import { AIMemory } from "../../services/ai/AIMemory";
 import { AIUsage } from "../../services/ai/AIUsage";
+import WelcomeWizard from "../../components/WelcomeWizard";
 import "./Dashboard.css";
+
+const WIZARD_KEY = "voxora-wizard-done";
+const GS_KEY = "voxora-gs-checklist";
 
 // ── Lazy-loaded workspace pages ──────────────────────────────────────────────
 const AIContent          = lazy(() => import("../Workspaces/AIContent"));
@@ -34,6 +38,10 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V5.5 Public Beta Launch ───────────────────────────────────────────────────
+const FeedbackCenter     = lazy(() => import("../Workspaces/FeedbackCenter"));
+const TrustCenter        = lazy(() => import("../Workspaces/TrustCenter"));
+const GettingStarted     = lazy(() => import("../Workspaces/GettingStarted"));
 // ── V5.4 Payments & Subscription ─────────────────────────────────────────────
 const Billing            = lazy(() => import("../Workspaces/Billing"));
 // ── V4.9 Authentication & User Accounts ──────────────────────────────────────
@@ -142,6 +150,12 @@ const Dashboard = () => {
   const userName = user?.name || localStorage.getItem("voxora-name") || "";
   const [workspace, setWorkspace] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
+  const [showWizard, setShowWizard] = useState(() => !localStorage.getItem(WIZARD_KEY));
+
+  const handleWizardComplete = useCallback(() => {
+    localStorage.setItem(WIZARD_KEY, "1");
+    setShowWizard(false);
+  }, []);
   const { projects, favorites, pinned } = useProjects();
   const { activities } = useActivity();
   const { usage, isDemoMode, activeProvider, health } = useAIContext();
@@ -193,6 +207,11 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
+      {/* V5.5 Welcome Wizard */}
+      {showWizard && (
+        <WelcomeWizard onComplete={handleWizardComplete} setWorkspace={(w) => { handleWizardComplete(); setWorkspace(w); }} />
+      )}
+
       {/* Mobile backdrop overlay */}
       {sidebarOpen && (
         <div
@@ -262,6 +281,64 @@ const Dashboard = () => {
                   <div className="stat-icon">📅</div>
                   <p className="stat-value">{stats.thisWeek}</p>
                   <h3 className="stat-label">This Week</h3>
+                </div>
+              </div>
+
+              {/* ── V5.5 Beta Status & Quick Nav ── */}
+              <div style={{ margin: "0 0 28px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  🧪 Beta Status
+                  <span style={{ fontSize: 11, background: "#ede9fe", color: "#4c1d95", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>Public Beta</span>
+                </h2>
+                <div className="stats">
+                  {/* Beta Badge */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("gettingStarted")}>
+                    <div className="stat-icon">🧪</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Beta</p>
+                    <h3 className="stat-label">Release Stage</h3>
+                  </div>
+                  {/* Tour Progress */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("gettingStarted")}>
+                    <div className="stat-icon">🗺️</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>
+                      {(() => {
+                        try {
+                          const done: string[] = JSON.parse(localStorage.getItem(GS_KEY) || "[]");
+                          return `${done.length}/8`;
+                        } catch { return "0/8"; }
+                      })()}
+                    </p>
+                    <h3 className="stat-label">Setup Progress</h3>
+                  </div>
+                  {/* Feedback */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("feedback")}>
+                    <div className="stat-icon">💬</div>
+                    <p className="stat-value">
+                      {(() => {
+                        try { return JSON.parse(localStorage.getItem("voxora-feedback-history") || "[]").length; }
+                        catch { return 0; }
+                      })()}
+                    </p>
+                    <h3 className="stat-label">Feedback Sent</h3>
+                  </div>
+                  {/* System Health */}
+                  <div className="stat-card">
+                    <div className="stat-icon">💚</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>All OK</p>
+                    <h3 className="stat-label">System Health</h3>
+                  </div>
+                  {/* Latest Update */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("help")}>
+                    <div className="stat-icon">🆕</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>V5.5</p>
+                    <h3 className="stat-label">Latest Update</h3>
+                  </div>
+                  {/* Getting Started */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("gettingStarted")}>
+                    <div className="stat-icon">🚀</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Start</p>
+                    <h3 className="stat-label">Getting Started</h3>
+                  </div>
                 </div>
               </div>
 
@@ -810,6 +887,11 @@ const Dashboard = () => {
 
           {/* V5.4 Payments & Subscription */}
           {workspace === "billing" && <Billing setWorkspace={setWorkspace} />}
+
+          {/* V5.5 Public Beta Launch */}
+          {workspace === "feedback"        && <FeedbackCenter  setWorkspace={setWorkspace} />}
+          {workspace === "trust"           && <TrustCenter     setWorkspace={setWorkspace} />}
+          {workspace === "gettingStarted"  && <GettingStarted  setWorkspace={setWorkspace} />}
 
           {/* V4.9 Authentication & User Accounts */}
           {workspace === "userProfile"      && <UserProfile        setWorkspace={setWorkspace} />}

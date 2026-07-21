@@ -132,6 +132,12 @@ const ACCOUNT_TOOLS = [
   { id: "billing",          icon: "💳", label: "Billing & Plans" },
 ];
 
+const BETA_TOOLS = [
+  { id: "gettingStarted", icon: "🗺️", label: "Getting Started" },
+  { id: "feedback",       icon: "💬", label: "Feedback Center" },
+  { id: "trust",          icon: "🔒", label: "Trust Center" },
+];
+
 const BOTTOM_NAV = [
   { id: "help",           icon: "❓", label: "Help Center" },
   { id: "settings",       icon: "⚙️", label: "Settings" },
@@ -329,6 +335,21 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
             onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">Beta & Support</div>
+      <nav className="sidebar-nav">
+        {BETA_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+            aria-label={item.label}
           >
             <span className="sidebar-item-icon">{item.icon}</span>
             <span className="sidebar-item-label">{item.label}</span>

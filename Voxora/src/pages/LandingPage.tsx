@@ -29,10 +29,32 @@ export default function LandingPage() {
     <div className="voxora">
       <PublicNav />
 
+      {/* ─── Beta Banner ─── */}
+      <div style={{
+        background: "linear-gradient(135deg, #4c1d95, #1e40af)",
+        color: "#fff",
+        textAlign: "center",
+        padding: "10px 20px",
+        fontSize: 13,
+        fontWeight: 600,
+        letterSpacing: 0.3,
+      }}>
+        🧪 Voxora is now in <strong>Public Beta</strong> — all features are live and free to try.&nbsp;
+        <button
+          onClick={() => navigate("/signup")}
+          style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.4)", color: "#fff", borderRadius: 6, padding: "3px 12px", cursor: "pointer", fontSize: 12, fontWeight: 700 }}
+        >
+          Join Beta →
+        </button>
+      </div>
+
       {/* ─── Hero ─── */}
       <main className="hero">
         <div className="hero-content">
-          <p className="tagline section-label">✦ THE INTELLIGENCE LAYER FOR THE AI AGE</p>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
+            <p className="tagline section-label" style={{ margin: 0 }}>✦ THE INTELLIGENCE LAYER FOR THE AI AGE</p>
+            <span style={{ background: "#ede9fe", color: "#4c1d95", borderRadius: 20, padding: "3px 12px", fontSize: 11, fontWeight: 700 }}>🧪 Public Beta</span>
+          </div>
           <h1>
             Build, Create &amp; Think
             <br />
@@ -51,9 +73,9 @@ export default function LandingPage() {
             </button>
           </div>
           <div className="hero-stats">
-            <div className="hero-stat"><strong>10+</strong><span>AI Tools</span></div>
+            <div className="hero-stat"><strong>50+</strong><span>AI Tools</span></div>
             <div className="hero-stat-divider" />
-            <div className="hero-stat"><strong>∞</strong><span>Ideas Generated</span></div>
+            <div className="hero-stat"><strong>10+</strong><span>Studio Modules</span></div>
             <div className="hero-stat-divider" />
             <div className="hero-stat"><strong>Free</strong><span>To Start</span></div>
           </div>
@@ -65,7 +87,7 @@ export default function LandingPage() {
           <h2>Voxora Intelligence Engine</h2>
           <p>Your AI command center for ideas, content, products and innovation.</p>
           <div className="ai-card-features">
-            {["🧠 Idea Generation", "📊 Market Research", "🚀 Startup Strategy", "⚙️ Automation"].map(f => (
+            {["🧠 Idea Generation", "📊 Market Research", "🚀 Startup Strategy", "⚙️ Automation", "🤝 Team Collab", "📈 Growth Studio"].map(f => (
               <span key={f} className="ai-feature-chip">{f}</span>
             ))}
           </div>
@@ -93,6 +115,55 @@ export default function LandingPage() {
               <p>{a.desc}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ─── Customer Logos ─── */}
+      <section style={{ padding: "40px 5%", textAlign: "center", background: "#f8fafc", borderTop: "1px solid #e2e8f0" }}>
+        <p className="section-label">✦ TRUSTED BY BUILDERS WORLDWIDE</p>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "40px", flexWrap: "wrap", marginTop: 20, opacity: 0.6 }}>
+          {["🚀 StartupCo", "💡 InnovateLab", "📊 DataBridge", "🤖 AIFirst", "🌍 GlobalBuilds", "⚡ VelocityHQ"].map(logo => (
+            <div key={logo} style={{ fontWeight: 700, fontSize: 14, color: "#64748b", letterSpacing: 0.5 }}>{logo}</div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── Product Showcase ─── */}
+      <section style={{ padding: "80px 5%", background: "#fff" }}>
+        <p className="section-label">✦ PRODUCT SHOWCASE</p>
+        <h2 style={{ textAlign: "center", fontSize: 36, fontWeight: 800, marginBottom: 12 }}>Everything in One Workspace</h2>
+        <p className="section-sub">From idea to execution — Voxora covers every stage of building a business.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16, marginTop: 40 }}>
+          {[
+            { icon: "🤖", title: "AI Assistant", desc: "Conversational AI for business strategy, brainstorming, and research.", badge: "Core" },
+            { icon: "📊", title: "Analytics Studio", desc: "10 analytics modules — revenue, customer, marketing, AI, and more.", badge: "Studio" },
+            { icon: "🤝", title: "Team Collaboration", desc: "Task boards, meeting notes, goals, OKRs — everything your team needs.", badge: "Team" },
+            { icon: "💰", title: "Financial Studio", desc: "Revenue models, unit economics, forecasts, and break-even analysis.", badge: "Finance" },
+            { icon: "📣", title: "Marketing Studio", desc: "Strategy, email campaigns, social media, SEO planning, and ad copy.", badge: "Marketing" },
+            { icon: "💼", title: "Investor Studio", desc: "Pitch decks, fundraising strategy, cap tables, and due diligence.", badge: "Investor" },
+            { icon: "📈", title: "Growth Studio", desc: "KPI tracking, OKR management, A/B tests, and growth experiments.", badge: "Growth" },
+            { icon: "🔌", title: "Integrations", desc: "Connect OpenAI, Gemini, Anthropic, Notion, Slack, Zapier, and more.", badge: "Connect" },
+          ].map(item => (
+            <div
+              key={item.title}
+              style={{ background: "#fff", border: "1.5px solid #e2e8f0", borderRadius: 16, padding: "24px 20px", cursor: "pointer", transition: "all 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}
+              onClick={() => navigate("/dashboard")}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#6C63FF"; (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(108,99,255,0.12)"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "#e2e8f0"; (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 8px rgba(0,0,0,0.04)"; (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <span style={{ fontSize: 28 }}>{item.icon}</span>
+                <span style={{ fontSize: 10, fontWeight: 700, background: "#ede9fe", color: "#4c1d95", borderRadius: 20, padding: "2px 10px" }}>{item.badge}</span>
+              </div>
+              <strong style={{ display: "block", fontSize: 14.5, fontWeight: 700, color: "#0f172a", marginBottom: 6 }}>{item.title}</strong>
+              <p style={{ fontSize: 13, color: "#64748b", margin: 0, lineHeight: 1.5 }}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div style={{ textAlign: "center", marginTop: 36 }}>
+          <button className="primary" onClick={() => navigate("/dashboard")} style={{ fontSize: 15, padding: "14px 36px" }}>
+            Explore All Features →
+          </button>
         </div>
       </section>
 
