@@ -535,10 +535,20 @@ const Dashboard = () => {
                     <h3 className="stat-label">Storage Used</h3>
                   </div>
                 </div>
+                {/* Firebase Status widget */}
+                  <div className="stat-card">
+                    <div className="stat-icon">
+                      {cloudStatus.isDemo ? "💾" : cloudStatus.isOnline ? "🔥" : "📴"}
+                    </div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>
+                      {cloudStatus.isDemo ? "Demo" : cloudStatus.isOnline ? "Connected" : "Offline"}
+                    </p>
+                    <h3 className="stat-label">Firebase Status</h3>
+                  </div>
                 {/* Backend provider badge */}
                 <div style={{ marginTop: 8, fontSize: 12, color: "var(--text-secondary, #64748b)" }}>
-                  Backend: <strong style={{ textTransform: "capitalize" }}>{cloudStatus.provider}</strong>
-                  {cloudStatus.isDemo && " — Set VITE_FIREBASE_* or VITE_SUPABASE_* env vars to connect a cloud backend."}
+                  Backend: <strong style={{ textTransform: "capitalize" }}>{cloudStatus.provider === "firebase" ? "Firebase" : "Local Demo"}</strong>
+                  {cloudStatus.isDemo && " — Set VITE_FIREBASE_* env vars to connect Firebase Auth & Firestore."}
                 </div>
               </div>
 

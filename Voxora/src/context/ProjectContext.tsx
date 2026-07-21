@@ -1,9 +1,16 @@
 // ── V5.3 Project Context — Cloud-backed with offline fallback ─────────────────
-// Primary store: backend provider (Firebase / Supabase / localStorage).
-// Writes are also enqueued in SyncManager so offline changes survive.
+// Data flow:
+//   1. Immediately render from localStorage (zero-latency first paint).
+//   2. On mount, hydrate from the backend provider (local or cloud).
+//   3. Every write is persisted to localStorage AND enqueued to SyncManager.
+//   4. SyncManager flushes to the cloud backend when online.
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, {
+  createContext, useCallback, useContext, useEffect, useState,
+} from "react";
 import { useActivity } from "./ActivityContext";
+import { useAuth } from "./AuthContext";
+import { getBackendProvider } from "../services/backend/BackendService";
 import { syncManager } from "../services/backend/SyncManager";
 
 export type Project = {
@@ -18,6 +25,7 @@ type ProjectContextType = {
   projects: Project[];
   favorites: string[];
   pinned: string[];
+  isHydrated: boolean;
   saveProject: (project: Project) => { success: boolean; error?: string };
   deleteProject: (id: string) => void;
   favoriteProject: (id: string) => void;
@@ -28,7 +36,7 @@ type ProjectContextType = {
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
-// ── Safe localStorage helpers ──────────────────────────────────────────────
+// ── Safe localStorage helpers ─────────────────────────────────────────────────
 function safeLoadArray<T>(key: string): T[] {
   try {
     const raw = localStorage.getItem(key);
@@ -68,42 +76,114 @@ function validateProject(project: Project): { valid: boolean; error?: string } {
 }
 
 export const ProjectProvider = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth();
+
+  // ── Initial state from localStorage (immediate render) ────────────────────
   const [projects, setProjects] = useState<Project[]>(() =>
     safeLoadArray<Project>("voxora-projects")
       .map(sanitizeProject)
       .filter((p): p is Project => p !== null)
   );
-
   const [favorites, setFavorites] = useState<string[]>(() =>
     safeLoadStringArray("voxora-favorites")
   );
-
   const [pinned, setPinned] = useState<string[]>(() =>
     safeLoadStringArray("voxora-pinned")
   );
+  const [isHydrated, setIsHydrated] = useState(false);
 
   const { addActivity } = useActivity();
 
+  // ── Cloud hydration on mount ───────────────────────────────────────────────
+  // Loads authoritative data from the backend provider (local or cloud).
+  // For LocalBackendProvider this reads the per-user namespaced store and
+  // merges any legacy data. For Firebase/Supabase it fetches real cloud data.
+  useEffect(() => {
+    if (!user?.id) { setIsHydrated(true); return; }
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const provider = await getBackendProvider();
+
+        // Load projects from cloud/local backend
+        const cloudProjects = await provider.getCollection(user.id, "projects");
+        // Load favorites from cloud/local backend
+        const cloudFavs = await provider.getCollection(user.id, "favorites");
+        // Load pins from cloud/local backend
+        const cloudPins = await provider.getCollection(user.id, "pins");
+
+        if (cancelled) return;
+
+        // Hydrate projects — merge cloud records into local state
+        if (cloudProjects.length > 0) {
+          const hydrated = cloudProjects
+            .map(r => sanitizeProject(r.data))
+            .filter((p): p is Project => p !== null);
+          // Merge: cloud is authoritative for ids it knows; keep local-only items
+          setProjects(prev => {
+            const cloudIds = new Set(hydrated.map(p => p.id));
+            const localOnly = prev.filter(p => !cloudIds.has(p.id));
+            const merged = [...hydrated, ...localOnly];
+            try { localStorage.setItem("voxora-projects", JSON.stringify(merged)); } catch { /* quota */ }
+            return merged;
+          });
+        }
+
+        // Hydrate favorites
+        if (cloudFavs.length > 0) {
+          const favRecord = cloudFavs.find(r => (r.data as { id?: string })?.id === "favorites-list");
+          if (favRecord) {
+            const items = (favRecord.data as { items?: string[] })?.items ?? [];
+            if (Array.isArray(items)) {
+              setFavorites(items.filter(v => typeof v === "string"));
+            }
+          }
+        }
+
+        // Hydrate pins
+        if (cloudPins.length > 0) {
+          const pinRecord = cloudPins.find(r => (r.data as { id?: string })?.id === "pins-list");
+          if (pinRecord) {
+            const items = (pinRecord.data as { items?: string[] })?.items ?? [];
+            if (Array.isArray(items)) {
+              setPinned(items.filter(v => typeof v === "string"));
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("[Voxora] Cloud hydration failed for projects, using local data:", e);
+      } finally {
+        if (!cancelled) setIsHydrated(true);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [user?.id]);
+
   // ── Persist to localStorage (primary offline store) ──────────────────────
   useEffect(() => {
+    if (!isHydrated) return; // avoid overwriting during hydration
     try { localStorage.setItem("voxora-projects", JSON.stringify(projects)); } catch (e) {
       console.warn("[Voxora] Could not save projects:", e);
     }
-  }, [projects]);
+  }, [projects, isHydrated]);
 
   useEffect(() => {
+    if (!isHydrated) return;
     try { localStorage.setItem("voxora-favorites", JSON.stringify(favorites)); } catch (e) {
       console.warn("[Voxora] Could not save favorites:", e);
     }
-  }, [favorites]);
+  }, [favorites, isHydrated]);
 
   useEffect(() => {
+    if (!isHydrated) return;
     try { localStorage.setItem("voxora-pinned", JSON.stringify(pinned)); } catch (e) {
       console.warn("[Voxora] Could not save pinned:", e);
     }
-  }, [pinned]);
+  }, [pinned, isHydrated]);
 
-  // ── Cloud sync helper ─────────────────────────────────────────────────────
+  // ── Cloud sync helpers ────────────────────────────────────────────────────
   const cloudUpsertProject = useCallback((p: Project) => {
     syncManager.enqueue("projects", "upsert", p.id, p);
   }, []);
@@ -241,7 +321,10 @@ export const ProjectProvider = ({ children }: { children: React.ReactNode }) => 
 
   return (
     <ProjectContext.Provider
-      value={{ projects, favorites, pinned, saveProject, deleteProject, favoriteProject, pinProject, updateNotes, duplicateProject }}
+      value={{
+        projects, favorites, pinned, isHydrated,
+        saveProject, deleteProject, favoriteProject, pinProject, updateNotes, duplicateProject,
+      }}
     >
       {children}
     </ProjectContext.Provider>

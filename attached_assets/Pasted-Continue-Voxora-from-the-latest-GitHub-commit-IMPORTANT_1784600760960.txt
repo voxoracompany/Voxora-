@@ -1,0 +1,167 @@
+Continue Voxora from the latest GitHub commit.
+
+IMPORTANT
+
+- Analyze the existing codebase first.
+- Verify V5.2 Google Gemini Integration exists.
+- Do NOT rebuild V1–V5.2.
+- Preserve all existing functionality.
+- Reuse the existing architecture.
+- Maintain the premium UI and responsive design.
+
+==================================================
+V5.3 — Firebase Authentication & Cloud Backend
+==================================================
+
+Goal:
+
+Replace the local demo authentication and local-only storage with a REAL Firebase backend.
+
+IMPORTANT:
+
+Do NOT implement Supabase.
+
+Only implement Firebase.
+
+==================================================
+Firebase Authentication
+==================================================
+
+Implement:
+
+- Email Sign Up
+- Email Login
+- Logout
+- Forgot Password
+- Password Reset
+- Session Persistence
+- Protected Routes
+
+==================================================
+Firestore Database
+==================================================
+
+Store and synchronize:
+
+- Projects
+- AI Conversations
+- Favorites
+- Pins
+- Dashboard Preferences
+- User Settings
+- Activity History
+
+==================================================
+Offline Support
+==================================================
+
+If Firebase is unavailable:
+
+- Continue using local storage.
+- Automatically sync when Firebase reconnects.
+- Never lose user data.
+
+==================================================
+Firebase Service Layer
+==================================================
+
+Create:
+
+services/firebase/
+
+- firebase.ts
+- auth.ts
+- firestore.ts
+- storage.ts (placeholder)
+
+Keep the architecture modular for future expansion.
+
+==================================================
+User Profile
+==================================================
+
+Support:
+
+- Avatar placeholder
+- Full Name
+- Username
+- Company
+- Bio
+- Language
+- Time Zone
+
+==================================================
+Dashboard
+==================================================
+
+Add widgets:
+
+- Logged-in User
+- Firebase Status
+- Cloud Sync Status
+- Last Sync Time
+- Storage Usage
+
+==================================================
+Security
+==================================================
+
+Use:
+
+- Environment variables
+- Secure Firebase initialization
+- No hard-coded secrets
+
+==================================================
+Demo Mode
+==================================================
+
+If Firebase configuration is missing:
+
+Display:
+
+"Running in Local Demo Mode"
+
+The application must continue working normally.
+
+==================================================
+Validation
+==================================================
+
+Run a production build.
+
+Fix every TypeScript error.
+
+Fix every runtime error.
+
+Verify:
+
+- Authentication works.
+- Firestore synchronization works.
+- Offline mode works.
+- No blank pages.
+- No broken routes.
+- No console errors.
+
+==================================================
+Git
+==================================================
+
+Commit:
+
+V5.3 Firebase Authentication & Cloud Backend
+
+Push to the connected GitHub repository.
+
+Verify the push succeeded.
+
+Report:
+
+- Build status
+- Commit hash
+- Push confirmation
+- Firebase Authentication status
+- Firestore status
+- Offline sync status
+
+Do not finish until the production build passes and the GitHub push has been confirmed.

@@ -1,12 +1,16 @@
-// ── V5.3 Authentication & Cloud Backend ──────────────────────────────────────
-// Modular auth layer backed by BackendProvider.
-// Demo Mode (localStorage) is automatic when no cloud provider is configured.
-// To activate Firebase or Supabase, set the corresponding VITE_ env vars.
+// ── V5.3 Authentication Context ───────────────────────────────────────────────
+// Firebase Auth when VITE_FIREBASE_* env vars are set.
+// Local Demo Mode (localStorage) when they are not.
+//
+// Session persistence: Firebase handles this via browserLocalPersistence.
+// onAuthStateChanged is subscribed so the UI reacts if the session is revoked.
 
 import {
   createContext, useCallback, useContext, useEffect, useState, type ReactNode,
 } from "react";
-import { getBackendProvider } from "../services/backend/BackendService";
+import { getBackendProvider, isCloudConfigured } from "../services/backend/BackendService";
+import { isFirebaseConfigured } from "../services/firebase/firebase";
+import { subscribeAuthState, mapFirebaseUser } from "../services/firebase/auth";
 import type { BackendProvider } from "../services/backend/BackendProvider";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -87,13 +91,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loginHistory, setLoginHistory] = useState<LoginHistoryEntry[]>([]);
   const [bp, setBp] = useState<BackendProvider | null>(null);
 
-  // Initialize provider and restore session
+  // ── Initialise provider and restore session ────────────────────────────────
   useEffect(() => {
     let cancelled = false;
     (async () => {
       const provider = await getBackendProvider();
       if (cancelled) return;
       setBp(provider);
+
+      // getCurrentUser() awaits Firebase's first auth-state emission (handles
+      // page-refresh correctly) or reads localStorage in Demo Mode.
       const u = await provider.getCurrentUser();
       if (!cancelled) {
         setUser(u as VoxoraUser | null);
@@ -104,19 +111,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => { cancelled = true; };
   }, []);
 
-  // ── Sign Up ──────────────────────────────────────────────────────────────
+  // ── Firebase ongoing session subscription ─────────────────────────────────
+  // Keeps the UI in sync when Firebase revokes a token or the session changes
+  // in another tab. No-op in Local Demo Mode.
+  useEffect(() => {
+    if (!isFirebaseConfigured() || !isCloudConfigured()) return;
+
+    const unsub = subscribeAuthState(async fbUser => {
+      if (fbUser) {
+        // Merge Firestore profile fields if provider is ready
+        if (bp) {
+          const full = await bp.getCurrentUser();
+          setUser(full as VoxoraUser | null);
+        } else {
+          setUser(mapFirebaseUser(fbUser) as unknown as VoxoraUser);
+        }
+      } else {
+        setUser(null);
+      }
+    });
+    return unsub;
+  }, [bp]);
+
+  // ── Sign Up ───────────────────────────────────────────────────────────────
   const signUp = useCallback(async (
     name: string, email: string, password: string, username = ""
   ): Promise<{ ok: boolean; error?: string }> => {
     const provider = bp ?? await getBackendProvider();
     const result = await provider.signUp(name, email, password, username);
 
-    const entry: LoginHistoryEntry = {
+    pushHistory({
       id: makeId(), timestamp: new Date().toISOString(),
       device: deviceLabel(), location: "Sign Up",
       status: result.ok ? "success" : "failed",
-    };
-    pushHistory(entry);
+    });
 
     if (result.ok && result.user) {
       setUser(result.user as VoxoraUser);
@@ -125,19 +153,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { ok: result.ok, error: result.error };
   }, [bp]);
 
-  // ── Login ────────────────────────────────────────────────────────────────
+  // ── Login ──────────────────────────────────────────────────────────────────
   const login = useCallback(async (
     email: string, password: string
   ): Promise<{ ok: boolean; error?: string }> => {
     const provider = bp ?? await getBackendProvider();
     const result = await provider.login(email, password);
 
-    const entry: LoginHistoryEntry = {
+    pushHistory({
       id: makeId(), timestamp: new Date().toISOString(),
       device: deviceLabel(), location: "Browser Session",
       status: result.ok ? "success" : "failed",
-    };
-    pushHistory(entry);
+    });
     setLoginHistory(loadHistory());
 
     if (result.ok && result.user) {
@@ -146,13 +173,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { ok: result.ok, error: result.error };
   }, [bp]);
 
-  // ── Logout ───────────────────────────────────────────────────────────────
+  // ── Logout ─────────────────────────────────────────────────────────────────
   const logout = useCallback(() => {
-    if (bp) bp.logout();
+    const provider = bp;
+    if (provider) provider.logout();
     setUser(null);
   }, [bp]);
 
-  // ── Update Profile ───────────────────────────────────────────────────────
+  // ── Update Profile ─────────────────────────────────────────────────────────
   const updateProfile = useCallback(async (data: Partial<VoxoraUser>) => {
     if (!user) return;
     const provider = bp ?? await getBackendProvider();
@@ -160,7 +188,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(prev => prev ? { ...prev, ...data } : prev);
   }, [bp, user]);
 
-  // ── Change Password ──────────────────────────────────────────────────────
+  // ── Change Password ────────────────────────────────────────────────────────
   const changePassword = useCallback(async (
     current: string, next: string
   ): Promise<{ ok: boolean; error?: string }> => {
@@ -169,7 +197,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return provider.changePassword(user.id, current, next);
   }, [bp, user]);
 
-  // ── Delete Account ───────────────────────────────────────────────────────
+  // ── Delete Account ─────────────────────────────────────────────────────────
   const deleteAccount = useCallback(async () => {
     if (!user) return;
     const provider = bp ?? await getBackendProvider();
@@ -179,7 +207,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoginHistory([]);
   }, [bp, user]);
 
-  // ── Profile completion ────────────────────────────────────────────────────
+  // ── Profile completion ─────────────────────────────────────────────────────
   const getProfileCompletion = useCallback((): number => {
     if (!user) return 0;
     const fields: (keyof VoxoraUser)[] = ["name", "email", "username", "bio", "company", "role", "avatarEmoji"];

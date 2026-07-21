@@ -1,118 +1,166 @@
 // ── V5.3 Firebase Backend Provider ───────────────────────────────────────────
-// Skeleton ready for Firebase SDK integration.
-// Set these env vars to activate (prefix VITE_ for Vite to expose them):
-//   VITE_FIREBASE_API_KEY
-//   VITE_FIREBASE_PROJECT_ID
-//   VITE_FIREBASE_AUTH_DOMAIN
-//   VITE_FIREBASE_APP_ID
-//
-// Install SDK when ready:  npm install firebase
-// Then replace the stub bodies below with real Firebase calls.
+// Real Firebase Auth + Firestore implementation.
+// Activated when VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, and
+// VITE_FIREBASE_PROJECT_ID are set. Falls back to LocalBackendProvider otherwise.
 
 import type { BackendProvider } from "../BackendProvider";
 import type {
   AuthResult, BackendUser, CloudCollection, CloudRecord, BackendProviderName,
 } from "../BackendTypes";
+import { isFirebaseConfigured } from "../../firebase/firebase";
+import {
+  waitForAuthReady,
+  firebaseSignUp,
+  firebaseLogin,
+  firebaseLogout,
+  firebaseSendPasswordReset,
+  firebaseSendEmailVerification,
+  firebaseChangePassword,
+  firebaseDeleteAccount,
+  mapFirebaseUser,
+  getFirebaseAuth,
+} from "../../firebase/auth";
+import {
+  getUserProfile,
+  saveUserProfile,
+  getCollection as fsGetCollection,
+  upsertRecord as fsUpsert,
+  deleteRecord as fsDelete,
+  getRecord as fsGetRecord,
+  isFirestoreReachable,
+} from "../../firebase/firestore";
 
-export function isFirebaseConfigured(): boolean {
-  return !!(
-    import.meta.env.VITE_FIREBASE_API_KEY &&
-    import.meta.env.VITE_FIREBASE_PROJECT_ID
-  );
-}
+export { isFirebaseConfigured };
 
+// ── Provider ─────────────────────────────────────────────────────────────────
 export class FirebaseBackendProvider implements BackendProvider {
   readonly name: BackendProviderName = "firebase";
 
   constructor() {
     if (!isFirebaseConfigured()) {
-      throw new Error("[Voxora] Firebase is not configured. Set VITE_FIREBASE_API_KEY and VITE_FIREBASE_PROJECT_ID.");
+      throw new Error("[Voxora] Firebase is not configured. Set VITE_FIREBASE_* env vars.");
     }
-    // TODO: When you install the Firebase SDK, initialize it here:
-    // import { initializeApp } from "firebase/app";
-    // import { getAuth } from "firebase/auth";
-    // import { getFirestore } from "firebase/firestore";
-    // const app = initializeApp({ apiKey: ..., projectId: ..., ... });
-    // this._auth = getAuth(app);
-    // this._db = getFirestore(app);
-    console.info("[Voxora] Firebase provider loaded. Install the firebase SDK and implement provider methods to activate cloud storage.");
+    console.info("[Voxora] Firebase provider initialised.");
   }
 
-  // ── Auth stubs — replace with firebase/auth calls ──────────────────────
-  async signUp(_name: string, _email: string, _password: string, _username?: string): Promise<AuthResult> {
-    // TODO: createUserWithEmailAndPassword(this._auth, email, password)
-    return { ok: false, error: "Firebase SDK not yet installed. Run: npm install firebase" };
+  // ── Auth ───────────────────────────────────────────────────────────────────
+  async signUp(name: string, email: string, password: string, username = ""): Promise<AuthResult> {
+    const result = await firebaseSignUp(name, email, password, username);
+    if (!result.ok || !result.user) return { ok: false, error: result.error };
+    // Persist extra profile fields to Firestore
+    await saveUserProfile(result.user.id, result.user);
+    return { ok: true, user: result.user };
   }
 
-  async login(_email: string, _password: string): Promise<AuthResult> {
-    // TODO: signInWithEmailAndPassword(this._auth, email, password)
-    return { ok: false, error: "Firebase SDK not yet installed. Run: npm install firebase" };
+  async login(email: string, password: string): Promise<AuthResult> {
+    const result = await firebaseLogin(email, password);
+    if (!result.ok || !result.user) return { ok: false, error: result.error };
+    // Merge Firestore profile fields (username, bio, etc.) over the Firebase Auth fields
+    const profile = await getUserProfile(result.user.id);
+    const user: BackendUser = { ...result.user, ...(profile ?? {}) };
+    return { ok: true, user };
   }
 
   async logout(): Promise<void> {
-    // TODO: signOut(this._auth)
+    await firebaseLogout();
   }
 
   async getCurrentUser(): Promise<BackendUser | null> {
-    // TODO: this._auth.currentUser
-    return null;
+    // waitForAuthReady resolves after Firebase has loaded the persisted session.
+    // This handles page-refresh correctly — auth.currentUser is null until then.
+    const fbUser = await waitForAuthReady();
+    if (!fbUser) return null;
+    const profile = await getUserProfile(fbUser.uid);
+    return { ...mapFirebaseUser(fbUser), ...(profile ?? {}) };
   }
 
-  async updateUser(_userId: string, _data: Partial<BackendUser>): Promise<{ ok: boolean; error?: string }> {
-    // TODO: updateDoc(doc(this._db, "users", userId), data)
-    return { ok: false, error: "Firebase SDK not yet installed." };
+  async updateUser(userId: string, data: Partial<BackendUser>): Promise<{ ok: boolean; error?: string }> {
+    const result = await saveUserProfile(userId, data as Partial<BackendUser>);
+    if (!result.ok) return result;
+    // Sync displayName to Firebase Auth if name changed
+    if (data.name) {
+      const auth = getFirebaseAuth();
+      if (auth.currentUser) {
+        const { updateProfile } = await import("firebase/auth");
+        await updateProfile(auth.currentUser, { displayName: data.name }).catch(() => {});
+      }
+    }
+    return { ok: true };
   }
 
-  async changePassword(_userId: string, _current: string, _next: string): Promise<{ ok: boolean; error?: string }> {
-    // TODO: updatePassword(this._auth.currentUser!, next)
-    return { ok: false, error: "Firebase SDK not yet installed." };
+  async changePassword(
+    _userId: string, currentPassword: string, newPassword: string
+  ): Promise<{ ok: boolean; error?: string }> {
+    return firebaseChangePassword(currentPassword, newPassword);
   }
 
-  async deleteAccount(_userId: string): Promise<{ ok: boolean; error?: string }> {
-    // TODO: deleteUser(this._auth.currentUser!)
-    return { ok: false, error: "Firebase SDK not yet installed." };
+  async deleteAccount(userId: string): Promise<{ ok: boolean; error?: string }> {
+    // Delete Firestore data first, then delete the Firebase Auth account
+    const collections: CloudCollection[] = [
+      "projects", "conversations", "favorites", "pins",
+      "dashboardPreferences", "settings", "activityHistory",
+    ];
+    await Promise.allSettled(
+      collections.map(col =>
+        fsGetCollection(userId, col).then(recs =>
+          Promise.allSettled(recs.map(r => fsDelete(userId, col, r.id)))
+        )
+      )
+    );
+    await saveUserProfile(userId, { id: userId } as BackendUser).catch(() => {});
+    return firebaseDeleteAccount();
   }
 
   async sendPasswordReset(email: string): Promise<{ ok: boolean; error?: string }> {
-    // TODO: sendPasswordResetEmail(this._auth, email)
-    void email;
-    return { ok: false, error: "Firebase SDK not yet installed." };
+    return firebaseSendPasswordReset(email);
   }
 
   async sendEmailVerification(_userId: string): Promise<{ ok: boolean; error?: string }> {
-    // TODO: sendEmailVerification(this._auth.currentUser!)
-    return { ok: false, error: "Firebase SDK not yet installed." };
+    return firebaseSendEmailVerification();
   }
 
-  // ── Data stubs — replace with Firestore calls ──────────────────────────
-  async getCollection(_userId: string, _collection: CloudCollection): Promise<CloudRecord[]> {
-    // TODO: getDocs(collection(this._db, `users/${userId}/${collection}`))
-    return [];
+  // ── Data ───────────────────────────────────────────────────────────────────
+  async getCollection(userId: string, col: CloudCollection): Promise<CloudRecord[]> {
+    const recs = await fsGetCollection(userId, col);
+    return recs.map(r => ({
+      id: (r as { id: string }).id,
+      userId,
+      collection: col,
+      data: r,
+      updatedAt: (r as { updatedAt?: string }).updatedAt ?? new Date().toISOString(),
+    }));
   }
 
   async upsertRecord(
-    _userId: string, _collection: CloudCollection, _id: string, _data: unknown
+    userId: string, col: CloudCollection, id: string, data: unknown
   ): Promise<{ ok: boolean; error?: string }> {
-    // TODO: setDoc(doc(this._db, `users/${userId}/${collection}/${id}`), { ...data, updatedAt: serverTimestamp() })
-    return { ok: false, error: "Firebase SDK not yet installed." };
+    return fsUpsert(userId, col, id, data as Record<string, unknown>);
   }
 
-  async deleteRecord(_userId: string, _collection: CloudCollection, _id: string): Promise<{ ok: boolean; error?: string }> {
-    // TODO: deleteDoc(doc(this._db, `users/${userId}/${collection}/${id}`))
-    return { ok: false, error: "Firebase SDK not yet installed." };
+  async deleteRecord(
+    userId: string, col: CloudCollection, id: string
+  ): Promise<{ ok: boolean; error?: string }> {
+    return fsDelete(userId, col, id);
   }
 
-  async getRecord(_userId: string, _collection: CloudCollection, _id: string): Promise<CloudRecord | null> {
-    // TODO: getDoc(doc(this._db, `users/${userId}/${collection}/${id}`))
-    return null;
+  async getRecord(
+    userId: string, col: CloudCollection, id: string
+  ): Promise<CloudRecord | null> {
+    const rec = await fsGetRecord(userId, col, id);
+    if (!rec) return null;
+    return {
+      id,
+      userId,
+      collection: col,
+      data: rec,
+      updatedAt: (rec as { updatedAt?: string }).updatedAt ?? new Date().toISOString(),
+    };
   }
 
+  // ── Health ──────────────────────────────────────────────────────────────────
   async isAvailable(): Promise<boolean> {
-    if (!isFirebaseConfigured()) return false;
-    try {
-      const url = `https://firestore.googleapis.com/v1/projects/${import.meta.env.VITE_FIREBASE_PROJECT_ID}/databases`;
-      const res = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(4000) });
-      return res.ok || res.status === 401; // 401 = reachable but needs auth
-    } catch { return false; }
+    const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
+    if (!projectId) return false;
+    return isFirestoreReachable(projectId);
   }
 }

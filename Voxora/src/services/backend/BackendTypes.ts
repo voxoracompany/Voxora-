@@ -1,7 +1,7 @@
 // ── V5.3 Backend Types ────────────────────────────────────────────────────────
-// Shared types for all backend providers (Firebase, Supabase, Local).
+// Shared types for all backend providers (Firebase, Local).
 
-export type BackendProviderName = "firebase" | "supabase" | "local";
+export type BackendProviderName = "firebase" | "local";
 
 export interface BackendUser {
   id: string;
