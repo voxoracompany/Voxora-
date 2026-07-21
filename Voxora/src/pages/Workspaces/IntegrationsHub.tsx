@@ -1,42 +1,222 @@
-// ── V4.8 Integrations Studio Hub ─────────────────────────────────────────────
+// ── V5.7 Integrations Hub (live IntegrationService) ──────────────────────────
+import { useState, useEffect, useCallback } from "react";
+import { IntegrationService } from "../../services/integrations/IntegrationService";
+import { CATEGORY_LABELS } from "../../services/integrations/IntegrationRegistry";
+import type { Integration, IntegrationCategory } from "../../services/integrations/IntegrationTypes";
 import "./Workspace.css";
 
 interface Props { setWorkspace: (w: string) => void }
 
-const TOOLS = [
-  { id: "intOpenAI",      icon: "🧠", label: "OpenAI",           desc: "Connect OpenAI GPT-4 — manage API key, test connection, and check provider status." },
-  { id: "intGemini",      icon: "♊", label: "Google Gemini",    desc: "Connect Google Gemini — configure API key, select model provider, and test connection." },
-  { id: "intAnthropic",   icon: "🤖", label: "Anthropic Claude", desc: "Connect Anthropic Claude — API key management, connection testing, and status." },
-  { id: "intGoogleDrive", icon: "🗂️", label: "Google Drive",     desc: "Export and import project data directly to and from Google Drive." },
-  { id: "intDropbox",     icon: "📦", label: "Dropbox",          desc: "Sync and backup Voxora projects to your Dropbox account." },
-  { id: "intNotion",      icon: "📄", label: "Notion",           desc: "Connect your Notion workspace and export pages from Voxora." },
-  { id: "intSlack",       icon: "💬", label: "Slack",            desc: "Send Voxora notifications and updates directly to Slack channels." },
-  { id: "intZapier",      icon: "⚡", label: "Zapier",           desc: "Automate workflows with Zapier webhooks and triggers." },
-  { id: "intWebhooks",    icon: "🔗", label: "Webhooks",         desc: "Configure incoming/outgoing webhooks and view event logs." },
-  { id: "intSettings",    icon: "⚙️", label: "Integration Settings", desc: "Enable or disable integrations, check sync status, and view sync logs." },
-];
+const STATUS_COLOR: Record<string, string> = {
+  connected:    "#10b981",
+  disconnected: "#6b7280",
+  error:        "#ef4444",
+  syncing:      "#f59e0b",
+  available:    "#6b7280",
+};
 
-const STATS = [
-  { label: "Integrations", val: "10",   icon: "🔌" },
-  { label: "AI Providers", val: "3",    icon: "🧠" },
-  { label: "Cloud Sync",   val: "Yes",  icon: "☁️" },
-  { label: "Webhooks",     val: "Yes",  icon: "🔗" },
-];
+const STATUS_LABEL: Record<string, string> = {
+  connected:    "Connected",
+  disconnected: "Disconnected",
+  error:        "Error",
+  syncing:      "Syncing…",
+  available:    "Available",
+};
 
-const CONNECTED = [
-  { name: "OpenAI",      status: "configured", icon: "🧠", color: "#10a37f" },
-  { name: "Gemini",      status: "configured", icon: "♊", color: "#4285f4" },
-  { name: "Anthropic",   status: "configured", icon: "🤖", color: "#d4a024" },
-  { name: "Google Drive",status: "available",  icon: "🗂️", color: "#34a853" },
-  { name: "Dropbox",     status: "available",  icon: "📦", color: "#0061ff" },
-  { name: "Notion",      status: "available",  icon: "📄", color: "#000" },
-  { name: "Slack",       status: "available",  icon: "💬", color: "#4a154b" },
-  { name: "Zapier",      status: "available",  icon: "⚡", color: "#ff4a00" },
-];
+function formatRelative(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "Just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
+
+// ── Integration Card ──────────────────────────────────────────────────────────
+
+function IntegrationCard({
+  integration,
+  onConnect,
+  onDisconnect,
+  onSync,
+  syncing,
+  connecting,
+}: {
+  integration: Integration;
+  onConnect: (id: string) => void;
+  onDisconnect: (id: string) => void;
+  onSync: (id: string) => void;
+  syncing: boolean;
+  connecting: boolean;
+}) {
+  const isConnected = integration.status === "connected";
+
+  return (
+    <div style={{
+      background: "var(--bg-card, #fff)",
+      border: `1.5px solid ${isConnected ? "#bbf7d0" : "var(--border, #e5e7eb)"}`,
+      borderRadius: 16, padding: "20px 20px",
+      boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+      transition: "border-color 0.2s",
+    }}>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+        <div style={{ fontSize: 32 }}>{integration.icon}</div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontWeight: 700, fontSize: 15 }}>{integration.name}</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 3 }}>
+            <span style={{
+              width: 8, height: 8, borderRadius: "50%",
+              background: STATUS_COLOR[integration.status], flexShrink: 0,
+            }} />
+            <span style={{
+              fontSize: 11, fontWeight: 600, color: STATUS_COLOR[integration.status],
+              textTransform: "uppercase", letterSpacing: 0.5,
+            }}>{STATUS_LABEL[integration.status]}</span>
+            {integration.isDemo && (
+              <span style={{ fontSize: 10, background: "#ede9fe", color: "#6c63ff", borderRadius: 6, padding: "1px 6px", fontWeight: 700 }}>Demo</span>
+            )}
+          </div>
+        </div>
+        <span style={{
+          fontSize: 11, background: "#f1f5f9", color: "#64748b",
+          borderRadius: 8, padding: "2px 8px", fontWeight: 600,
+        }}>{CATEGORY_LABELS[integration.category as IntegrationCategory]}</span>
+      </div>
+
+      {/* Description */}
+      <p style={{ margin: "0 0 12px", fontSize: 13, color: "#6b7280", lineHeight: 1.5 }}>
+        {integration.description}
+      </p>
+
+      {/* Meta */}
+      {isConnected && (
+        <div style={{ display: "flex", gap: 14, fontSize: 12, color: "#9ca3af", marginBottom: 14, flexWrap: "wrap" }}>
+          {integration.connectedAt && <span>🔗 Connected {formatRelative(integration.connectedAt)}</span>}
+          {integration.lastSync   && <span>🔄 Synced {formatRelative(integration.lastSync)}</span>}
+          {integration.syncCount  > 0 && <span>📊 {integration.syncCount} syncs</span>}
+        </div>
+      )}
+
+      {/* Actions */}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        {!isConnected ? (
+          <button
+            onClick={() => onConnect(integration.id)}
+            disabled={connecting}
+            style={{
+              flex: 1, padding: "8px 14px", borderRadius: 9, border: "none",
+              background: connecting ? "#e5e7eb" : "#6c63ff", color: connecting ? "#9ca3af" : "#fff",
+              fontSize: 13, fontWeight: 700, cursor: connecting ? "not-allowed" : "pointer",
+            }}
+          >{connecting ? "Connecting…" : "Connect"}</button>
+        ) : (
+          <>
+            <button
+              onClick={() => onSync(integration.id)}
+              disabled={syncing}
+              style={{
+                flex: 1, padding: "8px 14px", borderRadius: 9, border: "1.5px solid #10b981",
+                background: "transparent", color: "#10b981", fontSize: 13, fontWeight: 700,
+                cursor: syncing ? "not-allowed" : "pointer", opacity: syncing ? 0.6 : 1,
+              }}
+            >{syncing ? "Syncing…" : "Sync"}</button>
+            <button
+              onClick={() => onDisconnect(integration.id)}
+              style={{
+                flex: 1, padding: "8px 14px", borderRadius: 9, border: "1.5px solid #fee2e2",
+                background: "transparent", color: "#ef4444", fontSize: 13, fontWeight: 700, cursor: "pointer",
+              }}
+            >Disconnect</button>
+          </>
+        )}
+        <button
+          style={{
+            padding: "8px 14px", borderRadius: 9, border: "1.5px solid #e5e7eb",
+            background: "transparent", color: "#374151", fontSize: 13, fontWeight: 600, cursor: "pointer",
+          }}
+        >Configure</button>
+      </div>
+
+      {/* Status indicator */}
+      {isConnected && (
+        <div style={{
+          marginTop: 12, fontSize: 12, color: "#059669",
+          background: "#f0fdf4", borderRadius: 8, padding: "6px 10px",
+        }}>
+          ✅ Active — {integration.isDemo ? "Demo mode. Connect credentials to go live." : "Live connection."}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Main Component ────────────────────────────────────────────────────────────
+
+const CATEGORY_ICONS: Record<IntegrationCategory, string> = {
+  storage: "☁️", productivity: "🧑‍💼", communication: "💬",
+  automation: "⚡", developer: "🐙", calendar: "📅",
+};
 
 export default function IntegrationsHub({ setWorkspace }: Props) {
+  const [integrations, setIntegrations] = useState<Integration[]>([]);
+  const [syncingId,    setSyncingId]    = useState<string | null>(null);
+  const [connectingId, setConnectingId] = useState<string | null>(null);
+  const [toast,        setToast]        = useState("");
+  const [filter,       setFilter]       = useState<IntegrationCategory | "all">("all");
+  const stats = IntegrationService.getStats();
+  const events = IntegrationService.getEvents(6);
+
+  const refresh = useCallback(() => {
+    setIntegrations(IntegrationService.getAll());
+  }, []);
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2800);
+  };
+
+  const handleConnect = async (id: string) => {
+    setConnectingId(id);
+    await IntegrationService.connect(id);
+    setConnectingId(null);
+    refresh();
+    showToast("Integration connected (Demo Mode).");
+  };
+
+  const handleDisconnect = async (id: string) => {
+    await IntegrationService.disconnect(id);
+    refresh();
+    showToast("Integration disconnected.");
+  };
+
+  const handleSync = async (id: string) => {
+    setSyncingId(id);
+    await IntegrationService.sync(id);
+    setSyncingId(null);
+    refresh();
+    showToast("Sync complete.");
+  };
+
+  const categories: (IntegrationCategory | "all")[] = [
+    "all", "storage", "productivity", "communication", "automation", "developer", "calendar",
+  ];
+
+  const filtered = filter === "all" ? integrations : integrations.filter(i => i.category === filter);
+
   return (
-    <div className="workspace-container" style={{ maxWidth: 1000 }}>
+    <div className="workspace-container" style={{ maxWidth: 1100 }}>
+      {toast && (
+        <div style={{
+          position: "fixed", bottom: 24, right: 24, background: "#1e293b", color: "#fff",
+          borderRadius: 12, padding: "12px 20px", fontSize: 14, fontWeight: 600, zIndex: 9999,
+          boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+        }}>{toast}</div>
+      )}
+
       <button className="back-btn" onClick={() => setWorkspace("dashboard")}>← Back to Dashboard</button>
 
       {/* Hero */}
@@ -45,88 +225,145 @@ export default function IntegrationsHub({ setWorkspace }: Props) {
         borderRadius: 20, padding: "40px 36px", marginBottom: 32, color: "#fff",
       }}>
         <div style={{ fontSize: 48, marginBottom: 12 }}>🔌</div>
-        <h1 style={{ margin: 0, fontSize: 32, fontWeight: 800, letterSpacing: -0.5 }}>
-          Integrations Studio
-        </h1>
-        <p style={{ margin: "10px 0 0", fontSize: 16, opacity: 0.9, maxWidth: 520 }}>
-          Connect Voxora to your favourite tools — AI providers, cloud storage, productivity apps, and automation platforms. One hub for all your integrations.
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+          <h1 style={{ margin: 0, fontSize: 32, fontWeight: 800, letterSpacing: -0.5 }}>Integrations Hub</h1>
+          <span style={{ fontSize: 12, background: "#6c63ff", borderRadius: 8, padding: "3px 10px", fontWeight: 700 }}>V5.7</span>
+        </div>
+        <p style={{ margin: "0 0 0", fontSize: 16, opacity: 0.9, maxWidth: 560 }}>
+          Connect Voxora to your favourite tools — cloud storage, productivity apps, communication platforms, and automation services. All in demo mode until you add credentials.
         </p>
       </div>
 
       {/* Stats */}
       <div className="stats" style={{ marginBottom: 32 }}>
-        {STATS.map(s => (
+        {[
+          { icon: "🔌", val: stats.total,      label: "Available" },
+          { icon: "✅", val: stats.connected,   label: "Connected" },
+          { icon: "○",  val: stats.available,   label: "Not Connected" },
+          { icon: "🔄", val: events.filter(e => e.type === "sync").length, label: "Recent Syncs" },
+          { icon: "🟢", val: stats.connected > 0 ? "Healthy" : "None", label: "Health" },
+          { icon: "🧪", val: "Demo",            label: "Mode" },
+        ].map(s => (
           <div key={s.label} className="stat-card">
-            <div className="stat-icon">{s.icon}</div>
-            <p className="stat-value">{s.val}</p>
+            <div className="stat-icon" style={{ fontSize: 20 }}>{s.icon}</div>
+            <p className="stat-value" style={{ fontSize: 14 }}>{s.val}</p>
             <h3 className="stat-label">{s.label}</h3>
           </div>
         ))}
       </div>
 
-      {/* Connected Apps overview */}
-      <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>🔌 Integration Status</h2>
+      {/* Demo notice */}
       <div style={{
-        display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-        gap: 12, marginBottom: 32,
+        background: "linear-gradient(135deg, #ede9fe, #ddd6fe)",
+        border: "1.5px solid #c4b5fd", borderRadius: 14,
+        padding: "14px 18px", marginBottom: 28,
+        display: "flex", alignItems: "center", gap: 12,
       }}>
-        {CONNECTED.map(app => (
-          <div key={app.name} style={{
-            background: "#fff", border: "1.5px solid #e5e7eb", borderRadius: 14,
-            padding: "16px 18px", display: "flex", alignItems: "center", gap: 12,
-            boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
-          }}>
-            <div style={{ fontSize: 26 }}>{app.icon}</div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: 14, color: "#111827" }}>{app.name}</div>
-              <div style={{
-                fontSize: 11, fontWeight: 600, marginTop: 3,
-                color: app.status === "configured" ? "#10b981" : "#6b7280",
-                textTransform: "uppercase", letterSpacing: 0.5,
-              }}>
-                {app.status === "configured" ? "✅ Configured" : "○ Available"}
-              </div>
-            </div>
+        <span style={{ fontSize: 22 }}>🧪</span>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 14, color: "#4c1d95" }}>Demo Integration Mode</div>
+          <div style={{ fontSize: 13, color: "#6d28d9", marginTop: 2 }}>
+            No credentials required — connect, sync, and disconnect integrations to simulate the full workflow. Add real API keys in Integration Settings to go live.
           </div>
-        ))}
+        </div>
+        <button
+          onClick={() => setWorkspace("intSettings")}
+          style={{
+            marginLeft: "auto", padding: "8px 16px", borderRadius: 9, border: "none",
+            background: "#6c63ff", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", flexShrink: 0,
+          }}
+        >Settings →</button>
       </div>
 
-      {/* Tools Grid */}
-      <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>🧰 Integration Tools</h2>
-      <div className="cards" style={{ marginBottom: 32 }}>
-        {TOOLS.map(t => (
-          <div
-            key={t.id}
-            className="feature-card"
-            style={{ cursor: "pointer" }}
-            onClick={() => setWorkspace(t.id)}
+      {/* Category filter */}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24 }}>
+        {categories.map(cat => (
+          <button
+            key={cat}
+            onClick={() => setFilter(cat)}
+            style={{
+              padding: "6px 16px", borderRadius: 20,
+              border: `1.5px solid ${filter === cat ? "#6c63ff" : "#e5e7eb"}`,
+              background: filter === cat ? "#6c63ff" : "transparent",
+              color: filter === cat ? "#fff" : "#374151",
+              fontSize: 13, fontWeight: 600, cursor: "pointer",
+            }}
           >
-            <div style={{ fontSize: 32, marginBottom: 10 }}>{t.icon}</div>
-            <h3 style={{ margin: "0 0 6px", fontSize: 15, fontWeight: 700 }}>{t.label}</h3>
-            <p style={{ margin: 0, fontSize: 13, color: "var(--text-muted, #6b7280)", lineHeight: 1.5 }}>{t.desc}</p>
-            <button
-              className="workspace-btn"
-              style={{ marginTop: 14, width: "100%", fontSize: 13 }}
-              onClick={e => { e.stopPropagation(); setWorkspace(t.id); }}
-            >
-              Open →
-            </button>
-          </div>
+            {cat === "all" ? "All" : `${CATEGORY_ICONS[cat as IntegrationCategory]} ${CATEGORY_LABELS[cat as IntegrationCategory]}`}
+          </button>
         ))}
       </div>
 
-      {/* Health summary */}
+      {/* Integration cards grid */}
       <div style={{
-        background: "linear-gradient(135deg, #f0fdf4, #dcfce7)",
-        border: "1.5px solid #bbf7d0", borderRadius: 16,
-        padding: "20px 24px",
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))",
+        gap: 16, marginBottom: 36,
       }}>
-        <h3 style={{ margin: "0 0 8px", fontSize: 16, fontWeight: 700, color: "#065f46" }}>
-          ✅ Integration Health
-        </h3>
-        <p style={{ margin: 0, fontSize: 14, color: "#047857", lineHeight: 1.6 }}>
-          All core AI providers are configured and ready. Cloud storage and productivity integrations are available to connect. Webhook infrastructure is active and ready to receive events.
-        </p>
+        {filtered.map(integration => (
+          <IntegrationCard
+            key={integration.id}
+            integration={integration}
+            onConnect={handleConnect}
+            onDisconnect={handleDisconnect}
+            onSync={handleSync}
+            syncing={syncingId === integration.id}
+            connecting={connectingId === integration.id}
+          />
+        ))}
+      </div>
+
+      {/* Recent Activity */}
+      {events.length > 0 && (
+        <>
+          <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>🔄 Recent Sync Activity</h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 32 }}>
+            {events.map(ev => (
+              <div key={ev.id} style={{
+                background: "var(--bg-card, #fff)", border: "1.5px solid var(--border, #e5e7eb)",
+                borderRadius: 12, padding: "12px 16px",
+                display: "flex", alignItems: "center", gap: 14,
+              }}>
+                <span style={{ fontSize: 20 }}>
+                  {ev.type === "connect" ? "🔗" : ev.type === "disconnect" ? "🔌" : ev.type === "sync" ? "🔄" : "📡"}
+                </span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 600, fontSize: 13 }}>{ev.integrationName}</div>
+                  <div style={{ fontSize: 12, color: "#6b7280" }}>{ev.message}</div>
+                </div>
+                <span style={{
+                  fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 6,
+                  background: ev.status === "success" ? "#d1fae5" : "#fee2e2",
+                  color: ev.status === "success" ? "#059669" : "#dc2626",
+                }}>{ev.status}</span>
+                <span style={{ fontSize: 12, color: "#9ca3af", flexShrink: 0 }}>
+                  {formatRelative(ev.timestamp)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Automation CTA */}
+      <div style={{
+        background: "linear-gradient(135deg, #0f172a, #1e1b4b)",
+        borderRadius: 16, padding: "24px 28px", color: "#fff",
+        display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap",
+      }}>
+        <div>
+          <h3 style={{ margin: "0 0 6px", fontSize: 18, fontWeight: 800 }}>⚡ Ready to Automate?</h3>
+          <p style={{ margin: 0, fontSize: 14, opacity: 0.85 }}>
+            Build workflows that trigger automatically when integrations sync or events occur.
+          </p>
+        </div>
+        <button
+          onClick={() => setWorkspace("automation")}
+          style={{
+            padding: "12px 24px", borderRadius: 12, border: "none",
+            background: "#6c63ff", color: "#fff", fontSize: 15, fontWeight: 700, cursor: "pointer",
+          }}
+        >Open Automation Engine →</button>
       </div>
     </div>
   );

@@ -11,6 +11,8 @@ import { useSubscription } from "../../context/SubscriptionContext";
 import { AIMemory } from "../../services/ai/AIMemory";
 import { AIUsage } from "../../services/ai/AIUsage";
 import { MemoryService } from "../../services/memory/MemoryService";
+import { IntegrationService } from "../../services/integrations/IntegrationService";
+import { AutomationEngine } from "../../services/automation/AutomationEngine";
 import WelcomeWizard from "../../components/WelcomeWizard";
 import "./Dashboard.css";
 
@@ -39,6 +41,11 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V5.7 Integrations & Automation ───────────────────────────────────────────
+const AutomationWorkspace = lazy(() => import("../Workspaces/AutomationWorkspace"));
+const IntGoogleCal        = lazy(() => import("../Workspaces/IntGoogleCal"));
+const IntOutlook          = lazy(() => import("../Workspaces/IntOutlook"));
+const IntGitHub           = lazy(() => import("../Workspaces/IntGitHub"));
 // ── V5.6 Workspace Intelligence & AI Memory ───────────────────────────────────
 const PromptLibraryWorkspace = lazy(() => import("../Workspaces/PromptLibraryWorkspace"));
 const AIMemorySettings       = lazy(() => import("../Workspaces/AIMemorySettings"));
@@ -187,6 +194,10 @@ const Dashboard = () => {
   // V5.6 — Memory stats
   const memStats = useMemo(() => MemoryService.getStats(), []);
   const convCount = useMemo(() => AIMemory.getAll().length, []);
+
+  // V5.7 — Integration & Automation stats
+  const intStats  = useMemo(() => IntegrationService.getStats(), []);
+  const autoStats = useMemo(() => AutomationEngine.getStats(), []);
 
   // V5.6 — AI suggestions based on project context
   const aiSuggestions = useMemo(() => {
@@ -726,43 +737,69 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {/* ── Integrations Studio Widgets ── */}
+              {/* ── V5.7 Integrations & Automation Widgets ── */}
               <div style={{ margin: "28px 0 4px" }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-                  🔌 Integrations Studio
+                  🔌 Integrations & Automation
+                  <span style={{ fontSize: 11, background: "#ede9fe", color: "#6c63ff", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>V5.7</span>
                 </h2>
                 <div className="stats">
                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("integrationsHub")}>
                     <div className="stat-icon">🔌</div>
-                    <p className="stat-value">9</p>
-                    <h3 className="stat-label">Connected Apps</h3>
-                  </div>
-                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("intOpenAI")}>
-                    <div className="stat-icon">🧠</div>
-                    <p className="stat-value">3</p>
-                    <h3 className="stat-label">AI Providers</h3>
-                  </div>
-                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("intSettings")}>
-                    <div className="stat-icon">✅</div>
-                    <p className="stat-value" style={{ fontSize: 13 }}>Active</p>
-                    <h3 className="stat-label">Provider Status</h3>
-                  </div>
-                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("intWebhooks")}>
-                    <div className="stat-icon">🔗</div>
-                    <p className="stat-value" style={{ fontSize: 13 }}>Ready</p>
-                    <h3 className="stat-label">Sync Activity</h3>
-                  </div>
-                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("intSettings")}>
-                    <div className="stat-icon">📊</div>
-                    <p className="stat-value" style={{ fontSize: 13 }}>OK</p>
-                    <h3 className="stat-label">API Status</h3>
+                    <p className="stat-value">{intStats.connected}</p>
+                    <h3 className="stat-label">Connected</h3>
                   </div>
                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("integrationsHub")}>
+                    <div className="stat-icon">○</div>
+                    <p className="stat-value">{intStats.available}</p>
+                    <h3 className="stat-label">Available</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("automation")}>
                     <div className="stat-icon">⚡</div>
-                    <p className="stat-value" style={{ fontSize: 13 }}>Open</p>
-                    <h3 className="stat-label">Integrations</h3>
+                    <p className="stat-value">{autoStats.active}</p>
+                    <h3 className="stat-label">Active Workflows</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("automation")}>
+                    <div className="stat-icon">🔁</div>
+                    <p className="stat-value">{autoStats.totalExecutions}</p>
+                    <h3 className="stat-label">Total Executions</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("integrationsHub")}>
+                    <div className="stat-icon">{intStats.connected > 0 ? "🟢" : "⚪"}</div>
+                    <p className="stat-value" style={{ fontSize: 13 }}>{intStats.connected > 0 ? "Healthy" : "None"}</p>
+                    <h3 className="stat-label">Integration Health</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("automation")}>
+                    <div className="stat-icon">📊</div>
+                    <p className="stat-value">{autoStats.successRate}%</p>
+                    <h3 className="stat-label">Automation Rate</h3>
                   </div>
                 </div>
+                {/* Recent sync activity */}
+                {intStats.recentEvents.length > 0 && (
+                  <div className="dashboard-panel" style={{ marginTop: 16 }}>
+                    <div className="panel-header">
+                      <h2>🔄 Recent Sync Activity</h2>
+                      <button className="panel-link" onClick={() => setWorkspace("integrationsHub")}>View All →</button>
+                    </div>
+                    <div className="activity-mini-list">
+                      {intStats.recentEvents.map((ev) => (
+                        <div key={ev.id} className="activity-mini-item">
+                          <span className="activity-mini-icon">
+                            {ev.type === "connect" ? "🔗" : ev.type === "sync" ? "🔄" : ev.type === "disconnect" ? "🔌" : "📡"}
+                          </span>
+                          <div className="activity-mini-body">
+                            <span className="activity-mini-title">{ev.integrationName}</span>
+                            <span className="activity-mini-desc">{ev.message}</span>
+                          </div>
+                          <span className="activity-mini-time" style={{ color: ev.status === "success" ? "#10b981" : "#ef4444" }}>
+                            {ev.status}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* ── Analytics Studio Widgets ── */}
@@ -988,6 +1025,12 @@ const Dashboard = () => {
           {workspace === "userProfile"      && <UserProfile        setWorkspace={setWorkspace} />}
           {workspace === "accountSettings"  && <AccountSettings    setWorkspace={setWorkspace} />}
           {workspace === "securitySettings" && <SecuritySettings   setWorkspace={setWorkspace} />}
+
+          {/* V5.7 Integrations & Automation */}
+          {workspace === "automation"      && <AutomationWorkspace setWorkspace={setWorkspace} />}
+          {workspace === "intGoogleCal"    && <IntGoogleCal        setWorkspace={setWorkspace} />}
+          {workspace === "intOutlook"      && <IntOutlook          setWorkspace={setWorkspace} />}
+          {workspace === "intGitHub"       && <IntGitHub           setWorkspace={setWorkspace} />}
 
           {/* V4.8 Integrations Studio */}
           {workspace === "integrationsHub" && <IntegrationsHub     setWorkspace={setWorkspace} />}

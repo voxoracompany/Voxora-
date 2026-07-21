@@ -100,6 +100,7 @@ const TEAM_TOOLS = [
 
 const INTEGRATIONS_TOOLS = [
   { id: "integrationsHub",  icon: "🔌", label: "Integrations Hub" },
+  { id: "automation",       icon: "⚡", label: "Automation Engine" },
   { id: "intOpenAI",        icon: "🧠", label: "OpenAI" },
   { id: "intGemini",        icon: "♊", label: "Google Gemini" },
   { id: "intAnthropic",     icon: "🤖", label: "Anthropic Claude" },
@@ -109,6 +110,9 @@ const INTEGRATIONS_TOOLS = [
   { id: "intSlack",         icon: "💬", label: "Slack" },
   { id: "intZapier",        icon: "⚡", label: "Zapier" },
   { id: "intWebhooks",      icon: "🔗", label: "Webhooks" },
+  { id: "intGoogleCal",     icon: "📅", label: "Google Calendar" },
+  { id: "intOutlook",       icon: "📧", label: "Microsoft Outlook" },
+  { id: "intGitHub",        icon: "🐙", label: "GitHub" },
   { id: "intSettings",      icon: "⚙️", label: "Integration Settings" },
 ];
 

@@ -17,15 +17,19 @@ interface IntegrationConfig {
 }
 
 const INTEGRATIONS: IntegrationConfig[] = [
-  { id: "openai",       name: "OpenAI",         icon: "🧠", category: "AI Provider",    storageKey: "voxora-int-openai-enabled",    description: "GPT-4 and GPT-4o AI models" },
-  { id: "gemini",       name: "Google Gemini",   icon: "♊", category: "AI Provider",    storageKey: "voxora-int-gemini-enabled",    description: "Gemini Pro and Ultra models" },
-  { id: "anthropic",    name: "Anthropic Claude",icon: "🤖", category: "AI Provider",    storageKey: "voxora-int-anthropic-enabled", description: "Claude Opus, Sonnet, and Haiku" },
-  { id: "googledrive",  name: "Google Drive",    icon: "🗂️", category: "Cloud Storage",  storageKey: "voxora-int-gdrive-enabled",    description: "Cloud file export and import" },
-  { id: "dropbox",      name: "Dropbox",         icon: "📦", category: "Cloud Storage",  storageKey: "voxora-int-dropbox-enabled",   description: "Dropbox backup and restore" },
-  { id: "notion",       name: "Notion",          icon: "📄", category: "Productivity",   storageKey: "voxora-int-notion-enabled",    description: "Notion workspace export" },
-  { id: "slack",        name: "Slack",           icon: "💬", category: "Communication",  storageKey: "voxora-int-slack-enabled",     description: "Slack notifications and alerts" },
-  { id: "zapier",       name: "Zapier",          icon: "⚡", category: "Automation",     storageKey: "voxora-int-zapier-enabled",    description: "Zapier webhook automation" },
-  { id: "webhooks",     name: "Webhooks",        icon: "🔗", category: "Automation",     storageKey: "voxora-int-webhooks-enabled",  description: "Custom incoming/outgoing webhooks" },
+  { id: "openai",       name: "OpenAI",            icon: "🧠", category: "AI Provider",    storageKey: "voxora-int-openai-enabled",    description: "GPT-4 and GPT-4o AI models" },
+  { id: "gemini",       name: "Google Gemini",      icon: "♊", category: "AI Provider",    storageKey: "voxora-int-gemini-enabled",    description: "Gemini Pro and Ultra models" },
+  { id: "anthropic",    name: "Anthropic Claude",   icon: "🤖", category: "AI Provider",    storageKey: "voxora-int-anthropic-enabled", description: "Claude Opus, Sonnet, and Haiku" },
+  { id: "googledrive",  name: "Google Drive",       icon: "🗂️", category: "Cloud Storage",  storageKey: "voxora-int-gdrive-enabled",    description: "Cloud file export and import" },
+  { id: "dropbox",      name: "Dropbox",            icon: "📦", category: "Cloud Storage",  storageKey: "voxora-int-dropbox-enabled",   description: "Dropbox backup and restore" },
+  { id: "notion",       name: "Notion",             icon: "📄", category: "Productivity",   storageKey: "voxora-int-notion-enabled",    description: "Notion workspace export" },
+  { id: "slack",        name: "Slack",              icon: "💬", category: "Communication",  storageKey: "voxora-int-slack-enabled",     description: "Slack notifications and alerts" },
+  { id: "zapier",       name: "Zapier",             icon: "⚡", category: "Automation",     storageKey: "voxora-int-zapier-enabled",    description: "Zapier webhook automation" },
+  { id: "webhooks",     name: "Webhooks",           icon: "🔗", category: "Automation",     storageKey: "voxora-int-webhooks-enabled",  description: "Custom incoming/outgoing webhooks" },
+  // V5.7 additions
+  { id: "googleCal",    name: "Google Calendar",    icon: "📅", category: "Calendar",       storageKey: "voxora-int-gcal-enabled",      description: "Sync milestones and deadlines" },
+  { id: "outlook",      name: "Microsoft Outlook",  icon: "📧", category: "Calendar",       storageKey: "voxora-int-outlook-enabled",   description: "Outlook calendar and tasks" },
+  { id: "github",       name: "GitHub",             icon: "🐙", category: "Developer Tools", storageKey: "voxora-int-github-enabled",   description: "Link repos to Voxora projects" },
 ];
 
 const MOCK_SYNC_LOG = [

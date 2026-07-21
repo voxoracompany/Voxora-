@@ -1,0 +1,221 @@
+Continue Voxora from the latest GitHub commit.
+
+IMPORTANT
+
+- Analyze the existing codebase first.
+- Verify V5.6 Workspace Intelligence & AI Memory exists.
+- Continue from Git commit: aeaf0d8.
+- Do NOT rebuild V1–V5.6.
+- Preserve all existing functionality.
+- Reuse existing contexts, services, providers, routing, AI Engine, Firebase, Gemini, Subscription System, and Memory Engine.
+- Maintain the premium UI, responsive design, accessibility, and TypeScript quality.
+
+==================================================
+V5.7 — Integrations & Automation
+==================================================
+
+Goal:
+
+Make Voxora ready to connect with external productivity tools while keeping everything modular and production-ready.
+
+==================================================
+1. Integrations Hub
+==================================================
+
+Create an Integrations Hub workspace.
+
+Include cards for:
+
+- Google Drive
+- Dropbox
+- Notion
+- Slack
+- Zapier
+- Webhooks
+- Google Calendar
+- Microsoft Outlook
+- GitHub
+
+Each integration should display:
+
+- Connected / Not Connected
+- Configure
+- Sync
+- Disconnect
+- Status
+
+==================================================
+2. Integration Provider Architecture
+==================================================
+
+Create:
+
+src/services/integrations/
+
+Implement:
+
+- IntegrationTypes.ts
+- IntegrationService.ts
+- IntegrationRegistry.ts
+
+Create provider placeholders for:
+
+- GoogleDriveProvider.ts
+- DropboxProvider.ts
+- NotionProvider.ts
+- SlackProvider.ts
+- ZapierProvider.ts
+- GitHubProvider.ts
+
+Do NOT connect live APIs yet.
+
+==================================================
+3. Automation Engine
+==================================================
+
+Create:
+
+src/services/automation/
+
+Implement:
+
+- AutomationEngine.ts
+- AutomationTypes.ts
+- AutomationRules.ts
+
+Support:
+
+- Trigger
+- Condition
+- Action
+
+Example triggers:
+
+- Project Created
+- AI Conversation Saved
+- Billing Upgraded
+- Feedback Submitted
+- Report Generated
+
+==================================================
+4. Automation Workspace
+==================================================
+
+Create a new Automation workspace.
+
+Allow users to:
+
+- Create workflow
+- Enable/disable workflow
+- Duplicate workflow
+- Delete workflow
+- View execution history
+
+==================================================
+5. Scheduled Tasks
+==================================================
+
+Support scheduling:
+
+- Daily
+- Weekly
+- Monthly
+- Manual
+
+Future-ready architecture only.
+
+==================================================
+6. Dashboard Improvements
+==================================================
+
+Add widgets:
+
+- Connected Integrations
+- Automation Status
+- Recent Sync Activity
+- Workflow Count
+- Integration Health
+
+==================================================
+7. Settings
+==================================================
+
+Add an Integrations section.
+
+Display:
+
+- Connected providers
+- API status
+- Sync preferences
+- Automation preferences
+
+==================================================
+8. Demo Mode
+==================================================
+
+If no provider credentials exist:
+
+Display:
+
+"Demo Integration Mode"
+
+Allow users to simulate:
+
+- Connect
+- Sync
+- Disconnect
+
+without calling external APIs.
+
+==================================================
+Validation
+==================================================
+
+Run:
+
+- Production build
+- TypeScript
+- Route verification
+- Dashboard verification
+- Integration verification
+- Automation verification
+
+Verify:
+
+- No broken routes
+- No blank pages
+- No TypeScript errors
+- No runtime errors
+- Existing V1–V5.6 functionality preserved
+
+==================================================
+Git
+==================================================
+
+Commit:
+
+V5.7 Integrations & Automation
+
+Push to GitHub.
+
+Verify the push succeeded.
+
+Report:
+
+- Build status
+- TypeScript status
+- Commit hash
+- Push status
+- Integration Hub status
+- Automation Engine status
+- Dashboard status
+
+IMPORTANT
+
+When V5.7 is complete:
+
+STOP.
+
+Do NOT begin V5.8 automatically.
+
+Wait for my instruction before continuing.
