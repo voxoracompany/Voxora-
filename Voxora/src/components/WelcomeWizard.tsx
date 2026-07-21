@@ -94,9 +94,13 @@ export default function WelcomeWizard({ onComplete, setWorkspace }: Props) {
 
   const handleNext = useCallback(() => {
     if (isLast) {
-      onComplete();
       if (selectedAction) {
+        // setWorkspace prop already calls handleWizardComplete() internally,
+        // so this single call both closes the wizard and navigates to the workspace.
         setWorkspace(selectedAction);
+      } else {
+        // No action selected — close the wizard and stay on the Dashboard.
+        onComplete();
       }
     } else {
       setStep((s) => s + 1);
