@@ -1,0 +1,259 @@
+/* ── V5.6 Prompt Library Workspace ─────────────────────────────────────────── */
+.plw-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+  color: var(--text-primary, #1e293b);
+}
+
+.plw-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.plw-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+
+.plw-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary, #64748b);
+  margin: 0;
+}
+
+.plw-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.plw-btn {
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+
+.plw-btn--primary {
+  background: var(--accent, #6c63ff);
+  color: #fff;
+}
+.plw-btn--primary:hover { background: #5a52e0; }
+
+.plw-btn--outline {
+  background: transparent;
+  border: 1.5px solid var(--border, #e2e8f0);
+  color: var(--text-primary, #1e293b);
+}
+.plw-btn--outline:hover { background: var(--bg-hover, #f8fafc); }
+
+.plw-btn--ghost {
+  background: transparent;
+  color: var(--text-secondary, #64748b);
+}
+.plw-btn--ghost:hover { background: var(--bg-hover, #f8fafc); }
+
+.plw-search-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.plw-search {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1.5px solid var(--border, #e2e8f0);
+  border-radius: 10px;
+  font-size: 14px;
+  background: var(--bg-card, #fff);
+  color: var(--text-primary, #1e293b);
+  outline: none;
+}
+.plw-search:focus { border-color: var(--accent, #6c63ff); }
+
+.plw-count {
+  font-size: 13px;
+  color: var(--text-secondary, #64748b);
+  white-space: nowrap;
+}
+
+.plw-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.plw-tab {
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border, #e2e8f0);
+  background: transparent;
+  color: var(--text-secondary, #64748b);
+  transition: all 0.18s;
+}
+.plw-tab:hover { border-color: var(--accent, #6c63ff); color: var(--accent, #6c63ff); }
+.plw-tab.active { background: var(--accent, #6c63ff); color: #fff; border-color: var(--accent, #6c63ff); }
+
+/* Form card */
+.plw-form-card {
+  background: var(--bg-card, #fff);
+  border: 1.5px solid var(--accent, #6c63ff);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 28px;
+}
+.plw-form-card h3 { margin: 0 0 16px; font-size: 17px; font-weight: 700; }
+
+.plw-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.plw-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.plw-field label { font-size: 13px; font-weight: 600; color: var(--text-secondary, #64748b); }
+.plw-field input, .plw-field select, .plw-field textarea {
+  padding: 9px 13px;
+  border: 1.5px solid var(--border, #e2e8f0);
+  border-radius: 10px;
+  font-size: 14px;
+  background: var(--bg-main, #f8fafc);
+  color: var(--text-primary, #1e293b);
+  outline: none;
+  font-family: inherit;
+  resize: vertical;
+}
+.plw-field input:focus, .plw-field select:focus, .plw-field textarea:focus { border-color: var(--accent, #6c63ff); }
+
+.plw-form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+
+/* Section */
+.plw-section { margin-bottom: 32px; }
+.plw-section-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.plw-section-count {
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--bg-hover, #f1f5f9);
+  color: var(--text-secondary, #64748b);
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+/* Grid */
+.plw-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+/* Card */
+.plw-card {
+  background: var(--bg-card, #fff);
+  border: 1.5px solid var(--border, #e2e8f0);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: box-shadow 0.18s, border-color 0.18s;
+}
+.plw-card:hover { box-shadow: 0 4px 20px rgba(108,99,255,0.08); border-color: var(--accent, #6c63ff); }
+.plw-card--custom { border-color: #e0d7ff; background: linear-gradient(135deg, #faf8ff 0%, #fff 100%); }
+
+.plw-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.plw-card-badge {
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--bg-hover, #f1f5f9);
+  color: var(--text-secondary, #64748b);
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.plw-card-badge--custom { background: #ede9fe; color: #6c63ff; }
+
+.plw-fav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.4;
+  transition: opacity 0.15s, transform 0.15s;
+  padding: 0;
+  line-height: 1;
+}
+.plw-fav-btn:hover, .plw-fav-btn.active { opacity: 1; transform: scale(1.2); }
+
+.plw-card-label { font-size: 15px; font-weight: 700; margin: 0; color: var(--text-primary, #1e293b); }
+.plw-card-meta { font-size: 12px; color: var(--text-secondary, #64748b); margin: 0; }
+.plw-card-preview { font-size: 12px; color: var(--text-secondary, #64748b); margin: 0; line-height: 1.5; flex: 1; }
+
+.plw-card-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.plw-action-btn {
+  padding: 5px 13px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--accent, #6c63ff);
+  background: var(--accent, #6c63ff);
+  color: #fff;
+  transition: all 0.15s;
+}
+.plw-action-btn:hover { background: #5a52e0; }
+.plw-action-btn--ghost {
+  background: transparent;
+  color: var(--text-secondary, #64748b);
+  border-color: var(--border, #e2e8f0);
+}
+.plw-action-btn--ghost:hover { background: var(--bg-hover, #f8fafc); }
+.plw-action-btn--danger { background: transparent; color: #ef4444; border-color: #fee2e2; }
+.plw-action-btn--danger:hover { background: #fee2e2; }
+
+.plw-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary, #64748b);
+}
+.plw-empty h3 { font-size: 18px; margin: 12px 0 8px; }
+
+@media (max-width: 640px) {
+  .plw-header { flex-direction: column; }
+  .plw-grid { grid-template-columns: 1fr; }
+}

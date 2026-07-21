@@ -94,6 +94,17 @@ export const AIMemory = {
     return load().filter(c => c.pinned && !c.archived);
   },
 
+  // ── V5.6 Favourite ────────────────────────────────────────────────────────
+  favourite(id: string): void {
+    const convs = load();
+    const idx = convs.findIndex(c => c.id === id);
+    if (idx !== -1) { convs[idx].favourite = !convs[idx].favourite; save(convs); }
+  },
+
+  getFavourites(): Conversation[] {
+    return load().filter(c => c.favourite && !c.archived);
+  },
+
   getRecent(limit = 5): Conversation[] {
     return load()
       .filter(c => !c.archived)

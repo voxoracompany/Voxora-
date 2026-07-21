@@ -1,5 +1,5 @@
-// ── V5.1 AI Engine — Conversation Context Manager ────────────────────────────
-// Injects relevant conversation history into AI requests.
+// ── V5.6 AI Engine — Conversation Context Manager ────────────────────────────
+// Injects relevant conversation history and project context into AI requests.
 // Manages context window size, workspace isolation, and context trimming.
 
 import type { AIMessage, AIRequest } from './types/AITypes';

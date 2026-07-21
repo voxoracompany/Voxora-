@@ -63,6 +63,8 @@ export interface Conversation {
   workspace: string;
   pinned:    boolean;
   archived:  boolean;
+  /** V5.6 — user-starred conversations */
+  favourite?: boolean;
 }
 
 export interface FavouritePrompt {

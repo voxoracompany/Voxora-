@@ -1,0 +1,265 @@
+Continue Voxora from the latest GitHub commit.
+
+IMPORTANT
+
+- Continue from the latest GitHub commit (723b465).
+- Do NOT rebuild V1–V5.5.
+- Preserve every existing feature.
+- Reuse the existing AI Engine, Gemini Integration, Firebase Backend, Subscription System, and Onboarding Wizard.
+- Maintain the premium UI, responsive layout, accessibility, and TypeScript quality.
+
+==================================================
+V5.6 — Workspace Intelligence & AI Memory
+==================================================
+
+Goal:
+
+Transform Voxora into an intelligent AI operating system that remembers users, projects, conversations, and business context.
+
+==================================================
+1. Project Memory Engine
+==================================================
+
+Create:
+
+src/services/memory/
+
+Implement:
+
+- MemoryService.ts
+- MemoryTypes.ts
+- MemorySearch.ts
+- MemoryExport.ts
+
+The memory engine should store:
+
+- Project title
+- Startup idea
+- Customer research
+- Marketing plans
+- Financial analysis
+- Investor reports
+- Roadmaps
+- AI conversations
+- Notes
+- Documents
+- Generated content
+
+Provide methods:
+
+- saveMemory()
+- updateMemory()
+- getMemory()
+- getProjectMemory()
+- getRecentMemory()
+- searchMemory()
+- deleteMemory()
+- exportMemory()
+
+==================================================
+2. Persistent AI Conversations
+==================================================
+
+Upgrade every AI workspace.
+
+Features:
+
+- Conversation history
+- Rename chats
+- Delete chats
+- Archive chats
+- Pin chats
+- Search chats
+- Timestamps
+- Favorites
+
+Works in:
+
+- AI Assistant
+- Startup Studio
+- Marketing Studio
+- Financial Studio
+- Investor Studio
+- Growth Studio
+- Analytics Studio
+
+==================================================
+3. Context-Aware AI
+==================================================
+
+Before every AI request automatically include:
+
+- Active project
+- Project description
+- Previous AI outputs
+- Customer research
+- Business model
+- Roadmap
+- Notes
+- Previous conversations
+
+The AI should understand project context automatically.
+
+==================================================
+4. Workspace Search
+==================================================
+
+Create a global search.
+
+Search:
+
+- Projects
+- AI conversations
+- Memory
+- Notes
+- Reports
+- Documents
+- Roadmaps
+
+Support:
+
+- Categories
+- Date
+- Favorites
+- Relevance
+- Newest
+- Oldest
+
+==================================================
+5. Smart Prompt Library
+==================================================
+
+Create reusable prompts.
+
+Categories:
+
+- Startup
+- Marketing
+- Finance
+- Investor
+- Growth
+- Analytics
+- Product
+- Research
+
+Support:
+
+- Favorite
+- Duplicate
+- Edit
+- Delete
+- Import
+- Export
+
+==================================================
+6. AI Suggestions
+==================================================
+
+Automatically suggest:
+
+- Next business step
+- Missing research
+- Marketing improvements
+- Financial risks
+- Funding readiness
+- Growth opportunities
+
+Suggestions should be generated from saved project memory.
+
+==================================================
+7. Dashboard Intelligence
+==================================================
+
+Add dashboard widgets:
+
+- Recent Conversations
+- Active Projects
+- AI Memory Usage
+- Suggested Next Actions
+- Recent Reports
+- Recent Documents
+- Smart Insights
+
+==================================================
+8. AI Memory Settings
+==================================================
+
+Add settings for:
+
+- Enable Memory
+- Auto-save Conversations
+- Context Depth
+- Memory Retention
+- Export Memory
+- Delete All Memory
+
+==================================================
+Architecture
+==================================================
+
+Reuse the memory engine everywhere.
+
+Avoid duplicate code.
+
+Use the existing provider architecture.
+
+Keep everything modular.
+
+==================================================
+Validation
+==================================================
+
+Run:
+
+- Production build
+- TypeScript
+- Routing verification
+- Dashboard verification
+- AI verification
+- Memory verification
+- Search verification
+
+Fix every TypeScript error.
+
+Fix every runtime error.
+
+Verify:
+
+- No blank pages
+- No broken routes
+- No broken AI workspaces
+- Memory persists correctly
+- Search works
+- Dashboard widgets update correctly
+
+==================================================
+Git
+==================================================
+
+Commit:
+
+V5.6 Workspace Intelligence & AI Memory
+
+Push to GitHub.
+
+Verify push succeeded.
+
+Report:
+
+- Build status
+- TypeScript status
+- Commit hash
+- Push status
+- Memory system status
+- Conversation system status
+- Search status
+
+IMPORTANT
+
+After V5.6 is complete:
+
+STOP.
+
+Do NOT begin V5.7 automatically.
+
+Wait for my next instruction.

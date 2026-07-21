@@ -10,6 +10,7 @@ import { useCloud } from "../../context/CloudContext";
 import { useSubscription } from "../../context/SubscriptionContext";
 import { AIMemory } from "../../services/ai/AIMemory";
 import { AIUsage } from "../../services/ai/AIUsage";
+import { MemoryService } from "../../services/memory/MemoryService";
 import WelcomeWizard from "../../components/WelcomeWizard";
 import "./Dashboard.css";
 
@@ -38,6 +39,9 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V5.6 Workspace Intelligence & AI Memory ───────────────────────────────────
+const PromptLibraryWorkspace = lazy(() => import("../Workspaces/PromptLibraryWorkspace"));
+const AIMemorySettings       = lazy(() => import("../Workspaces/AIMemorySettings"));
 // ── V5.5 Public Beta Launch ───────────────────────────────────────────────────
 const FeedbackCenter     = lazy(() => import("../Workspaces/FeedbackCenter"));
 const TrustCenter        = lazy(() => import("../Workspaces/TrustCenter"));
@@ -179,6 +183,23 @@ const Dashboard = () => {
 
   // Recent AI conversations from AIMemory
   const recentConvs = useMemo(() => AIMemory.getRecent(3), []);
+
+  // V5.6 — Memory stats
+  const memStats = useMemo(() => MemoryService.getStats(), []);
+  const convCount = useMemo(() => AIMemory.getAll().length, []);
+
+  // V5.6 — AI suggestions based on project context
+  const aiSuggestions = useMemo(() => {
+    const suggestions: { icon: string; text: string; action: string }[] = [];
+    if (projects.length === 0) suggestions.push({ icon: "🚀", text: "Create your first startup idea to get started.", action: "startup" });
+    if (projects.length > 0 && !projects.some(p => p.category === "Customer Research")) suggestions.push({ icon: "🔬", text: "Run customer research to validate your idea.", action: "research" });
+    if (projects.length > 0 && !projects.some(p => p.category === "Business Model Canvas")) suggestions.push({ icon: "🏢", text: "Build a Business Model Canvas for your project.", action: "business" });
+    if (projects.length > 2 && !projects.some(p => ["Financial Forecast","Revenue Model"].includes(p.category))) suggestions.push({ icon: "💰", text: "Model your financials and revenue streams.", action: "financialForecast" });
+    if (usage.todayCount === 0) suggestions.push({ icon: "🤖", text: "Chat with AI Assistant to explore ideas.", action: "assistant" });
+    if (convCount === 0) suggestions.push({ icon: "💬", text: "Start an AI conversation to build your memory.", action: "assistant" });
+    if (projects.length > 3 && !projects.some(p => p.category === "Pitch Deck")) suggestions.push({ icon: "📊", text: "Create a pitch deck for investors.", action: "pitchDeck" });
+    return suggestions.slice(0, 4);
+  }, [projects, usage.todayCount, convCount]);
 
   // ── Keyboard shortcuts ───────────────────────────────────────────────────
   useEffect(() => {
@@ -786,6 +807,72 @@ const Dashboard = () => {
                 </div>
               </div>
 
+              {/* ── V5.6 Workspace Intelligence ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  🧠 Workspace Intelligence
+                  <span style={{ fontSize: 11, background: "#ede9fe", color: "#6c63ff", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>V5.6</span>
+                </h2>
+                <div className="stats">
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("search")}>
+                    <div className="stat-icon">🧠</div>
+                    <p className="stat-value">{memStats.total}</p>
+                    <h3 className="stat-label">Memory Items</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("search")}>
+                    <div className="stat-icon">💬</div>
+                    <p className="stat-value">{convCount}</p>
+                    <h3 className="stat-label">AI Conversations</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("promptLibrary")}>
+                    <div className="stat-icon">📚</div>
+                    <p className="stat-value">30+</p>
+                    <h3 className="stat-label">Prompt Templates</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("aiMemorySettings")}>
+                    <div className="stat-icon">⚙️</div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>Configure</p>
+                    <h3 className="stat-label">Memory Settings</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("search")}>
+                    <div className="stat-icon">🔍</div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>Search</p>
+                    <h3 className="stat-label">Global Search</h3>
+                  </div>
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("promptLibrary")}>
+                    <div className="stat-icon">✨</div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>Open</p>
+                    <h3 className="stat-label">Prompt Library</h3>
+                  </div>
+                </div>
+              </div>
+
+              {/* ── V5.6 AI Suggestions ── */}
+              {aiSuggestions.length > 0 && (
+                <div style={{ margin: "24px 0 4px" }}>
+                  <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14 }}>💡 Suggested Next Steps</h2>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {aiSuggestions.map((s, i) => (
+                      <div
+                        key={i}
+                        onClick={() => setWorkspace(s.action)}
+                        style={{
+                          display: "flex", alignItems: "center", gap: 14,
+                          background: "var(--bg-card, #fff)", border: "1.5px solid var(--border, #e2e8f0)",
+                          borderRadius: 12, padding: "14px 18px", cursor: "pointer", transition: "border-color 0.2s",
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.borderColor = "#6c63ff")}
+                        onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border, #e2e8f0)")}
+                      >
+                        <span style={{ fontSize: 22 }}>{s.icon}</span>
+                        <span style={{ fontSize: 14, color: "var(--text-primary, #1e293b)", flex: 1 }}>{s.text}</span>
+                        <span style={{ fontSize: 13, color: "#6c63ff", fontWeight: 600 }}>Go →</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Quick Actions */}
               <div className="quick-actions">
                 <h2>⚡ Quick Actions</h2>
@@ -887,6 +974,10 @@ const Dashboard = () => {
 
           {/* V5.4 Payments & Subscription */}
           {workspace === "billing" && <Billing setWorkspace={setWorkspace} />}
+
+          {/* V5.6 Workspace Intelligence & AI Memory */}
+          {workspace === "promptLibrary"    && <PromptLibraryWorkspace setWorkspace={setWorkspace} />}
+          {workspace === "aiMemorySettings" && <AIMemorySettings       setWorkspace={setWorkspace} />}
 
           {/* V5.5 Public Beta Launch */}
           {workspace === "feedback"        && <FeedbackCenter  setWorkspace={setWorkspace} />}

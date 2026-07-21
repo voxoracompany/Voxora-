@@ -1,3 +1,57 @@
+/* ── V5.6 Search Tabs ─────────────────────────────────────────────────────── */
+.search-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.search-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border, #e2e8f0);
+  background: transparent;
+  color: var(--text-secondary, #64748b);
+  transition: all 0.18s;
+}
+.search-tab:hover { border-color: #6C63FF; color: #6C63FF; }
+.search-tab.active { background: #6C63FF; color: #fff; border-color: #6C63FF; }
+.search-tab-count {
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.25);
+  padding: 1px 7px;
+  border-radius: 20px;
+  min-width: 20px;
+  text-align: center;
+}
+.search-tab.active .search-tab-count { background: rgba(255,255,255,0.3); }
+.search-tab:not(.active) .search-tab-count { background: var(--bg-hover, #f1f5f9); color: var(--text-secondary, #64748b); }
+
+.search-results-area { display: flex; flex-direction: column; gap: 24px; }
+.search-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary, #1e293b);
+}
+.search-section-count {
+  font-size: 12px;
+  background: var(--bg-hover, #f1f5f9);
+  color: var(--text-secondary, #64748b);
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
 .search-container { padding: 30px; max-width: 860px; }
 
 .search-header { margin-bottom: 24px; }
