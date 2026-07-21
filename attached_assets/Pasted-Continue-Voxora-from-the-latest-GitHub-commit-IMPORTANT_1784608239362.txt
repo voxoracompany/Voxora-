@@ -1,0 +1,90 @@
+Continue Voxora from the latest GitHub commit.
+
+IMPORTANT
+
+- Do NOT rebuild V1–V5.4.
+- Preserve all existing functionality.
+- Reuse the existing architecture.
+- Maintain the premium UI and responsive design.
+- Continue from the latest GitHub commit only.
+
+==================================================
+V5.5 — Fix Onboarding Wizard Regression
+==================================================
+
+The previous implementation is almost complete.
+
+Production build passes.
+TypeScript passes.
+Security review passes.
+
+The ONLY blocking issue reported by validation is:
+
+The Welcome / Onboarding Wizard does not apply the user's selected Quick Action when the wizard finishes.
+
+==================================================
+Requirements
+==================================================
+
+Fix ONLY the onboarding flow.
+
+1. Persist the selected Quick Action during onboarding.
+
+2. When Finish is clicked:
+
+- Apply the selected workspace.
+- Navigate directly to that workspace.
+- If nothing was selected, open the Dashboard.
+
+3. Preserve all existing onboarding behavior.
+
+4. Do NOT modify unrelated features.
+
+5. Do NOT remove any existing functionality.
+
+==================================================
+Validation
+==================================================
+
+Perform a manual onboarding test:
+
+- Start from a fresh user state.
+- Select every Quick Action one at a time.
+- Verify each opens the correct workspace after Finish.
+- Verify Dashboard is used as fallback.
+
+Run:
+
+- Production build
+- TypeScript
+- Runtime verification
+
+Verify:
+
+- No broken routes.
+- No blank pages.
+- No console errors.
+- No TypeScript errors.
+- Existing V5.4 and V5.5 functionality remains intact.
+
+==================================================
+Git
+==================================================
+
+Commit:
+
+Fix V5.5 Onboarding Wizard Completion
+
+Push to the connected GitHub repository.
+
+Verify the push succeeded.
+
+Report:
+
+- Build status
+- TypeScript status
+- Manual onboarding test results
+- Latest commit hash
+- Push status
+
+If the validation passes after this fix, automatically begin planning the next milestone (V5.6) but do NOT implement it until this fix is confirmed complete.
