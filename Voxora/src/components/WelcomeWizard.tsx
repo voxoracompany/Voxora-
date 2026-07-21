@@ -95,13 +95,13 @@ export default function WelcomeWizard({ onComplete, setWorkspace }: Props) {
   const handleNext = useCallback(() => {
     if (isLast) {
       onComplete();
-      if (step === 2 && selectedAction) {
+      if (selectedAction) {
         setWorkspace(selectedAction);
       }
     } else {
       setStep((s) => s + 1);
     }
-  }, [isLast, onComplete, step, selectedAction, setWorkspace]);
+  }, [isLast, onComplete, selectedAction, setWorkspace]);
 
   const handleSkip = () => {
     onComplete();
