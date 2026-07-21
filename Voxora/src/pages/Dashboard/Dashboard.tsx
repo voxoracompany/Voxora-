@@ -18,6 +18,7 @@ import { NotificationService } from "../../services/admin/NotificationService";
 import { AuditLogService } from "../../services/admin/AuditLogService";
 import { ErrorReportingService } from "../../services/admin/ErrorReportingService";
 import WelcomeWizard from "../../components/WelcomeWizard";
+import WorkspaceErrorBoundary from "../../components/WorkspaceErrorBoundary";
 import "./Dashboard.css";
 
 const WIZARD_KEY = "voxora-wizard-done";
@@ -45,6 +46,8 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V6.0 Launch Candidate ─────────────────────────────────────────────────────
+const BetaReadinessReport = lazy(() => import("../Workspaces/BetaReadinessReport"));
 // ── V5.9 Launch Preparation & Production Readiness ───────────────────────────
 const ErrorReporting     = lazy(() => import("../Workspaces/ErrorReporting"));
 const HealthCheck        = lazy(() => import("../Workspaces/HealthCheck"));
@@ -312,6 +315,7 @@ const Dashboard = () => {
         </div>
         <TopBar setWorkspace={setWorkspace} />
 
+        <WorkspaceErrorBoundary>
         <Suspense fallback={<WorkspaceLoader />}>
 
           {workspace === "dashboard" && (
@@ -1186,6 +1190,9 @@ const Dashboard = () => {
           {workspace === "accountSettings"  && <AccountSettings    setWorkspace={setWorkspace} />}
           {workspace === "securitySettings" && <SecuritySettings   setWorkspace={setWorkspace} />}
 
+          {/* V6.0 Launch Candidate */}
+          {workspace === "betaReadinessReport" && <BetaReadinessReport setWorkspace={setWorkspace} />}
+
           {/* V5.9 Launch Preparation & Production Readiness */}
           {workspace === "errorReporting"      && <ErrorReporting      setWorkspace={setWorkspace} />}
           {workspace === "healthCheck"         && <HealthCheck         setWorkspace={setWorkspace} />}
@@ -1287,6 +1294,7 @@ const Dashboard = () => {
           {workspace === "brandVoice"        && <BrandVoice         setWorkspace={setWorkspace} />}
 
         </Suspense>
+        </WorkspaceErrorBoundary>
       </main>
     </div>
   );

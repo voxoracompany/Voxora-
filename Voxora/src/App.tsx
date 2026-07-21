@@ -1,5 +1,5 @@
+import React, { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
-import { lazy, Suspense } from "react";
 import { ProjectProvider } from "./context/ProjectContext";
 import { ActivityProvider } from "./context/ActivityContext";
 import { ToastProvider } from "./context/ToastContext";
@@ -62,8 +62,6 @@ function CloudWrapper({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   return <CloudProvider userId={user?.id ?? null}>{children}</CloudProvider>;
 }
-
-import React from "react";
 
 export default function App() {
   return (

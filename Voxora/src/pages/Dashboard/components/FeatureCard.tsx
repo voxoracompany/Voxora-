@@ -1,3 +1,4 @@
+import { memo } from "react";
 import "./FeatureCard.css";
 
 type FeatureCardProps = {
@@ -7,7 +8,7 @@ type FeatureCardProps = {
   onClick: () => void;
 };
 
-const FeatureCard = ({ title, description, buttonText, onClick }: FeatureCardProps) => {
+const FeatureCard = memo(function FeatureCard({ title, description, buttonText, onClick }: FeatureCardProps) {
   return (
     <div className="feature-card">
       <h3 className="feature-card-title">{title}</h3>
@@ -15,6 +16,6 @@ const FeatureCard = ({ title, description, buttonText, onClick }: FeatureCardPro
       <button className="feature-card-btn" onClick={onClick}>{buttonText}</button>
     </div>
   );
-};
+});
 
 export default FeatureCard;
