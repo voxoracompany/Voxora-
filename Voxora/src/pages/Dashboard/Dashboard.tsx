@@ -182,6 +182,8 @@ const Dashboard = () => {
   const [workspace, setWorkspace] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
   const [showWizard, setShowWizard] = useState(() => !localStorage.getItem(WIZARD_KEY));
+  // Tracks whether admin/monitoring services have been seeded so dependent memos recompute after mount
+  const [adminSeeded, setAdminSeeded] = useState(false);
 
   const handleWizardComplete = useCallback(() => {
     localStorage.setItem(WIZARD_KEY, "1");
@@ -219,14 +221,19 @@ const Dashboard = () => {
   const intStats  = useMemo(() => IntegrationService.getStats(), []);
   const autoStats = useMemo(() => AutomationEngine.getStats(), []);
 
-  // V5.8 — Admin & Monitoring stats (seed once on mount)
-  useEffect(() => { AuditLogService.seed(); NotificationService.seed(); ErrorReportingService.seed(); }, []);
-  const sysMetrics    = useMemo(() => MonitoringService.getMetrics(), []);
-  const unreadNotifs  = useMemo(() => NotificationService.getUnreadCount(), []);
-  const recentAudits  = useMemo(() => AuditLogService.getAll().slice(0, 3), []);
+  // V5.8 — Admin & Monitoring stats (seed once on mount, then set flag so dependent memos recompute)
+  useEffect(() => {
+    AuditLogService.seed();
+    NotificationService.seed();
+    ErrorReportingService.seed();
+    setAdminSeeded(true);
+  }, []);
+  const sysMetrics    = useMemo(() => MonitoringService.getMetrics(),           [adminSeeded]);
+  const unreadNotifs  = useMemo(() => NotificationService.getUnreadCount(),     [adminSeeded]);
+  const recentAudits  = useMemo(() => AuditLogService.getAll().slice(0, 3),    [adminSeeded]);
 
   // V5.9 — Launch Preparation stats
-  const errStats = useMemo(() => ErrorReportingService.getStats(), []);
+  const errStats = useMemo(() => ErrorReportingService.getStats(), [adminSeeded]);
   const launchChecklistDone = useMemo(() => {
     try { return (JSON.parse(localStorage.getItem("voxora-launch-checklist-v59") || "[]") as string[]).length; }
     catch { return 0; }
