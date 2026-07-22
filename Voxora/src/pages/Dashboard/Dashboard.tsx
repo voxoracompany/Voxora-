@@ -219,14 +219,13 @@ const Dashboard = () => {
   const intStats  = useMemo(() => IntegrationService.getStats(), []);
   const autoStats = useMemo(() => AutomationEngine.getStats(), []);
 
-  // V5.8 — Admin & Monitoring stats
-  useMemo(() => { AuditLogService.seed(); NotificationService.seed(); }, []);
+  // V5.8 — Admin & Monitoring stats (seed once on mount)
+  useEffect(() => { AuditLogService.seed(); NotificationService.seed(); ErrorReportingService.seed(); }, []);
   const sysMetrics    = useMemo(() => MonitoringService.getMetrics(), []);
   const unreadNotifs  = useMemo(() => NotificationService.getUnreadCount(), []);
   const recentAudits  = useMemo(() => AuditLogService.getAll().slice(0, 3), []);
 
   // V5.9 — Launch Preparation stats
-  useMemo(() => { ErrorReportingService.seed(); }, []);
   const errStats = useMemo(() => ErrorReportingService.getStats(), []);
   const launchChecklistDone = useMemo(() => {
     try { return (JSON.parse(localStorage.getItem("voxora-launch-checklist-v59") || "[]") as string[]).length; }

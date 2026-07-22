@@ -1,0 +1,216 @@
+Continue Voxora from the latest GitHub commit.
+
+IMPORTANT
+
+- Analyze the entire codebase before making changes.
+- Verify V5.9 Launch Preparation & Production Readiness is present.
+- Continue from the latest GitHub commit only.
+- Do NOT rebuild V1–V5.9.
+- Preserve every existing feature.
+- Maintain the premium UI, responsive design, accessibility, and TypeScript quality.
+- This is V6.0 — Launch Candidate (RC). Focus on stability, polish, and production readiness rather than adding large new features.
+
+==================================================
+V6.0 — Launch Candidate (RC)
+==================================================
+
+Goal:
+
+Prepare Voxora for a real public beta launch.
+
+==================================================
+1. Full Application Audit
+==================================================
+
+Audit every module:
+
+- Dashboard
+- AI Engine
+- AI Assistant
+- Startup Studio
+- Marketing Studio
+- Financial Studio
+- Investor Studio
+- Growth Studio
+- Analytics Studio
+- Team Collaboration
+- Memory Engine
+- Integrations
+- Automation
+- Admin
+- Billing
+- Authentication
+- Settings
+- Onboarding
+
+Fix any inconsistencies found.
+
+==================================================
+2. Performance Optimization
+==================================================
+
+Optimize:
+
+- unnecessary re-renders
+- React memoization
+- lazy loading
+- bundle splitting
+- loading indicators
+- skeleton states
+- caching where appropriate
+
+Reduce bundle size where practical without removing features.
+
+==================================================
+3. UI / UX Polish
+==================================================
+
+Improve consistency across the application:
+
+- spacing
+- typography
+- icons
+- buttons
+- cards
+- empty states
+- loading screens
+- animations
+- mobile layouts
+- tablet layouts
+- desktop layouts
+
+Ensure a consistent premium design system.
+
+==================================================
+4. Production Security Review
+==================================================
+
+Review:
+
+- API key handling
+- Firebase configuration
+- Authentication flow
+- localStorage usage
+- Demo Mode fallback
+- Input validation
+- Error boundaries
+- Route protection
+
+Fix any issues discovered.
+
+==================================================
+5. Reliability Improvements
+==================================================
+
+Verify graceful handling of:
+
+- offline mode
+- API failures
+- Firebase failures
+- Gemini failures
+- payment provider failures
+- integration failures
+
+Ensure no feature crashes the application.
+
+==================================================
+6. Launch Readiness Verification
+==================================================
+
+Verify:
+
+- every workspace opens
+- every route works
+- every dashboard widget loads
+- settings save correctly
+- AI requests function
+- billing functions
+- memory functions
+- automation functions
+- admin tools function
+
+==================================================
+7. Final Documentation
+==================================================
+
+Update:
+
+README.md
+
+Include:
+
+- installation
+- deployment
+- environment variables
+- Firebase setup
+- Gemini setup
+- billing setup
+- troubleshooting
+- architecture overview
+- release notes
+
+==================================================
+8. Beta Release Summary
+==================================================
+
+Generate a Beta Readiness report including:
+
+- Total workspaces
+- Total services
+- Total providers
+- Total routes
+- Total dashboard widgets
+- Build statistics
+- Launch readiness percentage
+- Known limitations
+- Future roadmap (V6.1+)
+
+==================================================
+Validation
+==================================================
+
+Run:
+
+- TypeScript
+- Production build
+- Route verification
+- Runtime verification
+
+Confirm:
+
+- Zero TypeScript errors
+- Zero runtime errors
+- No broken routes
+- No blank pages
+- No regressions
+
+==================================================
+Git
+==================================================
+
+Commit:
+
+V6.0 Launch Candidate
+
+Push to GitHub.
+
+Verify push succeeded.
+
+Report:
+
+- Build status
+- TypeScript status
+- Commit hash
+- Push status
+- Launch readiness score
+- Beta readiness report
+
+IMPORTANT
+
+When V6.0 is complete:
+
+STOP.
+
+Do NOT begin V6.1 automatically.
+
+Wait for my instruction.

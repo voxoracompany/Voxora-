@@ -133,7 +133,7 @@ export default function BetaReadinessReport({ setWorkspace }: Props) {
   const scoreColor = launchScore >= 80 ? "#10b981" : launchScore >= 60 ? "#f59e0b" : "#ef4444";
   const scoreLabel = launchScore >= 80 ? "Launch Ready ✅" : launchScore >= 60 ? "Nearly Ready ⚠️" : "Needs Work 🔴";
 
-  const buildDate = "2025-07-21";
+  const buildDate = "2026-07-22";
   const version = "V6.0 Launch Candidate (RC)";
 
   return (

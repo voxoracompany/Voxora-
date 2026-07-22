@@ -219,7 +219,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider value={{
       user, isAuthenticated: !!user, isLoading, loginHistory,
       login, signUp, logout, updateProfile,
-      changePassword, deleteAccount: () => { deleteAccount(); },
+      changePassword, deleteAccount,
       getProfileCompletion,
     }}>
       {children}
