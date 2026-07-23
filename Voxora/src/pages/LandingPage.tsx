@@ -12,17 +12,37 @@ export default function LandingPage() {
 
   const handleContact = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!contact.name.trim() || !contact.email.trim() || !contact.message.trim()) return;
+    if (
+      !contact.name.trim() ||
+      !contact.email.trim() ||
+      !contact.message.trim()
+    )
+      return;
     setContactSent(true);
     setContact({ name: "", email: "", message: "" });
   };
 
   const FAQS = [
-    { q: "Is Voxora free to use?", a: "Yes — the core Voxora platform is free. Pro and Enterprise plans unlock advanced features, priority support, and team collaboration." },
-    { q: "Where is my data stored?", a: "Your data is stored locally in your browser. Nothing is sent to external servers in the current version. A cloud sync option is coming with V2.2." },
-    { q: "Do I need to create an account?", a: "No account is required to use Voxora today. Authentication and cloud backup will be optional features in a future update." },
-    { q: "Can I export my projects?", a: "Yes! Export any project as PDF, Markdown, or plain text via the Export Center. You can also backup all your data as a JSON file from Settings." },
-    { q: "What AI models does Voxora use?", a: "Voxora currently uses a built-in intelligent response system. Full AI model integration (GPT-4, Claude, etc.) is on the roadmap for V3.0." },
+    {
+      q: "Is Voxora free to use?",
+      a: "Yes — the core Voxora platform is free. Pro and Enterprise plans unlock advanced features, priority support, and team collaboration.",
+    },
+    {
+      q: "Where is my data stored?",
+      a: "Your data is stored locally in your browser. Nothing is sent to external servers in the current version. A cloud sync option is coming with V2.2.",
+    },
+    {
+      q: "Do I need to create an account?",
+      a: "No account is required to use Voxora today. Authentication and cloud backup will be optional features in a future update.",
+    },
+    {
+      q: "Can I export my projects?",
+      a: "Yes! Export any project as PDF, Markdown, or plain text via the Export Center. You can also backup all your data as a JSON file from Settings.",
+    },
+    {
+      q: "What AI models does Voxora use?",
+      a: "Voxora currently uses a built-in intelligent response system. Full AI model integration (GPT-4, Claude, etc.) is on the roadmap for V3.0.",
+    },
   ];
 
   return (
@@ -30,19 +50,31 @@ export default function LandingPage() {
       <PublicNav />
 
       {/* ─── Beta Banner ─── */}
-      <div style={{
-        background: "linear-gradient(135deg, #4c1d95, #1e40af)",
-        color: "#fff",
-        textAlign: "center",
-        padding: "10px 20px",
-        fontSize: 13,
-        fontWeight: 600,
-        letterSpacing: 0.3,
-      }}>
-        🧪 Voxora is now in <strong>Public Beta</strong> — all features are live and free to try.&nbsp;
+      <div
+        style={{
+          background: "linear-gradient(135deg, #4c1d95, #1e40af)",
+          color: "#fff",
+          textAlign: "center",
+          padding: "10px 20px",
+          fontSize: 13,
+          fontWeight: 600,
+          letterSpacing: 0.3,
+        }}
+      >
+        🧪 Voxora is now in <strong>Public Beta</strong> — all features are live
+        and free to try.&nbsp;
         <button
           onClick={() => navigate("/signup")}
-          style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.4)", color: "#fff", borderRadius: 6, padding: "3px 12px", cursor: "pointer", fontSize: 12, fontWeight: 700 }}
+          style={{
+            background: "rgba(255,255,255,0.2)",
+            border: "1px solid rgba(255,255,255,0.4)",
+            color: "#fff",
+            borderRadius: 6,
+            padding: "3px 12px",
+            cursor: "pointer",
+            fontSize: 12,
+            fontWeight: 700,
+          }}
         >
           Join Beta →
         </button>
@@ -51,9 +83,30 @@ export default function LandingPage() {
       {/* ─── Hero ─── */}
       <main className="hero">
         <div className="hero-content">
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
-            <p className="tagline section-label" style={{ margin: 0 }}>✦ THE INTELLIGENCE LAYER FOR THE AI AGE</p>
-            <span style={{ background: "#ede9fe", color: "#4c1d95", borderRadius: 20, padding: "3px 12px", fontSize: 11, fontWeight: 700 }}>🧪 Public Beta</span>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              marginBottom: 12,
+              flexWrap: "wrap",
+            }}
+          >
+            <p className="tagline section-label" style={{ margin: 0 }}>
+              ✦ THE INTELLIGENCE LAYER FOR THE AI AGE
+            </p>
+            <span
+              style={{
+                background: "#ede9fe",
+                color: "#4c1d95",
+                borderRadius: 20,
+                padding: "3px 12px",
+                fontSize: 11,
+                fontWeight: 700,
+              }}
+            >
+              🧪 Public Beta
+            </span>
           </div>
           <h1>
             Build, Create &amp; Think
@@ -68,16 +121,28 @@ export default function LandingPage() {
             <button className="primary" onClick={() => navigate("/signup")}>
               Start Building Free →
             </button>
-            <button className="secondary" onClick={() => navigate("/dashboard")}>
+            <button
+              className="secondary"
+              onClick={() => navigate("/dashboard")}
+            >
               Explore the Platform
             </button>
           </div>
           <div className="hero-stats">
-            <div className="hero-stat"><strong>50+</strong><span>AI Tools</span></div>
+            <div className="hero-stat">
+              <strong>50+</strong>
+              <span>AI Tools</span>
+            </div>
             <div className="hero-stat-divider" />
-            <div className="hero-stat"><strong>10+</strong><span>Studio Modules</span></div>
+            <div className="hero-stat">
+              <strong>10+</strong>
+              <span>Studio Modules</span>
+            </div>
             <div className="hero-stat-divider" />
-            <div className="hero-stat"><strong>Free</strong><span>To Start</span></div>
+            <div className="hero-stat">
+              <strong>Free</strong>
+              <span>To Start</span>
+            </div>
           </div>
         </div>
 
@@ -85,10 +150,21 @@ export default function LandingPage() {
           <div className="ai-card-glow" />
           <div className="circle">AI</div>
           <h2>Voxora Intelligence Engine</h2>
-          <p>Your AI command center for ideas, content, products and innovation.</p>
+          <p>
+            Your AI command center for ideas, content, products and innovation.
+          </p>
           <div className="ai-card-features">
-            {["🧠 Idea Generation", "📊 Market Research", "🚀 Startup Strategy", "⚙️ Automation", "🤝 Team Collab", "📈 Growth Studio"].map(f => (
-              <span key={f} className="ai-feature-chip">{f}</span>
+            {[
+              "🧠 Idea Generation",
+              "📊 Market Research",
+              "🚀 Startup Strategy",
+              "⚙️ Automation",
+              "🤝 Team Collab",
+              "📈 Growth Studio",
+            ].map((f) => (
+              <span key={f} className="ai-feature-chip">
+                {f}
+              </span>
             ))}
           </div>
         </div>
@@ -97,19 +173,55 @@ export default function LandingPage() {
       {/* ─── Features ─── */}
       <section className="ecosystem" id="features">
         <p className="section-label">✦ PLATFORM FEATURES</p>
-        <h2>One Intelligence Layer.<br />Infinite AI Possibilities.</h2>
-        <p className="section-sub">Voxora connects intelligent AI agents into one powerful ecosystem designed for creators, founders, businesses and innovators.</p>
+        <h2>
+          One Intelligence Layer.
+          <br />
+          Infinite AI Possibilities.
+        </h2>
+        <p className="section-sub">
+          Voxora connects intelligent AI agents into one powerful ecosystem
+          designed for creators, founders, businesses and innovators.
+        </p>
 
         <div className="agent-grid">
           {[
-            { icon: "🧠", title: "Idea Agent", desc: "Transform thoughts into strategies, plans and new possibilities with AI-powered brainstorming." },
-            { icon: "✍️", title: "Creator Agent", desc: "Create content, concepts and digital experiences with intelligent AI generation." },
-            { icon: "🚀", title: "Startup Agent", desc: "Turn ideas into products, businesses and growth strategies with market-ready analysis." },
-            { icon: "⚙️", title: "Automation Agent", desc: "Build intelligent workflows that save time and increase output dramatically." },
-            { icon: "📊", title: "Analytics Agent", desc: "Track your productivity and gain real insights from your actual project data." },
-            { icon: "🔍", title: "Search Agent", desc: "Instantly find anything across all your projects, notes, and AI conversations." },
+            {
+              icon: "🧠",
+              title: "Idea Agent",
+              desc: "Transform thoughts into strategies, plans and new possibilities with AI-powered brainstorming.",
+            },
+            {
+              icon: "✍️",
+              title: "Creator Agent",
+              desc: "Create content, concepts and digital experiences with intelligent AI generation.",
+            },
+            {
+              icon: "🚀",
+              title: "Startup Agent",
+              desc: "Turn ideas into products, businesses and growth strategies with market-ready analysis.",
+            },
+            {
+              icon: "⚙️",
+              title: "Automation Agent",
+              desc: "Build intelligent workflows that save time and increase output dramatically.",
+            },
+            {
+              icon: "📊",
+              title: "Analytics Agent",
+              desc: "Track your productivity and gain real insights from your actual project data.",
+            },
+            {
+              icon: "🔍",
+              title: "Search Agent",
+              desc: "Instantly find anything across all your projects, notes, and AI conversations.",
+            },
           ].map((a) => (
-            <div key={a.title} className="agent-card" onClick={() => navigate("/dashboard")} style={{ cursor: "pointer" }}>
+            <div
+              key={a.title}
+              className="agent-card"
+              onClick={() => navigate("/dashboard")}
+              style={{ cursor: "pointer" }}
+            >
               <div className="agent-card-icon">{a.icon}</div>
               <h3>{a.title}</h3>
               <p>{a.desc}</p>
@@ -119,11 +231,45 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Customer Logos ─── */}
-      <section style={{ padding: "40px 5%", textAlign: "center", background: "#f8fafc", borderTop: "1px solid #e2e8f0" }}>
+      <section
+        style={{
+          padding: "40px 5%",
+          textAlign: "center",
+          background: "#f8fafc",
+          borderTop: "1px solid #e2e8f0",
+        }}
+      >
         <p className="section-label">✦ TRUSTED BY BUILDERS WORLDWIDE</p>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "40px", flexWrap: "wrap", marginTop: 20, opacity: 0.6 }}>
-          {["🚀 StartupCo", "💡 InnovateLab", "📊 DataBridge", "🤖 AIFirst", "🌍 GlobalBuilds", "⚡ VelocityHQ"].map(logo => (
-            <div key={logo} style={{ fontWeight: 700, fontSize: 14, color: "#64748b", letterSpacing: 0.5 }}>{logo}</div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "40px",
+            flexWrap: "wrap",
+            marginTop: 20,
+            opacity: 0.6,
+          }}
+        >
+          {[
+            "🚀 StartupCo",
+            "💡 InnovateLab",
+            "📊 DataBridge",
+            "🤖 AIFirst",
+            "🌍 GlobalBuilds",
+            "⚡ VelocityHQ",
+          ].map((logo) => (
+            <div
+              key={logo}
+              style={{
+                fontWeight: 700,
+                fontSize: 14,
+                color: "#64748b",
+                letterSpacing: 0.5,
+              }}
+            >
+              {logo}
+            </div>
           ))}
         </div>
       </section>
@@ -131,37 +277,157 @@ export default function LandingPage() {
       {/* ─── Product Showcase ─── */}
       <section style={{ padding: "80px 5%", background: "#fff" }}>
         <p className="section-label">✦ PRODUCT SHOWCASE</p>
-        <h2 style={{ textAlign: "center", fontSize: 36, fontWeight: 800, marginBottom: 12 }}>Everything in One Workspace</h2>
-        <p className="section-sub">From idea to execution — Voxora covers every stage of building a business.</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16, marginTop: 40 }}>
+        <h2
+          style={{
+            textAlign: "center",
+            fontSize: 36,
+            fontWeight: 800,
+            marginBottom: 12,
+          }}
+        >
+          Everything in One Workspace
+        </h2>
+        <p className="section-sub">
+          From idea to execution — Voxora covers every stage of building a
+          business.
+        </p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+            gap: 16,
+            marginTop: 40,
+          }}
+        >
           {[
-            { icon: "🤖", title: "AI Assistant", desc: "Conversational AI for business strategy, brainstorming, and research.", badge: "Core" },
-            { icon: "📊", title: "Analytics Studio", desc: "10 analytics modules — revenue, customer, marketing, AI, and more.", badge: "Studio" },
-            { icon: "🤝", title: "Team Collaboration", desc: "Task boards, meeting notes, goals, OKRs — everything your team needs.", badge: "Team" },
-            { icon: "💰", title: "Financial Studio", desc: "Revenue models, unit economics, forecasts, and break-even analysis.", badge: "Finance" },
-            { icon: "📣", title: "Marketing Studio", desc: "Strategy, email campaigns, social media, SEO planning, and ad copy.", badge: "Marketing" },
-            { icon: "💼", title: "Investor Studio", desc: "Pitch decks, fundraising strategy, cap tables, and due diligence.", badge: "Investor" },
-            { icon: "📈", title: "Growth Studio", desc: "KPI tracking, OKR management, A/B tests, and growth experiments.", badge: "Growth" },
-            { icon: "🔌", title: "Integrations", desc: "Connect OpenAI, Gemini, Anthropic, Notion, Slack, Zapier, and more.", badge: "Connect" },
-          ].map(item => (
+            {
+              icon: "🤖",
+              title: "AI Assistant",
+              desc: "Conversational AI for business strategy, brainstorming, and research.",
+              badge: "Core",
+            },
+            {
+              icon: "📊",
+              title: "Analytics Studio",
+              desc: "10 analytics modules — revenue, customer, marketing, AI, and more.",
+              badge: "Studio",
+            },
+            {
+              icon: "🤝",
+              title: "Team Collaboration",
+              desc: "Task boards, meeting notes, goals, OKRs — everything your team needs.",
+              badge: "Team",
+            },
+            {
+              icon: "💰",
+              title: "Financial Studio",
+              desc: "Revenue models, unit economics, forecasts, and break-even analysis.",
+              badge: "Finance",
+            },
+            {
+              icon: "📣",
+              title: "Marketing Studio",
+              desc: "Strategy, email campaigns, social media, SEO planning, and ad copy.",
+              badge: "Marketing",
+            },
+            {
+              icon: "💼",
+              title: "Investor Studio",
+              desc: "Pitch decks, fundraising strategy, cap tables, and due diligence.",
+              badge: "Investor",
+            },
+            {
+              icon: "📈",
+              title: "Growth Studio",
+              desc: "KPI tracking, OKR management, A/B tests, and growth experiments.",
+              badge: "Growth",
+            },
+            {
+              icon: "🔌",
+              title: "Integrations",
+              desc: "Connect OpenAI, Gemini, Anthropic, Notion, Slack, Zapier, and more.",
+              badge: "Connect",
+            },
+          ].map((item) => (
             <div
               key={item.title}
-              style={{ background: "#fff", border: "1.5px solid #e2e8f0", borderRadius: 16, padding: "24px 20px", cursor: "pointer", transition: "all 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}
+              style={{
+                background: "#fff",
+                border: "1.5px solid #e2e8f0",
+                borderRadius: 16,
+                padding: "24px 20px",
+                cursor: "pointer",
+                transition: "all 0.2s",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+              }}
               onClick={() => navigate("/dashboard")}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#6C63FF"; (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(108,99,255,0.12)"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "#e2e8f0"; (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 8px rgba(0,0,0,0.04)"; (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = "#6C63FF";
+                (e.currentTarget as HTMLElement).style.boxShadow =
+                  "0 8px 24px rgba(108,99,255,0.12)";
+                (e.currentTarget as HTMLElement).style.transform =
+                  "translateY(-2px)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = "#e2e8f0";
+                (e.currentTarget as HTMLElement).style.boxShadow =
+                  "0 2px 8px rgba(0,0,0,0.04)";
+                (e.currentTarget as HTMLElement).style.transform =
+                  "translateY(0)";
+              }}
             >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 10,
+                }}
+              >
                 <span style={{ fontSize: 28 }}>{item.icon}</span>
-                <span style={{ fontSize: 10, fontWeight: 700, background: "#ede9fe", color: "#4c1d95", borderRadius: 20, padding: "2px 10px" }}>{item.badge}</span>
+                <span
+                  style={{
+                    fontSize: 10,
+                    fontWeight: 700,
+                    background: "#ede9fe",
+                    color: "#4c1d95",
+                    borderRadius: 20,
+                    padding: "2px 10px",
+                  }}
+                >
+                  {item.badge}
+                </span>
               </div>
-              <strong style={{ display: "block", fontSize: 14.5, fontWeight: 700, color: "#0f172a", marginBottom: 6 }}>{item.title}</strong>
-              <p style={{ fontSize: 13, color: "#64748b", margin: 0, lineHeight: 1.5 }}>{item.desc}</p>
+              <strong
+                style={{
+                  display: "block",
+                  fontSize: 14.5,
+                  fontWeight: 700,
+                  color: "#0f172a",
+                  marginBottom: 6,
+                }}
+              >
+                {item.title}
+              </strong>
+              <p
+                style={{
+                  fontSize: 13,
+                  color: "#64748b",
+                  margin: 0,
+                  lineHeight: 1.5,
+                }}
+              >
+                {item.desc}
+              </p>
             </div>
           ))}
         </div>
         <div style={{ textAlign: "center", marginTop: 36 }}>
-          <button className="primary" onClick={() => navigate("/dashboard")} style={{ fontSize: 15, padding: "14px 36px" }}>
+          <button
+            className="primary"
+            onClick={() => navigate("/dashboard")}
+            style={{ fontSize: 15, padding: "14px 36px" }}
+          >
             Explore All Features →
           </button>
         </div>
@@ -171,14 +437,33 @@ export default function LandingPage() {
       <section className="why-voxora">
         <p className="section-label">✦ WHY VOXORA</p>
         <h2>Why Voxora?</h2>
-        <p className="section-sub">The future will not be powered by one AI. It will be powered by intelligent systems working together.</p>
+        <p className="section-sub">
+          The future will not be powered by one AI. It will be powered by
+          intelligent systems working together.
+        </p>
 
         <div className="why-grid">
           {[
-            { icon: "🌐", title: "Connected Intelligence", desc: "Voxora brings multiple AI agents together into one unified intelligence layer, eliminating context switching." },
-            { icon: "⚡", title: "Faster Creation", desc: "Move from ideas to execution 10x faster with AI-powered tools that do the heavy lifting for you." },
-            { icon: "🧩", title: "Endless Possibilities", desc: "Build, automate and innovate across different areas using intelligent AI systems built for scale." },
-            { icon: "🔒", title: "Your Data, Your Control", desc: "Everything stays on your device. No accounts needed, no data harvesting, no surveillance." },
+            {
+              icon: "🌐",
+              title: "Connected Intelligence",
+              desc: "Voxora brings multiple AI agents together into one unified intelligence layer, eliminating context switching.",
+            },
+            {
+              icon: "⚡",
+              title: "Faster Creation",
+              desc: "Move from ideas to execution 10x faster with AI-powered tools that do the heavy lifting for you.",
+            },
+            {
+              icon: "🧩",
+              title: "Endless Possibilities",
+              desc: "Build, automate and innovate across different areas using intelligent AI systems built for scale.",
+            },
+            {
+              icon: "🔒",
+              title: "Your Data, Your Control",
+              desc: "Everything stays on your device. No accounts needed, no data harvesting, no surveillance.",
+            },
           ].map((w) => (
             <div key={w.title} className="why-card">
               <div className="why-card-icon">{w.icon}</div>
@@ -193,13 +478,27 @@ export default function LandingPage() {
       <section className="how-it-works">
         <p className="section-label">✦ HOW IT WORKS</p>
         <h2>How Voxora Works</h2>
-        <p className="section-sub">From a simple idea to intelligent execution in three steps.</p>
+        <p className="section-sub">
+          From a simple idea to intelligent execution in three steps.
+        </p>
 
         <div className="steps">
           {[
-            { num: "01", title: "Share Your Idea", desc: "Start with a thought, challenge, or goal. Voxora adapts to you." },
-            { num: "02", title: "Activate AI Tools", desc: "Choose from 10+ AI-powered tools designed for your objective." },
-            { num: "03", title: "Create & Execute", desc: "Turn AI-powered insights into real products, content and solutions." },
+            {
+              num: "01",
+              title: "Share Your Idea",
+              desc: "Start with a thought, challenge, or goal. Voxora adapts to you.",
+            },
+            {
+              num: "02",
+              title: "Activate AI Tools",
+              desc: "Choose from 10+ AI-powered tools designed for your objective.",
+            },
+            {
+              num: "03",
+              title: "Create & Execute",
+              desc: "Turn AI-powered insights into real products, content and solutions.",
+            },
           ].map((s) => (
             <div key={s.num} className="step-card">
               <span className="step-num">{s.num}</span>
@@ -214,14 +513,36 @@ export default function LandingPage() {
       <section className="testimonials-section">
         <p className="section-label">✦ TESTIMONIALS</p>
         <h2>Built for Builders</h2>
-        <p className="section-sub">Join innovators using Voxora to build smarter and faster.</p>
+        <p className="section-sub">
+          Join innovators using Voxora to build smarter and faster.
+        </p>
 
         <div className="testimonials-grid">
           {[
-            { name: "Sarah K.", role: "Startup Founder", text: "Voxora completely changed how I validate ideas. What used to take weeks of research now takes minutes.", avatar: "SK" },
-            { name: "Marcus T.", role: "Product Manager", text: "The analytics dashboard gives me real insight into my team's productivity. It's exactly what I needed.", avatar: "MT" },
-            { name: "Priya R.", role: "Content Creator", text: "I use the AI Assistant every day for brainstorming. The suggestions are surprisingly on point.", avatar: "PR" },
-            { name: "James L.", role: "Entrepreneur", text: "The SWOT Analysis and Business Model Canvas tools saved me countless hours of strategic planning.", avatar: "JL" },
+            {
+              name: "Sarah K.",
+              role: "Startup Founder",
+              text: "Voxora completely changed how I validate ideas. What used to take weeks of research now takes minutes.",
+              avatar: "SK",
+            },
+            {
+              name: "Marcus T.",
+              role: "Product Manager",
+              text: "The analytics dashboard gives me real insight into my team's productivity. It's exactly what I needed.",
+              avatar: "MT",
+            },
+            {
+              name: "Priya R.",
+              role: "Content Creator",
+              text: "I use the AI Assistant every day for brainstorming. The suggestions are surprisingly on point.",
+              avatar: "PR",
+            },
+            {
+              name: "James L.",
+              role: "Entrepreneur",
+              text: "The SWOT Analysis and Business Model Canvas tools saved me countless hours of strategic planning.",
+              avatar: "JL",
+            },
           ].map((t) => (
             <div key={t.name} className="testimonial-card">
               <p className="testimonial-text">"{t.text}"</p>
@@ -250,7 +571,14 @@ export default function LandingPage() {
               price: "$0",
               period: "forever",
               desc: "Everything you need to get started.",
-              features: ["All AI Tools", "Unlimited Projects", "Smart Search", "Export (MD, TXT)", "Activity Center", "Local Storage"],
+              features: [
+                "All AI Tools",
+                "Unlimited Projects",
+                "Smart Search",
+                "Export (MD, TXT)",
+                "Activity Center",
+                "Local Storage",
+              ],
               cta: "Get Started Free",
               featured: false,
             },
@@ -259,7 +587,14 @@ export default function LandingPage() {
               price: "$12",
               period: "/month",
               desc: "For power users and serious builders.",
-              features: ["Everything in Free", "Cloud Sync (coming soon)", "PDF Export", "Priority Support", "Advanced Analytics", "Team Sharing (coming soon)"],
+              features: [
+                "Everything in Free",
+                "Cloud Sync (coming soon)",
+                "PDF Export",
+                "Priority Support",
+                "Advanced Analytics",
+                "Team Sharing (coming soon)",
+              ],
               cta: "Start Pro Trial",
               featured: true,
             },
@@ -268,12 +603,22 @@ export default function LandingPage() {
               price: "Custom",
               period: "",
               desc: "For teams and organizations.",
-              features: ["Everything in Pro", "Custom AI Models", "SSO / SAML", "Dedicated Support", "SLA Guarantee", "Custom Integrations"],
+              features: [
+                "Everything in Pro",
+                "Custom AI Models",
+                "SSO / SAML",
+                "Dedicated Support",
+                "SLA Guarantee",
+                "Custom Integrations",
+              ],
               cta: "Contact Sales",
               featured: false,
             },
           ].map((p) => (
-            <div key={p.plan} className={`pricing-card ${p.featured ? "featured" : ""}`}>
+            <div
+              key={p.plan}
+              className={`pricing-card ${p.featured ? "featured" : ""}`}
+            >
               {p.featured && <div className="pricing-badge">Most Popular</div>}
               <h3>{p.plan}</h3>
               <div className="pricing-price">
@@ -289,8 +634,12 @@ export default function LandingPage() {
                 ))}
               </ul>
               <button
-                className={p.featured ? "primary pricing-cta" : "secondary pricing-cta"}
-                onClick={() => navigate(p.plan === "Enterprise" ? "/contact" : "/signup")}
+                className={
+                  p.featured ? "primary pricing-cta" : "secondary pricing-cta"
+                }
+                onClick={() =>
+                  navigate(p.plan === "Enterprise" ? "/contact" : "/signup")
+                }
               >
                 {p.cta}
               </button>
@@ -325,15 +674,21 @@ export default function LandingPage() {
       <section className="contact-section" id="contact">
         <p className="section-label">✦ CONTACT</p>
         <h2>Get In Touch</h2>
-        <p className="section-sub">Have a question or want to learn more? We'd love to hear from you.</p>
+        <p className="section-sub">
+          Have a question or want to learn more? We'd love to hear from you.
+        </p>
 
         <div className="contact-form-wrap">
           {contactSent ? (
             <div className="contact-success">
               <div style={{ fontSize: 48 }}>✅</div>
               <h3>Message Sent!</h3>
-              <p>Thanks for reaching out. We'll get back to you within 24 hours.</p>
-              <button className="primary" onClick={() => setContactSent(false)}>Send Another</button>
+              <p>
+                Thanks for reaching out. We'll get back to you within 24 hours.
+              </p>
+              <button className="primary" onClick={() => setContactSent(false)}>
+                Send Another
+              </button>
             </div>
           ) : (
             <form className="contact-form" onSubmit={handleContact}>
@@ -343,7 +698,9 @@ export default function LandingPage() {
                   placeholder="Your name"
                   value={contact.name}
                   maxLength={80}
-                  onChange={(e) => setContact((c) => ({ ...c, name: e.target.value }))}
+                  onChange={(e) =>
+                    setContact((c) => ({ ...c, name: e.target.value }))
+                  }
                   required
                 />
                 <input
@@ -352,7 +709,9 @@ export default function LandingPage() {
                   placeholder="Your email"
                   value={contact.email}
                   maxLength={100}
-                  onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))}
+                  onChange={(e) =>
+                    setContact((c) => ({ ...c, email: e.target.value }))
+                  }
                   required
                 />
               </div>
@@ -362,10 +721,14 @@ export default function LandingPage() {
                 value={contact.message}
                 maxLength={2000}
                 rows={5}
-                onChange={(e) => setContact((c) => ({ ...c, message: e.target.value }))}
+                onChange={(e) =>
+                  setContact((c) => ({ ...c, message: e.target.value }))
+                }
                 required
               />
-              <button className="primary" type="submit">Send Message →</button>
+              <button className="primary" type="submit">
+                Send Message →
+              </button>
             </form>
           )}
         </div>
