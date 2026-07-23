@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import voxoraLogo from "../assets/logo/voxora-logo.png";
 import "./PublicNav.css";
 
 interface NavItem {
@@ -120,7 +121,14 @@ export default function PublicNav() {
       <nav className="pub-nav">
         <div className="pub-nav-inner-row">
           <Link to="/" className="pub-nav-logo">
-            🚀 VOXORA
+            <img
+              src={voxoraLogo}
+              alt="Voxora"
+              width={40}
+              height={40}
+              style={{ display: "block", objectFit: "contain", borderRadius: 8 }}
+            />
+            VOXORA
           </Link>
 
           {/* Desktop links */}
