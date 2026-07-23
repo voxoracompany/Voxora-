@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import voxoraLogo from "../assets/logo/voxora-logo.png";
 import "./PublicFooter.css";
 
 export default function PublicFooter() {
@@ -8,7 +9,10 @@ export default function PublicFooter() {
     <footer className="pub-footer">
       <div className="pub-footer-inner">
         <div className="pub-footer-brand">
-          <h2>🚀 VOXORA</h2>
+          <h2 style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <img src={voxoraLogo} alt="Voxora" width={40} height={40} style={{ display: "block", objectFit: "contain", borderRadius: 8 }} />
+            VOXORA
+          </h2>
           <p>The intelligence layer for the future of the AI age.</p>
           <button className="pub-footer-launch" onClick={() => navigate("/dashboard")}>
             Launch App →

@@ -10,7 +10,8 @@ import {
 } from "react";
 import { getBackendProvider, isCloudConfigured } from "../services/backend/BackendService";
 import { isFirebaseConfigured } from "../services/firebase/firebase";
-import { subscribeAuthState, mapFirebaseUser } from "../services/firebase/auth";
+import { subscribeAuthState, mapFirebaseUser, firebaseGoogleSignIn } from "../services/firebase/auth";
+import { saveUserProfile } from "../services/firebase/firestore";
 import type { BackendProvider } from "../services/backend/BackendProvider";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -48,6 +49,7 @@ interface AuthContextValue {
   loginHistory: LoginHistoryEntry[];
   login: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>;
   signUp: (name: string, email: string, password: string, username?: string) => Promise<{ ok: boolean; error?: string }>;
+  loginWithGoogle: () => Promise<{ ok: boolean; error?: string }>;
   logout: () => void;
   updateProfile: (data: Partial<VoxoraUser>) => Promise<void>;
   changePassword: (current: string, next: string) => Promise<{ ok: boolean; error?: string }>;
@@ -173,6 +175,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { ok: result.ok, error: result.error };
   }, [bp]);
 
+  // ── Google Sign-In ────────────────────────────────────────────────────────
+  const loginWithGoogle = useCallback(async (): Promise<{ ok: boolean; error?: string }> => {
+    if (!isFirebaseConfigured()) {
+      return { ok: false, error: "Google sign-in requires Firebase. Add VITE_FIREBASE_* keys to enable it." };
+    }
+    const result = await firebaseGoogleSignIn();
+    if (!result.ok) return { ok: false, error: result.error };
+    const voxoraUser = result.user as VoxoraUser;
+
+    // Persist profile to Firestore (create on first sign-in, update on return)
+    if (result.isNewUser) {
+      await saveUserProfile(voxoraUser.id, voxoraUser);
+    }
+
+    pushHistory({
+      id: makeId(), timestamp: new Date().toISOString(),
+      device: deviceLabel(), location: "Google Sign-In",
+      status: "success",
+    });
+    setUser(voxoraUser);
+    setLoginHistory(loadHistory());
+    return { ok: true };
+  }, []);
+
   // ── Logout ─────────────────────────────────────────────────────────────────
   const logout = useCallback(() => {
     const provider = bp;
@@ -218,7 +244,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider value={{
       user, isAuthenticated: !!user, isLoading, loginHistory,
-      login, signUp, logout, updateProfile,
+      login, signUp, loginWithGoogle, logout, updateProfile,
       changePassword, deleteAccount,
       getProfileCompletion,
     }}>

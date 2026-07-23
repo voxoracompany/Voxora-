@@ -6,6 +6,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
   signOut,
   sendPasswordResetEmail,
   sendEmailVerification,
@@ -96,6 +98,29 @@ export async function firebaseLogin(
     const user = mapFirebaseUser(cred.user);
     return { ok: true, user };
   } catch (e: unknown) {
+    return { ok: false, error: friendlyError(e) };
+  }
+}
+
+export async function firebaseGoogleSignIn(): Promise<{ ok: boolean; user?: BackendUser; isNewUser?: boolean; error?: string }> {
+  try {
+    const auth = getFirebaseAuth();
+    await setPersistence(auth, browserLocalPersistence);
+    const provider = new GoogleAuthProvider();
+    provider.addScope("email");
+    provider.addScope("profile");
+    const cred = await signInWithPopup(auth, provider);
+    const isNewUser = cred.user.metadata.creationTime === cred.user.metadata.lastSignInTime;
+    const user = mapFirebaseUser(cred.user, {
+      name: cred.user.displayName ?? "",
+      username: cred.user.email?.split("@")[0] ?? "",
+    });
+    return { ok: true, user, isNewUser };
+  } catch (e: unknown) {
+    const code = (e as { code?: string }).code ?? "";
+    if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") {
+      return { ok: false, error: "" }; // user dismissed — no error message needed
+    }
     return { ok: false, error: friendlyError(e) };
   }
 }
