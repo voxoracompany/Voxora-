@@ -23,6 +23,7 @@ import {
 import {
   getUserProfile,
   saveUserProfile,
+  deleteUserData,
   getCollection as fsGetCollection,
   upsertRecord as fsUpsert,
   deleteRecord as fsDelete,
@@ -47,18 +48,17 @@ export class FirebaseBackendProvider implements BackendProvider {
   async signUp(name: string, email: string, password: string, username = ""): Promise<AuthResult> {
     const result = await firebaseSignUp(name, email, password, username);
     if (!result.ok || !result.user) return { ok: false, error: result.error };
-    // Persist extra profile fields to Firestore
-    await saveUserProfile(result.user.id, result.user);
+    // Persist extra profile fields without blocking the redirect.
+    void saveUserProfile(result.user.id, result.user);
     return { ok: true, user: result.user };
   }
 
   async login(email: string, password: string): Promise<AuthResult> {
     const result = await firebaseLogin(email, password);
     if (!result.ok || !result.user) return { ok: false, error: result.error };
-    // Merge Firestore profile fields (username, bio, etc.) over the Firebase Auth fields
-    const profile = await getUserProfile(result.user.id);
-    const user: BackendUser = { ...result.user, ...(profile ?? {}) };
-    return { ok: true, user };
+    // Return Firebase Auth data immediately; profile hydration happens in the
+    // background through AuthContext after navigation.
+    return { ok: true, user: result.user };
   }
 
   async logout(): Promise<void> {
@@ -70,8 +70,13 @@ export class FirebaseBackendProvider implements BackendProvider {
     // This handles page-refresh correctly — auth.currentUser is null until then.
     const fbUser = await waitForAuthReady();
     if (!fbUser) return null;
-    const profile = await getUserProfile(fbUser.uid);
-    return { ...mapFirebaseUser(fbUser), ...(profile ?? {}) };
+    // Return Firebase Auth data immediately. Firestore profile data is
+    // hydrated by AuthContext after the session is available.
+    return mapFirebaseUser(fbUser);
+  }
+
+  async hydrateUserProfile(userId: string): Promise<Partial<BackendUser> | null> {
+    return getUserProfile(userId);
   }
 
   async updateUser(userId: string, data: Partial<BackendUser>): Promise<{ ok: boolean; error?: string }> {
@@ -95,20 +100,13 @@ export class FirebaseBackendProvider implements BackendProvider {
   }
 
   async deleteAccount(userId: string): Promise<{ ok: boolean; error?: string }> {
-    // Delete Firestore data first, then delete the Firebase Auth account
-    const collections: CloudCollection[] = [
-      "projects", "conversations", "favorites", "pins",
-      "dashboardPreferences", "settings", "activityHistory",
-    ];
-    await Promise.allSettled(
-      collections.map(col =>
-        fsGetCollection(userId, col).then(recs =>
-          Promise.allSettled(recs.map(r => fsDelete(userId, col, r.id)))
-        )
-      )
-    );
-    await saveUserProfile(userId, { id: userId } as BackendUser).catch(() => {});
-    return firebaseDeleteAccount();
+    // Delete Firestore data first, then delete the Firebase Auth account.
+    const dataResult = await deleteUserData(userId);
+    if (!dataResult.ok) return dataResult;
+    const authResult = await firebaseDeleteAccount();
+    if (!authResult.ok) return authResult;
+    await firebaseLogout();
+    return { ok: true };
   }
 
   async sendPasswordReset(email: string): Promise<{ ok: boolean; error?: string }> {

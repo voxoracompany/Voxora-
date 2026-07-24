@@ -62,7 +62,7 @@ export default function TopBar({ setWorkspace }: TopBarProps) {
               aria-label="Account menu"
               aria-expanded={menuOpen}
             >
-              {user?.avatarEmoji && user.avatarEmoji !== "🚀"
+              {user?.avatarEmoji
                 ? <span style={{ fontSize: 18 }}>{user.avatarEmoji}</span>
                 : avatarLetter}
             </button>
@@ -93,6 +93,12 @@ export default function TopBar({ setWorkspace }: TopBarProps) {
                   onClick={() => { setMenuOpen(false); setWorkspace && setWorkspace("settings"); }}
                 >
                   <span>⚙️</span> Settings
+                </button>
+                <button
+                  className="topbar-dropdown-item"
+                  onClick={() => { setMenuOpen(false); setWorkspace && setWorkspace("accountSettings"); }}
+                >
+                  <span>👤</span> Account Settings
                 </button>
 
                 <div className="topbar-dropdown-divider" />

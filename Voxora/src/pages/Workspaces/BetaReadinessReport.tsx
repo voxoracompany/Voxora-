@@ -146,7 +146,7 @@ export default function BetaReadinessReport({ setWorkspace }: Props) {
       }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16 }}>
           <div>
-            <h1 style={{ fontSize: 26, fontWeight: 900, margin: "0 0 6px" }}>🚀 Beta Readiness Report</h1>
+            <h1 style={{ fontSize: 26, fontWeight: 900, margin: "0 0 6px" }}>✨ Beta Readiness Report</h1>
             <p style={{ fontSize: 14, opacity: 0.85, margin: 0 }}>{version} — Generated {buildDate}</p>
           </div>
           <div style={{
@@ -321,7 +321,7 @@ export default function BetaReadinessReport({ setWorkspace }: Props) {
       {/* Quick Navigation */}
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
         {[
-          { label: "🚀 Launch Checklist", ws: "launchChecklist" },
+          { label: "✨ Launch Checklist", ws: "launchChecklist" },
           { label: "❤️ Health Check", ws: "healthCheck" },
           { label: "🐛 Error Reporting", ws: "errorReporting" },
           { label: "📋 Deployment Checklist", ws: "deploymentChecklist" },

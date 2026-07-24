@@ -23,7 +23,7 @@ export default function FundraisingStrategy({ setWorkspace }: { setWorkspace: (w
       type: "fundraising_strategy_generated",
       title: "Fundraising Strategy Generated",
       description: `Fundraising strategy created for "${product}".`,
-      category: "Investor Studio", icon: "🚀",
+      category: "Investor Studio", icon: "✨",
     });
   };
 
@@ -36,13 +36,13 @@ export default function FundraisingStrategy({ setWorkspace }: { setWorkspace: (w
       createdAt: new Date().toISOString(),
       notes: result,
     });
-    showToast("🚀 Fundraising strategy saved!");
+    showToast("Fundraising strategy saved!");
   };
 
   return (
     <div className="workspace-container">
       <button className="back-btn" onClick={() => setWorkspace("investorHub")}>← Back to Investor Studio</button>
-      <h1>🚀 Fundraising Strategy</h1>
+      <h1>✨ Fundraising Strategy</h1>
       <p className="workspace-subtitle">Define how much to raise, who to target, and your 90-day fundraising timeline.</p>
 
       {isDemoMode && <DemoBanner onConfigure={() => setWorkspace("aiSettings")} />}
@@ -57,7 +57,7 @@ export default function FundraisingStrategy({ setWorkspace }: { setWorkspace: (w
           disabled={isLoading}
         />
         <button className="workspace-btn" onClick={generate} disabled={!product.trim() || isLoading}>
-          {isLoading ? "⏳ Building…" : "🚀 Build Fundraising Strategy"}
+          {isLoading ? "⏳ Building…" : "✨ Build Fundraising Strategy"}
         </button>
       </div>
 
@@ -70,7 +70,7 @@ export default function FundraisingStrategy({ setWorkspace }: { setWorkspace: (w
 
       {!result && !isLoading && (
         <div className="workspace-empty">
-          <div className="workspace-empty-icon">🚀</div>
+          <div className="workspace-empty-icon">✨</div>
           <p>Enter your startup to generate a complete fundraising strategy with investor targets and timeline.</p>
         </div>
       )}

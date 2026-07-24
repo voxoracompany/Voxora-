@@ -22,7 +22,7 @@ const AI_TOOLS = [
   { id: "assistant",      icon: "🤖", label: "AI Assistant" },
   { id: "content",        icon: "✍️", label: "AI Content" },
   { id: "apps",           icon: "💡", label: "App Ideas" },
-  { id: "startup",        icon: "🚀", label: "Startup Ideas" },
+  { id: "startup",        icon: "✨", label: "Startup Ideas" },
   { id: "aiSettings",    icon: "🧠", label: "AI Settings" },
 ];
 
@@ -42,7 +42,7 @@ const STRATEGY_TOOLS = [
 
 const INVESTOR_TOOLS = [
   { id: "investorHub",         icon: "💼", label: "Investor Hub" },
-  { id: "fundraisingStrategy", icon: "🚀", label: "Fundraising Strategy" },
+  { id: "fundraisingStrategy", icon: "✨", label: "Fundraising Strategy" },
   { id: "investorNarrative",   icon: "📖", label: "Investor Narrative" },
   { id: "termSheet",           icon: "📋", label: "Term Sheet Guide" },
   { id: "dueDiligence",        icon: "✅", label: "Due Diligence" },
@@ -125,7 +125,7 @@ const ANALYTICS_TOOLS = [
   { id: "marketingAnalytics",  icon: "📣", label: "Marketing Analytics" },
   { id: "financialAnalytics",  icon: "📊", label: "Financial Analytics" },
   { id: "aiAnalytics",         icon: "🤖", label: "AI Analytics" },
-  { id: "startupAnalytics",    icon: "🚀", label: "Startup Analytics" },
+  { id: "startupAnalytics",    icon: "✨", label: "Startup Analytics" },
   { id: "trendAnalysis",       icon: "📈", label: "Trend Analysis" },
   { id: "analyticsReports",    icon: "📄", label: "Reports" },
 ];
@@ -156,7 +156,7 @@ const ADMIN_TOOLS = [
 const LAUNCH_TOOLS = [
   { id: "launchChecklist",     icon: "✅", label: "Launch Checklist"    },
   { id: "healthCheck",         icon: "🏥", label: "Health Check"        },
-  { id: "deploymentChecklist", icon: "🚀", label: "Deployment Checklist"},
+  { id: "deploymentChecklist", icon: "✨", label: "Deployment Checklist"},
   { id: "errorReporting",      icon: "🚨", label: "Error Reporting"     },
   { id: "documentationCenter", icon: "📚", label: "Documentation"       },
 ];
@@ -191,7 +191,7 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
         role="navigation"
       >
       <div className="sidebar-brand" style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
-        <span className="sidebar-logo">🚀</span>
+        <span className="sidebar-logo">V</span>
         <span className="sidebar-title">VOXORA</span>
         {onClose && (
           <button

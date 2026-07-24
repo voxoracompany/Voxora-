@@ -56,7 +56,7 @@ export const MEMORY_TYPE_LABELS: Record<MemoryItemType, string> = {
 
 export const MEMORY_TYPE_ICONS: Record<MemoryItemType, string> = {
   project_title:     '📁',
-  startup_idea:      '🚀',
+      startup_idea:      '✨',
   customer_research: '🔬',
   marketing_plan:    '📣',
   financial_analysis:'💰',

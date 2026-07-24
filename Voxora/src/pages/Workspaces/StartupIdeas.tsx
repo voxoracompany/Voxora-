@@ -23,7 +23,7 @@ const StartupIdeas = ({ setWorkspace }: { setWorkspace: (workspace: string) => v
       type: "startup_ideas_generated",
       title: "Startup Ideas Generated",
       description: `Generated startup ideas for: "${topic}".`,
-      category: "AI", icon: "🚀",
+      category: "AI", icon: "✨",
     });
   };
 
@@ -36,13 +36,13 @@ const StartupIdeas = ({ setWorkspace }: { setWorkspace: (workspace: string) => v
       createdAt: new Date().toISOString(),
       notes: result,
     });
-    showToast("🚀 Startup ideas saved to projects!");
+    showToast("Startup ideas saved to projects!");
   };
 
   return (
     <div className="workspace-container">
       <button className="back-btn" onClick={() => setWorkspace("dashboard")}>← Back to Dashboard</button>
-      <h1>🚀 Startup Ideas</h1>
+      <h1>✨ Startup Ideas</h1>
       <p className="workspace-subtitle">Explore business opportunities powered by Voxora AI.</p>
 
       {isDemoMode && <DemoBanner onConfigure={() => setWorkspace("aiSettings")} />}
@@ -58,7 +58,7 @@ const StartupIdeas = ({ setWorkspace }: { setWorkspace: (workspace: string) => v
           disabled={isLoading}
         />
         <button className="workspace-btn" onClick={generateIdeas} disabled={!topic.trim() || isLoading}>
-          {isLoading ? "⏳ Generating…" : "🚀 Generate Startup Ideas"}
+          {isLoading ? "⏳ Generating…" : "✨ Generate Startup Ideas"}
         </button>
       </div>
 
@@ -73,7 +73,7 @@ const StartupIdeas = ({ setWorkspace }: { setWorkspace: (workspace: string) => v
 
       {!result && !isLoading && (
         <div className="workspace-empty">
-          <div className="workspace-empty-icon">🚀</div>
+          <div className="workspace-empty-icon">✨</div>
           <p>Enter a market or problem above to explore startup opportunities.</p>
         </div>
       )}

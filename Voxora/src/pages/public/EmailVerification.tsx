@@ -56,7 +56,7 @@ export default function EmailVerification() {
       <div className="pub-auth-wrap">
         <div className="pub-auth-card" style={{ textAlign: "center" }}>
           <div style={{ fontSize: 60, marginBottom: 16 }}>📧</div>
-          <div className="pub-auth-logo" style={{ marginBottom: 8 }}>🚀 VOXORA</div>
+          <div className="pub-auth-logo" style={{ marginBottom: 8 }}>VOXORA</div>
           <h2 style={{ marginBottom: 12 }}>Verify your email</h2>
           <p style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.6, marginBottom: 24 }}>
             We sent a verification link to{" "}

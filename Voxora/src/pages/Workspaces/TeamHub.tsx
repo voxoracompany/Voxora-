@@ -21,7 +21,7 @@ const STATS = [
   { label: "Collab Tools", val: "9",    icon: "🛠️" },
   { label: "AI-Powered",   val: "Yes",  icon: "🤖" },
   { label: "Team Ready",   val: "Yes",  icon: "✅" },
-  { label: "Focus",        val: "Scale",icon: "🚀" },
+  { label: "Focus",        val: "Scale",icon: "✨" },
 ];
 
 export default function TeamHub({ setWorkspace }: Props) {

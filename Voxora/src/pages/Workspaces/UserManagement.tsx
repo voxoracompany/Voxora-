@@ -49,7 +49,7 @@ export default function UserManagement({ setWorkspace }: Props) {
       email:         user?.email || "demo@voxora.ai",
       role:          "owner",
       status:        "active",
-      avatarEmoji:   user?.avatarEmoji || "🚀",
+      avatarEmoji:   user?.avatarEmoji || "V",
       createdAt:     new Date(Date.now() - 7 * 86400000).toISOString(),
       lastLogin:     new Date().toISOString(),
       projectCount:  parseInt(localStorage.getItem("voxora-projects") || "[]") > 0

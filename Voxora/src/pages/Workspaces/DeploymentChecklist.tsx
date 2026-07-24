@@ -190,7 +190,7 @@ export default function DeploymentChecklist({ setWorkspace }: Props) {
 
       <div className="admin-header">
         <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-          <h1>🚀 Deployment Checklist</h1>
+          <h1>✨ Deployment Checklist</h1>
           <span className="admin-badge admin-badge--blue">V5.9</span>
           <span className="admin-badge admin-badge--green">{score}% Ready</span>
         </div>

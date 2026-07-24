@@ -79,7 +79,7 @@ function exportPDF(projects: Project[], favorites: string[], pinned: string[]) {
 </head>
 <body>
 <div class="header-bar">
-  <div class="brand">🚀 Voxora</div>
+  <div class="brand">Voxora</div>
   <div class="export-date">Exported ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</div>
 </div>
 ${projects

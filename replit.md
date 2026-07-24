@@ -9,13 +9,15 @@ An AI-powered platform landing page and workspace built with React, TypeScript, 
 
 ## How to run
 The workflow `Start application` runs `cd Voxora && npm run dev`, which starts the Vite dev server on port 5000.
+From the project root, run `cd Voxora && npm install` once, then use `npm run dev`.
+For checks, use `npm run typecheck` and `npm run build` from `Voxora/`.
 
 ## Project structure
 - `Voxora/src/pages/` — Landing page and all workspace pages (Dashboard, AI Assistant, Analytics, etc.)
 - `Voxora/src/components/` — Shared UI components (ToastContainer, etc.)
-- `Voxora/src/context/` — React context providers (Activity, Project, Toast)
+- `Voxora/src/context/` — React context providers (Auth, Activity, Project, Toast, Cloud)
 
 ## Navigation
-The app uses `useState`-based routing (no router library). All workspace pages are lazy-loaded. Dark mode is toggled via `data-theme` on `<html>`.
+Public pages use React Router, while dashboard workspace switching uses state-based navigation. Workspace pages are lazy-loaded. Dark mode is toggled via `data-theme` on `<html>`.
 
 ## User preferences

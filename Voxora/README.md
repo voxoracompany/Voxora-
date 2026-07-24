@@ -1,4 +1,4 @@
-# 🚀 Voxora — AI-Powered Business Intelligence Platform
+# Voxora — AI-Powered Business Intelligence Platform
 
 > The all-in-one AI workspace for founders, marketers, investors, and growth-focused teams.
 

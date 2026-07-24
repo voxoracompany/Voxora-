@@ -15,7 +15,7 @@ const POSTS = [
     readTime: "5 min read",
   },
   {
-    emoji: "🚀",
+    emoji: "✨",
     tag: "Founders",
     title: "From Idea to MVP: A Framework for AI-Assisted Validation",
     excerpt: "Learn how to use Voxora's Startup Studio and Customer Research tools to validate your idea before writing a single line of code.",

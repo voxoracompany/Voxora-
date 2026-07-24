@@ -6,7 +6,7 @@ import "./Workspace.css";
 interface Props { setWorkspace: (w: string) => void }
 
 const TOOLS = [
-  { id: "fundraisingStrategy", icon: "🚀", label: "Fundraising Strategy",  desc: "Define how much to raise, who to target, and a 90-day fundraising timeline." },
+  { id: "fundraisingStrategy", icon: "✨", label: "Fundraising Strategy",  desc: "Define how much to raise, who to target, and a 90-day fundraising timeline." },
   { id: "investorNarrative",   icon: "📖", label: "Investor Narrative",    desc: "Craft the founding story, market insight, and belief statement investors need." },
   { id: "pitchDeck",           icon: "🎯", label: "Pitch Deck",            desc: "12-slide investor pitch deck outline with full talking points." },
   { id: "executiveSummary",    icon: "📄", label: "Executive Summary",     desc: "One-page summary for investors, partners, and accelerator applications." },

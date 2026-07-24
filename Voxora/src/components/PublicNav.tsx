@@ -18,7 +18,7 @@ const PLATFORMS: NavItem[] = [
     to: "/platforms/ai-command-center",
   },
   {
-    icon: "🚀",
+    icon: "✨",
     label: "Startup Studio",
     description: "Validate and launch your ideas",
     to: "/platforms/startup-studio",

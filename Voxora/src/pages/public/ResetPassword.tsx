@@ -33,7 +33,7 @@ export default function ResetPassword() {
 
       <div className="pub-auth-wrap">
         <div className="pub-auth-card">
-          <div className="pub-auth-logo">🚀 VOXORA</div>
+          <div className="pub-auth-logo">VOXORA</div>
           <p className="pub-auth-subtitle">Create a new password</p>
 
           {!done ? (

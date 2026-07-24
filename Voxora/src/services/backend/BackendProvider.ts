@@ -14,6 +14,7 @@ export interface BackendProvider {
   login(email: string, password: string): Promise<AuthResult>;
   logout(): Promise<void>;
   getCurrentUser(): Promise<BackendUser | null>;
+  hydrateUserProfile?(userId: string): Promise<Partial<BackendUser> | null>;
   updateUser(userId: string, data: Partial<BackendUser>): Promise<{ ok: boolean; error?: string }>;
   changePassword(userId: string, currentPassword: string, newPassword: string): Promise<{ ok: boolean; error?: string }>;
   deleteAccount(userId: string): Promise<{ ok: boolean; error?: string }>;

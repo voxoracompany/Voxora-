@@ -38,7 +38,7 @@ export function mapFirebaseUser(fbUser: User, extra?: Partial<BackendUser>): Bac
     bio:                extra?.bio          ?? "",
     company:            extra?.company      ?? "",
     role:               extra?.role         ?? "",
-    avatarEmoji:        extra?.avatarEmoji  ?? "🚀",
+    avatarEmoji:        extra?.avatarEmoji  ?? "V",
     createdAt:          extra?.createdAt    ?? (fbUser.metadata.creationTime ?? new Date().toISOString()),
     emailVerified:      fbUser.emailVerified,
     twoFAEnabled:       extra?.twoFAEnabled        ?? false,

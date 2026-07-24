@@ -250,7 +250,7 @@ const Dashboard = () => {
   // V5.6 — AI suggestions based on project context
   const aiSuggestions = useMemo(() => {
     const suggestions: { icon: string; text: string; action: string }[] = [];
-    if (projects.length === 0) suggestions.push({ icon: "🚀", text: "Create your first startup idea to get started.", action: "startup" });
+    if (projects.length === 0) suggestions.push({ icon: "✨", text: "Create your first startup idea to get started.", action: "startup" });
     if (projects.length > 0 && !projects.some(p => p.category === "Customer Research")) suggestions.push({ icon: "🔬", text: "Run customer research to validate your idea.", action: "research" });
     if (projects.length > 0 && !projects.some(p => p.category === "Business Model Canvas")) suggestions.push({ icon: "🏢", text: "Build a Business Model Canvas for your project.", action: "business" });
     if (projects.length > 2 && !projects.some(p => ["Financial Forecast","Revenue Model"].includes(p.category))) suggestions.push({ icon: "💰", text: "Model your financials and revenue streams.", action: "financialForecast" });
@@ -317,7 +317,7 @@ const Dashboard = () => {
           >
             <span /><span /><span />
           </button>
-          <span className="mobile-brand">🚀 VOXORA</span>
+          <span className="mobile-brand">VOXORA</span>
         </div>
         <TopBar setWorkspace={setWorkspace} />
 
@@ -327,7 +327,7 @@ const Dashboard = () => {
           {workspace === "dashboard" && (
             <>
               <div className="welcome-section">
-                <h1>Welcome back{userName ? `, ${userName}` : ""} 🚀</h1>
+                <h1>Welcome back{userName ? `, ${userName}` : ""}</h1>
                 <p className="welcome-sub">Your AI-powered workspace for ideas, research, and strategy.</p>
               </div>
 
@@ -416,7 +416,7 @@ const Dashboard = () => {
                   </div>
                   {/* Getting Started */}
                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("gettingStarted")}>
-                    <div className="stat-icon">🚀</div>
+                    <div className="stat-icon">✨</div>
                     <p className="stat-value" style={{ fontSize: 13 }}>Start</p>
                     <h3 className="stat-label">Getting Started</h3>
                   </div>
@@ -589,7 +589,7 @@ const Dashboard = () => {
                 </h2>
                 <div className="stats">
                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("userProfile")}>
-                    <div className="stat-icon">{user?.avatarEmoji || "🚀"}</div>
+                    <div className="stat-icon">{user?.avatarEmoji || "V"}</div>
                     <p className="stat-value" style={{ fontSize: 13 }}>{user?.name ? user.name.split(" ")[0] : "You"}</p>
                     <h3 className="stat-label">Logged In As</h3>
                   </div>
@@ -927,7 +927,7 @@ const Dashboard = () => {
                   {/* ── V5.9 Launch Readiness ── */}
               <div style={{ margin: "28px 0 4px" }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-                  🚀 Launch Readiness
+                  ✨ Launch Readiness
                   <span style={{ fontSize: 11, background: "#ede9fe", color: "#6c63ff", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>V5.9</span>
                 </h2>
                 <div className="stats">
@@ -953,7 +953,7 @@ const Dashboard = () => {
                   </div>
                   {/* Deployment Status */}
                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("deploymentChecklist")}>
-                    <div className="stat-icon">🚀</div>
+                    <div className="stat-icon">✨</div>
                     <p className="stat-value" style={{ fontSize: 12 }}>Check</p>
                     <h3 className="stat-label">Deployment</h3>
                   </div>
@@ -999,7 +999,7 @@ const Dashboard = () => {
                     <h3 className="stat-label">AI Usage</h3>
                   </div>
                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("startupAnalytics")}>
-                    <div className="stat-icon">🚀</div>
+                    <div className="stat-icon">✨</div>
                     <p className="stat-value">{Math.min(100, Math.round(
                       (projects.filter(p => ["Customer Research","Product Validation","Business Model Canvas","Market Research"].includes(p.category)).length / 4) * 50 +
                       (projects.filter(p => ["Pitch Deck","Executive Summary","Fundraising Strategy"].includes(p.category)).length / 3) * 50
@@ -1086,7 +1086,7 @@ const Dashboard = () => {
                 <div className="cards">
                   <FeatureCard title="✍️ AI Content Ideas"    description="Generate creative content concepts."                    buttonText="Open"     onClick={() => setWorkspace("content")} />
                   <FeatureCard title="💡 App Ideas"           description="Discover and create new app concepts."                  buttonText="Open"     onClick={() => setWorkspace("apps")} />
-                  <FeatureCard title="🚀 Startup Ideas"       description="Explore business opportunities."                        buttonText="Open"     onClick={() => setWorkspace("startup")} />
+                  <FeatureCard title="✨ Startup Ideas"       description="Explore business opportunities."                        buttonText="Open"     onClick={() => setWorkspace("startup")} />
                   <FeatureCard title="🔬 Customer Research"   description="Understand customers and their needs."                  buttonText="Research" onClick={() => setWorkspace("research")} />
                   <FeatureCard title="📋 SWOT Analysis"       description="Analyze strengths, weaknesses, and opportunities."     buttonText="Analyze"  onClick={() => setWorkspace("swot")} />
                   <FeatureCard title="🏆 Competitor Analysis" description="Analyze competitors before building."                   buttonText="Analyze"  onClick={() => setWorkspace("competitor")} />

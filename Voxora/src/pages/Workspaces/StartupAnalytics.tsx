@@ -59,12 +59,12 @@ export default function StartupAnalytics({ setWorkspace }: Props) {
   return (
     <div className="workspace-container" style={{ maxWidth: 900 }}>
       <button className="back-btn" onClick={() => setWorkspace("analyticsHub")}>← Back to Analytics Studio</button>
-      <h1>🚀 Startup Analytics</h1>
+      <h1>✨ Startup Analytics</h1>
       <p className="workspace-subtitle">Scores are auto-calculated from your workspace projects. Drag to adjust manually.</p>
 
       <div className="stats" style={{ marginBottom: 28 }}>
         <div className="stat-card">
-          <div className="stat-icon">🚀</div>
+          <div className="stat-icon">✨</div>
           <p className="stat-value" style={{ color: scores.readinessScore >= 70 ? "#10b981" : scores.readinessScore >= 40 ? "#f59e0b" : "#ef4444" }}>{scores.readinessScore}%</p>
           <h3 className="stat-label">Startup Readiness</h3>
         </div>
@@ -75,7 +75,7 @@ export default function StartupAnalytics({ setWorkspace }: Props) {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28 }}>
         {[
-          { key: "readinessScore" as const, label: "Startup Readiness", color: "#6C63FF", icon: "🚀" },
+          { key: "readinessScore" as const, label: "Startup Readiness", color: "#6C63FF", icon: "✨" },
           { key: "validationScore" as const, label: "Validation Score", color: "#10b981", icon: "✅" },
           { key: "bizModelScore" as const, label: "Business Model Score", color: "#3b82f6", icon: "🏢" },
           { key: "competitorScore" as const, label: "Competitor Score", color: "#f59e0b", icon: "🏆" },

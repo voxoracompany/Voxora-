@@ -157,7 +157,7 @@ export default function LandingPage() {
             {[
               "🧠 Idea Generation",
               "📊 Market Research",
-              "🚀 Startup Strategy",
+              "✨ Startup Strategy",
               "⚙️ Automation",
               "🤝 Team Collab",
               "📈 Growth Studio",
@@ -196,7 +196,7 @@ export default function LandingPage() {
               desc: "Create content, concepts and digital experiences with intelligent AI generation.",
             },
             {
-              icon: "🚀",
+              icon: "✨",
               title: "Startup Agent",
               desc: "Turn ideas into products, businesses and growth strategies with market-ready analysis.",
             },
@@ -252,7 +252,7 @@ export default function LandingPage() {
           }}
         >
           {[
-            "🚀 StartupCo",
+            "✨ StartupCo",
             "💡 InnovateLab",
             "📊 DataBridge",
             "🤖 AIFirst",

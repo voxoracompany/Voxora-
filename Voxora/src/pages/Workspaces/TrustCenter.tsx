@@ -200,7 +200,7 @@ export default function TrustCenter({ setWorkspace }: Props) {
         {activeTab === "About Voxora" && (
           <div>
             <div className="trust-section-card" style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 56, marginBottom: 12 }}>🚀</div>
+              <div style={{ fontSize: 56, marginBottom: 12 }}>✨</div>
               <h2>About Voxora</h2>
               <p style={{ fontSize: 16, color: "#6C63FF", fontWeight: 700, margin: "0 0 16px" }}>
                 The Intelligence Layer for the AI Age
@@ -220,7 +220,7 @@ export default function TrustCenter({ setWorkspace }: Props) {
                 {[
                   { icon: "🤖", name: "AI Assistants", desc: "Smart conversation and research tools" },
                   { icon: "📊", name: "Analytics Studio", desc: "Growth and business intelligence" },
-                  { icon: "🚀", name: "Startup Tools", desc: "Idea to pitch deck, end to end" },
+                  { icon: "✨", name: "Startup Tools", desc: "Idea to pitch deck, end to end" },
                   { icon: "🤝", name: "Team Collaboration", desc: "Async-first team management" },
                   { icon: "💰", name: "Financial Studio", desc: "Models, forecasts, and planning" },
                   { icon: "🌱", name: "Growth Studio", desc: "KPIs, OKRs, and experiments" },

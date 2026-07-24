@@ -44,7 +44,7 @@ function generateMockResponse(req: AIRequest): string {
 • Feature depth needs 6–12 months to match incumbents
 • Small team bandwidth constrains growth speed
 
-🚀 OPPORTUNITIES
+✨ OPPORTUNITIES
 • Growing demand for AI-powered automation ($47B market, 23% CAGR)
 • Underserved SMB segment abandoned by enterprise-focused players
 • API-first approach enables ecosystem partnership distribution
@@ -134,7 +134,7 @@ Validate the Pro tier price point with 10 paid users before automating the funne
 • Customer support response times: 24–72 hours
 • Monolithic design — hard to customise for niche workflows
 
-🚀 YOUR DIFFERENTIATION OPPORTUNITIES
+✨ YOUR DIFFERENTIATION OPPORTUNITIES
 • AI-first architecture delivers results 10× faster
 • Pricing accessible to bootstrapped founders ($29 vs $200+)
 • Niche focus: serve one segment dramatically better
@@ -366,7 +366,7 @@ Lead with #1 (SEO anchor), promote with #2 (viral potential), and convert with #
     case 'apps':
       return `💡 APP IDEAS — ${subject}
 
-🚀 6 HIGH-POTENTIAL APP CONCEPTS
+✨ 6 HIGH-POTENTIAL APP CONCEPTS
 
 1. 🤖 "${subject}AI"
    One-liner: AI-powered ${subject} tool that delivers results in 60 seconds
@@ -414,7 +414,7 @@ Lead with #1 (SEO anchor), promote with #2 (viral potential), and convert with #
 Validate #1 first (broadest market, fastest to build MVP). Use #6 as a long-term moat builder once core product achieves PMF.`;
 
     case 'startup':
-      return `🚀 STARTUP IDEAS — ${subject}
+      return `✨ STARTUP IDEAS — ${subject}
 
 💡 5 VALIDATED STARTUP OPPORTUNITIES
 
@@ -1015,7 +1015,7 @@ Headlines: Sentence case, not Title Case. Action-oriented.
 Lead with Pillar 1 (Speed) in top-of-funnel content. Shift to Pillar 3 (Confidence) closer to conversion. The tagline "#3" should appear in your bio, email footer, and paid ads immediately.`;
 
     case 'fundraisingStrategy':
-      return `🚀 FUNDRAISING STRATEGY — ${subject}
+      return `✨ FUNDRAISING STRATEGY — ${subject}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 💼 ROUND TYPE & AMOUNT
@@ -1827,7 +1827,7 @@ LTV Calculation:
 ├────────────────┼──────────┼──────────┼────────────┤
 │ Pessimistic    │ $675     │ $300     │ 2.25:1 ⚠️  │
 │ Base Case      │ $1,013   │ $150     │ 6.75:1 ✅  │
-│ Optimistic     │ $1,440   │ $80      │ 18:1 🚀    │
+│ Optimistic     │ $1,440   │ $80      │ 18:1 ✨    │
 └────────────────┴──────────┴──────────┴────────────┘
 
 Target: > 3:1 (sustainable), > 5:1 (healthy growth), > 10:1 (exceptional)
@@ -1842,7 +1842,7 @@ Payback = CAC ÷ (ARPU × Gross Margin)
 📉 CHURN IMPACT ANALYSIS
 
 Monthly Churn vs LTV:
-• 2% churn → 50-month retention → LTV = $1,688 🚀
+• 2% churn → 50-month retention → LTV = $1,688 ✨
 • 3% churn → 33-month retention → LTV = $1,013 ✅
 • 5% churn → 20-month retention → LTV = $675 ⚠️
 • 8% churn → 12-month retention → LTV = $405 ❌

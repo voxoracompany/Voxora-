@@ -19,7 +19,7 @@ const FORMATS: { id: RetroFormat; label: string; icon: string; desc: string; col
   {
     id: "start-stop-continue", icon: "🔁", label: "Start / Stop / Continue", desc: "Classic retro format.",
     cols: [
-      { key:"start",    label:"Start",    icon:"🚀", color:"#10b981" },
+      { key:"start",    label:"Start",    icon:"✨", color:"#10b981" },
       { key:"stop",     label:"Stop",     icon:"🛑", color:"#ef4444" },
       { key:"continue", label:"Continue", icon:"✅", color:"#3b82f6" },
     ],

@@ -120,7 +120,7 @@ const CATEGORIES: ChecklistCategory[] = [
   },
   {
     id: "deployment",
-    icon: "🚀",
+    icon: "✨",
     title: "Deployment",
     items: [
       { id: "dep-checklist", label: "Complete Deployment Checklist",  description: "All items pass in the Deployment Checklist.", action: "deploymentChecklist", actionLabel: "Deployment Checklist" },
@@ -196,7 +196,7 @@ export default function LaunchChecklist({ setWorkspace }: Props) {
         <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
           <button className="admin-action-btn" onClick={markAll}>✅ Check All</button>
           <button className="admin-action-btn" onClick={clearAll}>🔄 Reset</button>
-          <button className="admin-action-btn" onClick={() => setWorkspace("deploymentChecklist")}>🚀 Deployment Checklist</button>
+          <button className="admin-action-btn" onClick={() => setWorkspace("deploymentChecklist")}>✨ Deployment Checklist</button>
           <button className="admin-action-btn" onClick={() => setWorkspace("healthCheck")}>🏥 Health Check</button>
         </div>
       </div>
@@ -219,7 +219,7 @@ export default function LaunchChecklist({ setWorkspace }: Props) {
         </div>
         {percent === 100 && (
           <div style={{ marginTop: 12, padding: "10px 14px", background: "#d1fae5", borderRadius: 10, fontSize: 13, fontWeight: 600, color: "#065f46" }}>
-            🚀 You're ready for launch! All checklist items are complete.
+            ✨ You're ready for launch! All checklist items are complete.
           </div>
         )}
       </div>

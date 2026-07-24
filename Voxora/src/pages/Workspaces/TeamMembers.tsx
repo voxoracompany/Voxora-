@@ -17,7 +17,7 @@ const STATUSES: Status[] = ["Active","Part-time","Advisor","Inactive"];
 const STATUS_COLOR: Record<Status, string> = { Active: "#10b981", "Part-time": "#3b82f6", Advisor: "#f59e0b", Inactive: "#9ca3af" };
 const ROLE_COLORS: Partial<Record<Role, string>> = { Founder: "#6C63FF", "Co-Founder": "#8b5cf6", CTO: "#3b82f6", CPO: "#10b981", CMO: "#ec4899", CFO: "#f59e0b" };
 const DEPTS = ["Engineering","Product","Marketing","Finance","Operations","Design","Sales","Leadership","Advisory"];
-const AVATARS = ["🧑","👩","👨","🧑‍💻","👩‍💼","👨‍💼","🧑‍🎨","👩‍🔬","👨‍🚀","🧑‍🏫"];
+const AVATARS = ["🧑","👩","👨","🧑‍💻","👩‍💼","👨‍💼","🧑‍🎨","👩‍🔬","👨‍💼","🧑‍🏫"];
 
 const EMPTY = { name:"", role:"Engineer" as Role, email:"", department:"Engineering", status:"Active" as Status, joinDate:"", notes:"" };
 

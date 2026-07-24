@@ -22,7 +22,7 @@ export default function NotFound() {
 
       <div style={{ position: "relative", zIndex: 1 }}>
         <div style={{ fontSize: 20, fontWeight: 900, color: "#fff", marginBottom: 32, letterSpacing: -0.5 }}>
-          🚀 VOXORA
+          VOXORA
         </div>
 
         <div style={{

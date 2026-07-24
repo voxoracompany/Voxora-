@@ -58,6 +58,28 @@ export async function saveUserProfile(uid: string, data: Partial<BackendUser>): 
   }
 }
 
+/** Delete the user document and every supported user-owned subcollection. */
+export async function deleteUserData(uid: string): Promise<{ ok: boolean; error?: string }> {
+  const collections = [
+    "projects", "conversations", "favorites", "pins",
+    "dashboardPreferences", "settings", "activityHistory",
+  ];
+
+  try {
+    await Promise.all(collections.map(async col => {
+      const snap = await getDocs(colRef(uid, col));
+      await Promise.all(snap.docs.map(record => deleteDoc(record.ref)));
+    }));
+    await deleteDoc(userRef(uid));
+    return { ok: true };
+  } catch (e: unknown) {
+    return {
+      ok: false,
+      error: String((e as { message?: string }).message ?? e),
+    };
+  }
+}
+
 // ── Generic Collection CRUD ────────────────────────────────────────────────────
 export interface FirestoreRecord {
   id: string;

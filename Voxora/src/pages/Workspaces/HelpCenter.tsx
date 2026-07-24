@@ -513,7 +513,7 @@ export default function HelpCenter({ setWorkspace }: Props) {
         {activeTab === "About Voxora" && (
           <div className="help-about">
             <div className="help-section-card help-about-hero">
-              <div className="help-about-logo">🚀</div>
+              <div className="help-about-logo">✨</div>
               <h2>Voxora</h2>
               <p className="help-about-tagline">The Intelligence Layer for the Future of the AI Age</p>
               <div className="help-about-badges">

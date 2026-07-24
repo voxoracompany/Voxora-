@@ -23,7 +23,7 @@ const WORKSPACES = [
   { value: 'assistant',  label: '🤖 AI Assistant'       },
   { value: 'content',    label: '✍️ AI Content'         },
   { value: 'apps',       label: '💡 App Ideas'           },
-  { value: 'startup',    label: '🚀 Startup Ideas'       },
+  { value: 'startup',    label: '✨ Startup Ideas'       },
   { value: 'swot',       label: '📋 SWOT Analysis'       },
   { value: 'competitor', label: '🏆 Competitor Analysis' },
   { value: 'market',     label: '📈 Market Research'     },

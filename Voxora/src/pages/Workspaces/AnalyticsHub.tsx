@@ -14,7 +14,7 @@ const TOOLS = [
   { id: "marketingAnalytics",   icon: "📣", label: "Marketing Analytics",   desc: "Campaign performance, SEO, social media, email, and conversion rates." },
   { id: "financialAnalytics",   icon: "📊", label: "Financial Analytics",   desc: "Profit, expenses, cash flow, burn rate, and break-even progress." },
   { id: "aiAnalytics",          icon: "🤖", label: "AI Analytics",          desc: "AI requests, workspace usage, prompt usage, tokens, and response times." },
-  { id: "startupAnalytics",     icon: "🚀", label: "Startup Analytics",     desc: "Startup readiness, validation score, business model, competitors, and market." },
+  { id: "startupAnalytics",     icon: "✨", label: "Startup Analytics",     desc: "Startup readiness, validation score, business model, competitors, and market." },
   { id: "trendAnalysis",        icon: "📈", label: "Trend Analysis",        desc: "Weekly, monthly, quarterly, and yearly trend breakdowns." },
   { id: "analyticsReports",     icon: "📄", label: "Reports",               desc: "Generate weekly, monthly, quarterly, and annual reports." },
 ];

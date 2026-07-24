@@ -51,7 +51,7 @@ export class LocalBackendProvider implements BackendProvider {
       bio: "",
       company: "",
       role: "",
-      avatarEmoji: "🚀",
+      avatarEmoji: "V",
       createdAt: new Date().toISOString(),
       emailVerified: false,
       twoFAEnabled: false,
@@ -87,6 +87,10 @@ export class LocalBackendProvider implements BackendProvider {
     return loadJson<BackendUser>(K.user);
   }
 
+  async hydrateUserProfile(_userId: string): Promise<Partial<BackendUser> | null> {
+    return null;
+  }
+
   async updateUser(userId: string, data: Partial<BackendUser>): Promise<{ ok: boolean; error?: string }> {
     const u = loadJson<BackendUser>(K.user);
     if (!u || u.id !== userId) return { ok: false, error: "User not found." };
@@ -114,6 +118,11 @@ export class LocalBackendProvider implements BackendProvider {
     }
     localStorage.removeItem(K.user);
     localStorage.removeItem("voxora-name");
+    const userId = u?.id || _userId;
+    for (let i = localStorage.length - 1; i >= 0; i -= 1) {
+      const key = localStorage.key(i);
+      if (key?.startsWith(`voxora-cloud-${userId}-`)) localStorage.removeItem(key);
+    }
     return { ok: true };
   }
 

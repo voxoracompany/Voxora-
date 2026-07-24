@@ -51,6 +51,7 @@ export default function AccountSettings({ setWorkspace }: Props) {
   // Delete account
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [deleteInput, setDeleteInput] = useState("");
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const TABS = [
     { id: "profile",       icon: "👤", label: "Profile" },
@@ -83,11 +84,17 @@ export default function AccountSettings({ setWorkspace }: Props) {
     showToast("✅ Preferences saved!");
   };
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     if (deleteInput.toLowerCase() !== "delete my account") {
       showToast("Please type the confirmation phrase exactly.", "error"); return;
     }
-    deleteAccount();
+    setDeleteLoading(true);
+    const result = await deleteAccount();
+    setDeleteLoading(false);
+    if (!result.ok) {
+      showToast(result.error || "Unable to delete your account.", "error");
+      return;
+    }
     navigate("/");
   };
 
@@ -111,7 +118,7 @@ export default function AccountSettings({ setWorkspace }: Props) {
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: 28, border: "2px solid rgba(255,255,255,0.3)", flexShrink: 0,
         }}>
-          {user?.avatarEmoji || "🚀"}
+          {user?.avatarEmoji || user?.name?.charAt(0).toUpperCase() || "V"}
         </div>
         <div style={{ flex: 1 }}>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800 }}>Account Settings</h1>
@@ -276,8 +283,12 @@ export default function AccountSettings({ setWorkspace }: Props) {
               🗑️ Delete Account
             </button>
           ) : (
-            <div style={{ marginTop: 12 }}>
+            <div className="account-delete-dialog" role="dialog" aria-modal="true" aria-labelledby="delete-account-title">
+              <h4 id="delete-account-title">Delete your Voxora account?</h4>
               <p style={{ fontSize: 14, color: "#dc2626", fontWeight: 600, marginBottom: 10 }}>
+                This permanently deletes your Firebase Authentication account and all associated Firestore data.
+              </p>
+              <p style={{ fontSize: 14, color: "#4b5563", marginBottom: 10 }}>
                 Type <strong>delete my account</strong> to confirm:
               </p>
               <input
@@ -286,14 +297,16 @@ export default function AccountSettings({ setWorkspace }: Props) {
                 value={deleteInput}
                 onChange={e => setDeleteInput(e.target.value)}
                 style={{ borderColor: "#fecaca", marginBottom: 12 }}
+                autoFocus
               />
               <div style={{ display: "flex", gap: 10 }}>
                 <button className="clear-btn confirm" onClick={handleDeleteAccount}
-                  disabled={deleteInput.toLowerCase() !== "delete my account"}>
-                  ⚠️ Permanently Delete
+                  disabled={deleteLoading || deleteInput.toLowerCase() !== "delete my account"}>
+                  {deleteLoading ? "Deleting..." : "⚠️ Permanently Delete"}
                 </button>
                 <button className="workspace-btn" style={{ background: "#6b7280" }}
-                  onClick={() => { setDeleteConfirm(false); setDeleteInput(""); }}>
+                  onClick={() => { setDeleteConfirm(false); setDeleteInput(""); }}
+                  disabled={deleteLoading}>
                   Cancel
                 </button>
               </div>

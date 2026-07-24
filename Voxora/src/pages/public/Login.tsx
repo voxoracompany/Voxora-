@@ -44,7 +44,7 @@ export default function Login() {
 
       <div className="pub-auth-wrap">
         <div className="pub-auth-card">
-          <div className="pub-auth-logo">🚀 VOXORA</div>
+          <div className="pub-auth-logo">VOXORA</div>
           <p className="pub-auth-subtitle">Sign in to your workspace</p>
 
           <h2>Welcome back</h2>
@@ -87,7 +87,7 @@ export default function Login() {
               />
             </div>
             <button className="pub-auth-submit" type="submit" disabled={loading}>
-              {loading ? "Signing in…" : "Sign In →"}
+              {loading ? <><span className="auth-spinner" aria-hidden="true" />Signing you in...</> : "Sign In →"}
             </button>
           </form>
 
@@ -114,7 +114,7 @@ export default function Login() {
               <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
               <path fill="none" d="M0 0h48v48H0z"/>
             </svg>
-            {googleLoading ? "Signing in…" : "Continue with Google"}
+            {googleLoading ? <><span className="auth-spinner auth-spinner--dark" aria-hidden="true" />Signing you in...</> : "Continue with Google"}
           </button>
 
           <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: 10, padding: "10px 14px", marginTop: 16, fontSize: 12, color: "#1d4ed8" }}>

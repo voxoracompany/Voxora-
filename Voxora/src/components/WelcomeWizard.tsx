@@ -11,7 +11,7 @@ interface Props {
 
 const STEPS = [
   {
-    icon: "🚀",
+    icon: "✨",
     title: "Welcome to Voxora Beta",
     subtitle: "The AI-native platform for building intelligent agents, automations, and business applications.",
     content: (
@@ -79,7 +79,7 @@ const STEPS = [
 
 const QUICK_ACTIONS = [
   { icon: "🤖", label: "Chat with AI", workspace: "assistant" },
-  { icon: "🚀", label: "Generate Startup Idea", workspace: "startup" },
+  { icon: "✨", label: "Generate Startup Idea", workspace: "startup" },
   { icon: "🔬", label: "Research Customers", workspace: "research" },
   { icon: "📊", label: "View Analytics", workspace: "analytics" },
   { icon: "💡", label: "App Ideas", workspace: "apps" },

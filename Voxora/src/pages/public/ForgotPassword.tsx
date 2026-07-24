@@ -20,7 +20,7 @@ export default function ForgotPassword() {
 
       <div className="pub-auth-wrap">
         <div className="pub-auth-card">
-          <div className="pub-auth-logo">🚀 VOXORA</div>
+          <div className="pub-auth-logo">VOXORA</div>
           <p className="pub-auth-subtitle">We'll send you a reset link</p>
 
           {!sent ? (

@@ -53,7 +53,7 @@ interface AuthContextValue {
   logout: () => void;
   updateProfile: (data: Partial<VoxoraUser>) => Promise<void>;
   changePassword: (current: string, next: string) => Promise<{ ok: boolean; error?: string }>;
-  deleteAccount: () => void;
+  deleteAccount: () => Promise<{ ok: boolean; error?: string }>;
   getProfileCompletion: () => number;
 }
 
@@ -126,13 +126,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const unsub = subscribeAuthState(async fbUser => {
       if (fbUser) {
-        // Merge Firestore profile fields if provider is ready
-        if (bp) {
-          const full = await bp.getCurrentUser();
-          setUser(full as VoxoraUser | null);
-        } else {
-          setUser(mapFirebaseUser(fbUser) as unknown as VoxoraUser);
-        }
+        // Keep auth-state changes immediate; profile data is non-essential.
+        setUser(mapFirebaseUser(fbUser) as unknown as VoxoraUser);
+        void bp?.hydrateUserProfile?.(fbUser.uid).then(profile => {
+          if (profile) setUser(prev => prev ? { ...prev, ...profile } : prev);
+        });
       } else {
         setUser(null);
       }
@@ -189,9 +187,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!result.ok) return { ok: false, error: result.error };
     const voxoraUser = result.user as VoxoraUser;
 
-    // Persist profile to Firestore (create on first sign-in, update on return)
+    // Do not block navigation on non-essential profile persistence.
     if (result.isNewUser) {
-      await saveUserProfile(voxoraUser.id, voxoraUser);
+      void saveUserProfile(voxoraUser.id, voxoraUser);
     }
 
     pushHistory({
@@ -229,13 +227,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [bp, user]);
 
   // ── Delete Account ─────────────────────────────────────────────────────────
-  const deleteAccount = useCallback(async () => {
-    if (!user) return;
+  const deleteAccount = useCallback(async (): Promise<{ ok: boolean; error?: string }> => {
+    if (!user) return { ok: false, error: "Not logged in." };
     const provider = bp ?? await getBackendProvider();
-    await provider.deleteAccount(user.id);
+    const result = await provider.deleteAccount(user.id);
+    if (!result.ok) return result;
     localStorage.removeItem(HISTORY_KEY);
     setUser(null);
     setLoginHistory([]);
+    return { ok: true };
   }, [bp, user]);
 
   // ── Profile completion ─────────────────────────────────────────────────────

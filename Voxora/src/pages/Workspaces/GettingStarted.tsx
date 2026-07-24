@@ -21,7 +21,7 @@ interface CheckItem {
 const CHECKLIST: CheckItem[] = [
   { id: "profile",   label: "Complete your profile",      desc: "Add your name and bio to personalize AI responses.",     icon: "👤", workspace: "userProfile",    action: "Open Profile" },
   { id: "assistant", label: "Chat with the AI Assistant", desc: "Ask Voxora AI anything about your business or idea.",    icon: "🤖", workspace: "assistant",      action: "Open Chat" },
-  { id: "startup",   label: "Generate a Startup Idea",    desc: "Use AI to generate a business concept in seconds.",      icon: "🚀", workspace: "startup",        action: "Try It" },
+  { id: "startup",   label: "Generate a Startup Idea",    desc: "Use AI to generate a business concept in seconds.",      icon: "✨", workspace: "startup",        action: "Try It" },
   { id: "research",  label: "Run Customer Research",       desc: "Understand your target market with AI-powered research.", icon: "🔬", workspace: "research",       action: "Start Research" },
   { id: "saved",     label: "Explore Saved Projects",      desc: "View, organize, and manage your generated content.",     icon: "📁", workspace: "saved",          action: "View Projects" },
   { id: "export",    label: "Export a Project",            desc: "Download your work as PDF, Markdown, or JSON.",          icon: "📤", workspace: "export",          action: "Open Export" },
@@ -30,7 +30,7 @@ const CHECKLIST: CheckItem[] = [
 ];
 
 const TEMPLATES = [
-  { icon: "🚀", name: "Startup Validation",    desc: "Validate your startup idea with research, persona, and SWOT.",         workspaces: ["startup","research","swot"] },
+  { icon: "✨", name: "Startup Validation",    desc: "Validate your startup idea with research, persona, and SWOT.",         workspaces: ["startup","research","swot"] },
   { icon: "📣", name: "Marketing Launch",      desc: "Plan a product launch with strategy, email, and ad copy.",             workspaces: ["marketingStrategy","emailCampaign","adCopy"] },
   { icon: "💰", name: "Financial Planning",    desc: "Model your revenue, unit economics, and break-even point.",            workspaces: ["revenueModel","unitEconomics","breakEven"] },
   { icon: "🤝", name: "Team Kickoff",          desc: "Set up team goals, task board, and collaboration plan.",               workspaces: ["teamGoals","taskBoard","collaborationPlan"] },

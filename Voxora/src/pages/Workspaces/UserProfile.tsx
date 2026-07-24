@@ -7,7 +7,7 @@ import "./Workspace.css";
 
 interface Props { setWorkspace: (w: string) => void }
 
-const AVATAR_EMOJIS = ["🚀","😊","🦁","🐬","🦊","🐉","🎯","⚡","🔥","🌟","💎","🎸"];
+const AVATAR_EMOJIS = ["😊","🦁","🐬","🦊","🐉","🎯","⚡","🔥","🌟","💎","🎸"];
 
 export default function UserProfile({ setWorkspace }: Props) {
   const { user, updateProfile, getProfileCompletion } = useAuth();
@@ -19,7 +19,7 @@ export default function UserProfile({ setWorkspace }: Props) {
   const [bio, setBio] = useState(user?.bio || "");
   const [company, setCompany] = useState(user?.company || "");
   const [role, setRole] = useState(user?.role || "");
-  const [avatarEmoji, setAvatarEmoji] = useState(user?.avatarEmoji || "🚀");
+  const [avatarEmoji, setAvatarEmoji] = useState(user?.avatarEmoji || "V");
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 
   const completion = getProfileCompletion();
