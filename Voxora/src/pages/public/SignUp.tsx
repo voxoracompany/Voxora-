@@ -27,10 +27,16 @@ export default function SignUp() {
     setError("");
     if (form.password.length < 8) { setError("Password must be at least 8 characters."); return; }
     setLoading(true);
-    const result = await signUp(form.name, form.email, form.password, form.username);
-    setLoading(false);
-    if (!result.ok) { setError(result.error || "Sign up failed."); return; }
-    navigate("/verify-email");
+    try {
+      const result = await signUp(form.name, form.email, form.password, form.username);
+      if (!result.ok) { setError(result.error || "Sign up failed."); return; }
+      navigate("/dashboard");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

@@ -90,6 +90,9 @@
 .sidebar-item-icon  { font-size: 15px; flex-shrink: 0; width: 20px; text-align: center; }
 .sidebar-item-label { line-height: 1.2; }
 
+.sidebar-item--logout       { color: #f87171; }
+.sidebar-item--logout:hover { background: rgba(248,113,113,0.1); color: #fca5a5; }
+
 .sidebar-divider {
   height: 1px;
   background: rgba(255,255,255,0.08);

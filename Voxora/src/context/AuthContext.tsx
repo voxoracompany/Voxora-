@@ -97,17 +97,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const provider = await getBackendProvider();
-      if (cancelled) return;
-      setBp(provider);
+      try {
+        const provider = await getBackendProvider();
+        if (cancelled) return;
+        setBp(provider);
 
-      // getCurrentUser() awaits Firebase's first auth-state emission (handles
-      // page-refresh correctly) or reads localStorage in Demo Mode.
-      const u = await provider.getCurrentUser();
-      if (!cancelled) {
-        setUser(u as VoxoraUser | null);
-        setLoginHistory(loadHistory());
-        setIsLoading(false);
+        // getCurrentUser() awaits Firebase's first auth-state emission (handles
+        // page-refresh correctly) or reads localStorage in Demo Mode.
+        const u = await provider.getCurrentUser();
+        if (!cancelled) {
+          setUser(u as VoxoraUser | null);
+          setLoginHistory(loadHistory());
+        }
+      } catch (err) {
+        console.warn("[Voxora/Auth] Failed to restore session:", err);
+      } finally {
+        if (!cancelled) setIsLoading(false);
       }
     })();
     return () => { cancelled = true; };

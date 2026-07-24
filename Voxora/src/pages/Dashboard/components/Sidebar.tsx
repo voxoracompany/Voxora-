@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -167,6 +168,12 @@ const BOTTOM_NAV = [
 
 export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: SidebarProps) {
   const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <>
@@ -428,6 +435,17 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
           <span className="sidebar-item-icon">🌐</span>
           <span className="sidebar-item-label">Home Page</span>
         </button>
+
+        {isAuthenticated && (
+          <button
+            className="sidebar-item sidebar-item--logout"
+            onClick={handleLogout}
+            style={{ marginTop: 4 }}
+          >
+            <span className="sidebar-item-icon">🚪</span>
+            <span className="sidebar-item-label">Log Out</span>
+          </button>
+        )}
       </nav>
     </aside>
     </>

@@ -26,10 +26,16 @@ export default function Login() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    const result = await login(form.email, form.password);
-    setLoading(false);
-    if (!result.ok) { setError(result.error || "Sign in failed."); return; }
-    navigate("/dashboard");
+    try {
+      const result = await login(form.email, form.password);
+      if (!result.ok) { setError(result.error || "Sign in failed."); return; }
+      navigate("/dashboard");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
