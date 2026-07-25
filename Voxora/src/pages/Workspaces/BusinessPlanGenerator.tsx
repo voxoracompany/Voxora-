@@ -263,6 +263,16 @@ Write a detailed, professional, and actionable "${sec.label}" section. Be specif
     scheduleAutoSave(updated);
   }, [currentPlan, scheduleAutoSave]);
 
+  // ── HTML escape helper (prevents XSS in PDF export) ─────────────────────────
+  function escapeHtml(str: string): string {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   // ── Export ──────────────────────────────────────────────────────────────────
   const exportMarkdown = (plan: BusinessPlan) => {
     let md = `# ${plan.title}\n\n`;
@@ -292,18 +302,18 @@ Write a detailed, professional, and actionable "${sec.label}" section. Be specif
     const win = window.open("", "_blank");
     if (!win) { showToast("❌ Popup blocked. Please allow popups."); return; }
     const sectionsHtml = SECTIONS.map(sec => {
-      const content = (plan.generatedSections[sec.key] || "").replace(/\n/g, "<br/>");
-      return `<h2>${sec.label}</h2><div class="section-body">${content}</div>`;
+      const content = escapeHtml(plan.generatedSections[sec.key] || "").replace(/\n/g, "<br/>");
+      return `<h2>${escapeHtml(sec.label)}</h2><div class="section-body">${content}</div>`;
     }).join("");
-    win.document.write(`<!DOCTYPE html><html><head><title>${plan.title}</title>
+    win.document.write(`<!DOCTYPE html><html><head><title>${escapeHtml(plan.title)}</title>
 <style>body{font-family:Georgia,serif;max-width:800px;margin:40px auto;color:#111;line-height:1.7}
 h1{color:#6C63FF;border-bottom:2px solid #6C63FF;padding-bottom:8px}
 h2{color:#444;margin-top:32px;border-bottom:1px solid #ddd;padding-bottom:4px}
 .meta{color:#666;margin-bottom:24px}.section-body{white-space:pre-wrap}
 @media print{body{margin:20px}}</style></head><body>
-<h1>${plan.title}</h1>
-<p class="meta"><strong>Industry:</strong> ${plan.industry} &nbsp;|&nbsp; <strong>AI Provider:</strong> ${plan.aiProvider} &nbsp;|&nbsp; <strong>Created:</strong> ${new Date(plan.createdAt).toLocaleDateString()}</p>
-<h2>Business Idea</h2><p>${plan.businessIdea}</p>
+<h1>${escapeHtml(plan.title)}</h1>
+<p class="meta"><strong>Industry:</strong> ${escapeHtml(plan.industry)} &nbsp;|&nbsp; <strong>AI Provider:</strong> ${escapeHtml(plan.aiProvider)} &nbsp;|&nbsp; <strong>Created:</strong> ${escapeHtml(new Date(plan.createdAt).toLocaleDateString())}</p>
+<h2>Business Idea</h2><p>${escapeHtml(plan.businessIdea)}</p>
 ${sectionsHtml}
 </body></html>`);
     win.document.close();
