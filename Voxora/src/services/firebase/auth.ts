@@ -15,6 +15,7 @@ import {
   updateProfile,
   deleteUser,
   reauthenticateWithCredential,
+  reauthenticateWithPopup,
   EmailAuthProvider,
   onAuthStateChanged,
   browserLocalPersistence,
@@ -201,12 +202,20 @@ export async function firebaseReauthenticateWithGoogle(): Promise<{ ok: boolean;
     const auth = getFirebaseAuth();
     const user = auth.currentUser;
     if (!user) return { ok: false, error: "Not logged in." };
+
+    // Use reauthenticateWithPopup — Firebase's native reauth flow. Unlike
+    // signInWithPopup, it cannot switch auth.currentUser to a different account.
     const provider = new GoogleAuthProvider();
     provider.addScope("email");
-    const result = await signInWithPopup(auth, provider);
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    if (!credential) return { ok: false, error: "Google authentication failed." };
-    await reauthenticateWithCredential(user, credential);
+    const result = await reauthenticateWithPopup(user, provider);
+
+    // Verify the reauthenticated identity matches the original user.
+    if (result.user.uid !== user.uid) {
+      // This should never happen with reauthenticateWithPopup, but guard anyway.
+      await signOut(auth);
+      return { ok: false, error: "Identity mismatch — please sign in with the same Google account." };
+    }
+
     return { ok: true };
   } catch (e: unknown) {
     const code = (e as { code?: string }).code ?? "";
