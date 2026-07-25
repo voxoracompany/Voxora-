@@ -69,6 +69,18 @@ const INVESTOR_TOOLS = [
   { id: "capTable",            icon: "📊", label: "Cap Table" },
 ];
 
+const SALES_CRM_TOOLS = [
+  { id: "salesCRM",             icon: "🤝", label: "Sales & CRM Studio"    },
+  { id: "crmLeadManager",       icon: "👤", label: "Lead Manager"           },
+  { id: "crmPipeline",          icon: "📊", label: "Sales Pipeline"         },
+  { id: "crmContacts",          icon: "📇", label: "Contact Manager"        },
+  { id: "crmMeetings",          icon: "📅", label: "Meeting Planner"        },
+  { id: "crmProposals",         icon: "📝", label: "Proposal Generator"     },
+  { id: "crmAnalytics",         icon: "📈", label: "CRM Analytics"          },
+  { id: "crmTasks",             icon: "✅", label: "Task Manager"           },
+  { id: "crmExport",            icon: "📤", label: "CRM Export"             },
+];
+
 const FINANCIAL_STUDIO_V63 = [
   { id: "financialStudio",          icon: "💰", label: "Financial Studio"         },
   { id: "financialDashboard",       icon: "📊", label: "Financial Dashboard"      },
@@ -321,6 +333,20 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
       <div className="sidebar-section-label">Investor Studio</div>
       <nav className="sidebar-nav">
         {INVESTOR_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">🤝 Sales & CRM Studio (V6.4)</div>
+      <nav className="sidebar-nav">
+        {SALES_CRM_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}

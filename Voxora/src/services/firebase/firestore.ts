@@ -84,6 +84,8 @@ export async function deleteUserData(uid: string): Promise<{ ok: boolean; error?
   const collections = [
     "projects", "conversations", "favorites", "pins",
     "dashboardPreferences", "settings", "activityHistory",
+    // V6.4 Sales & CRM Studio subcollections
+    "salesCrmLeads", "salesCrmContacts", "salesCrmMeetings", "salesCrmTasks",
   ];
 
   try {

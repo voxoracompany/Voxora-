@@ -158,6 +158,16 @@ const UnitEconomics      = lazy(() => import("../Workspaces/UnitEconomics"));
 const BreakEven          = lazy(() => import("../Workspaces/BreakEven"));
 const PitchDeck          = lazy(() => import("../Workspaces/PitchDeck"));
 const ExecutiveSummary   = lazy(() => import("../Workspaces/ExecutiveSummary"));
+// ── V6.4 Sales & CRM Studio ──────────────────────────────────────────────────
+const SalesCRM            = lazy(() => import("../Workspaces/SalesCRM"));
+const CRMLeadManager      = lazy(() => import("../Workspaces/CRMLeadManager"));
+const CRMPipeline         = lazy(() => import("../Workspaces/CRMPipeline"));
+const CRMContacts         = lazy(() => import("../Workspaces/CRMContacts"));
+const CRMMeetingPlanner   = lazy(() => import("../Workspaces/CRMMeetingPlanner"));
+const CRMProposalGenerator= lazy(() => import("../Workspaces/CRMProposalGenerator"));
+const CRMAnalytics        = lazy(() => import("../Workspaces/CRMAnalytics"));
+const CRMTaskManager      = lazy(() => import("../Workspaces/CRMTaskManager"));
+const CRMExport           = lazy(() => import("../Workspaces/CRMExport"));
 // ── V6.3 Financial Studio ─────────────────────────────────────────────────────
 const FinancialStudio         = lazy(() => import("../Workspaces/FinancialStudio"));
 const FinancialDashboard      = lazy(() => import("../Workspaces/FinancialDashboard"));
@@ -1321,6 +1331,17 @@ const Dashboard = () => {
           {workspace === "termSheet"           && <TermSheetGuide      setWorkspace={setWorkspace} />}
           {workspace === "dueDiligence"        && <DueDiligence        setWorkspace={setWorkspace} />}
           {workspace === "capTable"            && <CapTable            setWorkspace={setWorkspace} />}
+
+          {/* V6.4 Sales & CRM Studio */}
+          {workspace === "salesCRM"             && <SalesCRM             setWorkspace={setWorkspace} />}
+          {workspace === "crmLeadManager"       && <CRMLeadManager       setWorkspace={setWorkspace} />}
+          {workspace === "crmPipeline"          && <CRMPipeline          setWorkspace={setWorkspace} />}
+          {workspace === "crmContacts"          && <CRMContacts          setWorkspace={setWorkspace} />}
+          {workspace === "crmMeetings"          && <CRMMeetingPlanner    setWorkspace={setWorkspace} />}
+          {workspace === "crmProposals"         && <CRMProposalGenerator setWorkspace={setWorkspace} />}
+          {workspace === "crmAnalytics"         && <CRMAnalytics         setWorkspace={setWorkspace} />}
+          {workspace === "crmTasks"             && <CRMTaskManager       setWorkspace={setWorkspace} />}
+          {workspace === "crmExport"            && <CRMExport            setWorkspace={setWorkspace} />}
 
           {/* V6.3 Financial Studio */}
           {workspace === "financialStudio"          && <FinancialStudio          setWorkspace={setWorkspace} />}
