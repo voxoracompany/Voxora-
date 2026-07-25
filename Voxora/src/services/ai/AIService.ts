@@ -88,6 +88,13 @@ class AIService {
   constructor() {
     this._settings = loadSettings();
     this._provider = buildProvider(this._settings);
+    const isDemo   = this._provider.name === 'mock';
+    console.info(
+      `[Voxora/AI] Provider: ${this._provider.name}` +
+      (this._provider.model ? ` (${this._provider.model})` : '') +
+      ` | Demo Mode: ${isDemo}` +
+      (envGeminiKey ? ' | VITE_GEMINI_API_KEY: ✓ detected' : ' | VITE_GEMINI_API_KEY: ✗ not set'),
+    );
   }
 
   /** Re-read settings and reinitialise provider (call after updating settings). */

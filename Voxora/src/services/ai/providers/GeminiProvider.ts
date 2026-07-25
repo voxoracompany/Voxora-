@@ -1,7 +1,7 @@
 // ── V4.1 AI Engine — Google Gemini Provider ───────────────────────────────────
 import type { AIProvider, AIRequest, AIResponse } from '../types/AITypes';
 
-const MODEL    = 'gemini-1.5-flash';
+const MODEL    = 'gemini-2.0-flash';
 const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 const STREAM_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent`;
 
