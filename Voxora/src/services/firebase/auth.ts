@@ -172,6 +172,47 @@ export async function firebaseDeleteAccount(): Promise<{ ok: boolean; error?: st
     await deleteUser(user);
     return { ok: true };
   } catch (e: unknown) {
+    // Return the raw code for requires-recent-login so callers can trigger reauth
+    const code = (e as { code?: string }).code ?? "";
+    if (code === "auth/requires-recent-login") {
+      return { ok: false, error: "auth/requires-recent-login" };
+    }
+    return { ok: false, error: friendlyError(e) };
+  }
+}
+
+// ── Reauthentication ──────────────────────────────────────────────────────────
+export async function firebaseReauthenticate(
+  password: string
+): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const user = getFirebaseAuth().currentUser;
+    if (!user || !user.email) return { ok: false, error: "Not logged in." };
+    const cred = EmailAuthProvider.credential(user.email, password);
+    await reauthenticateWithCredential(user, cred);
+    return { ok: true };
+  } catch (e: unknown) {
+    return { ok: false, error: friendlyError(e) };
+  }
+}
+
+export async function firebaseReauthenticateWithGoogle(): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const auth = getFirebaseAuth();
+    const user = auth.currentUser;
+    if (!user) return { ok: false, error: "Not logged in." };
+    const provider = new GoogleAuthProvider();
+    provider.addScope("email");
+    const result = await signInWithPopup(auth, provider);
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    if (!credential) return { ok: false, error: "Google authentication failed." };
+    await reauthenticateWithCredential(user, credential);
+    return { ok: true };
+  } catch (e: unknown) {
+    const code = (e as { code?: string }).code ?? "";
+    if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") {
+      return { ok: false, error: "Google sign-in was cancelled." };
+    }
     return { ok: false, error: friendlyError(e) };
   }
 }

@@ -10,7 +10,10 @@ import {
 } from "react";
 import { getBackendProvider, isCloudConfigured } from "../services/backend/BackendService";
 import { isFirebaseConfigured } from "../services/firebase/firebase";
-import { subscribeAuthState, mapFirebaseUser, firebaseGoogleSignIn } from "../services/firebase/auth";
+import {
+  subscribeAuthState, mapFirebaseUser, firebaseGoogleSignIn,
+  firebaseReauthenticate, firebaseReauthenticateWithGoogle,
+} from "../services/firebase/auth";
 import { saveUserProfile } from "../services/firebase/firestore";
 import type { BackendProvider } from "../services/backend/BackendProvider";
 
@@ -54,6 +57,8 @@ interface AuthContextValue {
   updateProfile: (data: Partial<VoxoraUser>) => Promise<void>;
   changePassword: (current: string, next: string) => Promise<{ ok: boolean; error?: string }>;
   deleteAccount: () => Promise<{ ok: boolean; error?: string }>;
+  reauthenticate: (password: string) => Promise<{ ok: boolean; error?: string }>;
+  reauthenticateWithGoogle: () => Promise<{ ok: boolean; error?: string }>;
   getProfileCompletion: () => number;
 }
 
@@ -226,6 +231,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return provider.changePassword(user.id, current, next);
   }, [bp, user]);
 
+  // ── Reauthenticate ─────────────────────────────────────────────────────────
+  const reauthenticate = useCallback(async (
+    password: string
+  ): Promise<{ ok: boolean; error?: string }> => {
+    if (!isFirebaseConfigured()) return { ok: false, error: "Reauthentication is only available with Firebase." };
+    return firebaseReauthenticate(password);
+  }, []);
+
+  const reauthenticateWithGoogle = useCallback(async (): Promise<{ ok: boolean; error?: string }> => {
+    if (!isFirebaseConfigured()) return { ok: false, error: "Reauthentication is only available with Firebase." };
+    return firebaseReauthenticateWithGoogle();
+  }, []);
+
   // ── Delete Account ─────────────────────────────────────────────────────────
   const deleteAccount = useCallback(async (): Promise<{ ok: boolean; error?: string }> => {
     if (!user) return { ok: false, error: "Not logged in." };
@@ -256,6 +274,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user, isAuthenticated: !!user, isLoading, loginHistory,
       login, signUp, loginWithGoogle, logout, updateProfile,
       changePassword, deleteAccount,
+      reauthenticate, reauthenticateWithGoogle,
       getProfileCompletion,
     }}>
       {children}
