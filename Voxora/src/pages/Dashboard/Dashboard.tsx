@@ -54,6 +54,15 @@ const OpsSOPBuilder      = lazy(() => import("../Workspaces/OpsSOPBuilder"));
 const OpsWorkflowBuilder = lazy(() => import("../Workspaces/OpsWorkflowBuilder"));
 const OpsTeamManager     = lazy(() => import("../Workspaces/OpsTeamManager"));
 const OpsPerformance     = lazy(() => import("../Workspaces/OpsPerformance"));
+// ── V6.6 HR & People Studio ──────────────────────────────────────────────────
+const HRPeopleStudio       = lazy(() => import("../Workspaces/HRPeopleStudio"));
+const HREmployeeManager    = lazy(() => import("../Workspaces/HREmployeeManager"));
+const HRRecruitmentManager = lazy(() => import("../Workspaces/HRRecruitmentManager"));
+const HRAttendanceManager  = lazy(() => import("../Workspaces/HRAttendanceManager"));
+const HRLeaveManager       = lazy(() => import("../Workspaces/HRLeaveManager"));
+const HRPayrollManager     = lazy(() => import("../Workspaces/HRPayrollManager"));
+const HRPerformanceReview  = lazy(() => import("../Workspaces/HRPerformanceReview"));
+const HRReports            = lazy(() => import("../Workspaces/HRReports"));
 // ── V6.2 Marketing Studio ────────────────────────────────────────────────────
 const MarketingStudio   = lazy(() => import("../Workspaces/MarketingStudio"));
 const BrandIdentityGen  = lazy(() => import("../Workspaces/BrandIdentityGen"));
@@ -1348,6 +1357,16 @@ const Dashboard = () => {
           {workspace === "opsWorkflow"     && <OpsWorkflowBuilder setWorkspace={setWorkspace} />}
           {workspace === "opsTeam"         && <OpsTeamManager     setWorkspace={setWorkspace} />}
           {workspace === "opsPerformance"  && <OpsPerformance     setWorkspace={setWorkspace} />}
+
+          {/* V6.6 HR & People Studio */}
+          {workspace === "hrStudio"      && <HRPeopleStudio       setWorkspace={setWorkspace} />}
+          {workspace === "hrEmployees"   && <HREmployeeManager    setWorkspace={setWorkspace} />}
+          {workspace === "hrRecruitment" && <HRRecruitmentManager setWorkspace={setWorkspace} />}
+          {workspace === "hrAttendance"  && <HRAttendanceManager  setWorkspace={setWorkspace} />}
+          {workspace === "hrLeave"       && <HRLeaveManager       setWorkspace={setWorkspace} />}
+          {workspace === "hrPayroll"     && <HRPayrollManager     setWorkspace={setWorkspace} />}
+          {workspace === "hrPerformance" && <HRPerformanceReview  setWorkspace={setWorkspace} />}
+          {workspace === "hrReports"     && <HRReports            setWorkspace={setWorkspace} />}
 
           {/* V6.4 Sales & CRM Studio */}
           {workspace === "salesCRM"             && <SalesCRM             setWorkspace={setWorkspace} />}

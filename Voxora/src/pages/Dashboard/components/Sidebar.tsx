@@ -79,6 +79,17 @@ const OPS_TOOLS = [
   { id: "opsPerformance",  icon: "📊",  label: "Performance Dashboard" },
 ];
 
+const HR_PEOPLE_TOOLS = [
+  { id: "hrStudio",      icon: "👥",  label: "HR & People Studio"   },
+  { id: "hrEmployees",   icon: "👤",  label: "Employee Manager"     },
+  { id: "hrRecruitment", icon: "🎯",  label: "Recruitment Manager"  },
+  { id: "hrAttendance",  icon: "🕐",  label: "Attendance Manager"   },
+  { id: "hrLeave",       icon: "🏖️", label: "Leave Manager"        },
+  { id: "hrPayroll",     icon: "💵",  label: "Payroll Manager"      },
+  { id: "hrPerformance", icon: "⭐",  label: "Performance Review"   },
+  { id: "hrReports",     icon: "📊",  label: "HR Reports"           },
+];
+
 const SALES_CRM_TOOLS = [
   { id: "salesCRM",             icon: "🤝", label: "Sales & CRM Studio"    },
   { id: "crmLeadManager",       icon: "👤", label: "Lead Manager"           },
@@ -357,6 +368,20 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
       <div className="sidebar-section-label">⚙️ Operations Studio (V6.5)</div>
       <nav className="sidebar-nav">
         {OPS_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">👥 HR &amp; People Studio (V6.6)</div>
+      <nav className="sidebar-nav">
+        {HR_PEOPLE_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
