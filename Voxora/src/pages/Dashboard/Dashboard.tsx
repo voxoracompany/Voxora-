@@ -46,6 +46,13 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V6.1 Investor & Pitch Studio ─────────────────────────────────────────────
+const InvestorStudio      = lazy(() => import("../Workspaces/InvestorStudio"));
+const PitchDeckGenerator  = lazy(() => import("../Workspaces/PitchDeckGenerator"));
+const ExecSummaryGen      = lazy(() => import("../Workspaces/ExecSummaryGen"));
+const ElevatorPitch       = lazy(() => import("../Workspaces/ElevatorPitch"));
+const FundingCalculator   = lazy(() => import("../Workspaces/FundingCalculator"));
+const InvestorReadiness   = lazy(() => import("../Workspaces/InvestorReadiness"));
 // ── V6.0 AI Business Platform ─────────────────────────────────────────────────
 const BusinessPlanGenerator = lazy(() => import("../Workspaces/BusinessPlanGenerator"));
 const BetaReadinessReport = lazy(() => import("../Workspaces/BetaReadinessReport"));
@@ -1196,6 +1203,14 @@ const Dashboard = () => {
           {workspace === "userProfile"      && <UserProfile        setWorkspace={setWorkspace} />}
           {workspace === "accountSettings"  && <AccountSettings    setWorkspace={setWorkspace} />}
           {workspace === "securitySettings" && <SecuritySettings   setWorkspace={setWorkspace} />}
+
+          {/* V6.1 Investor & Pitch Studio */}
+          {workspace === "investorStudio"     && <InvestorStudio     setWorkspace={setWorkspace} />}
+          {workspace === "pitchDeckGenerator" && <PitchDeckGenerator setWorkspace={setWorkspace} />}
+          {workspace === "execSummaryGen"     && <ExecSummaryGen     setWorkspace={setWorkspace} />}
+          {workspace === "elevatorPitch"      && <ElevatorPitch      setWorkspace={setWorkspace} />}
+          {workspace === "fundingCalculator"  && <FundingCalculator  setWorkspace={setWorkspace} />}
+          {workspace === "investorReadiness"  && <InvestorReadiness  setWorkspace={setWorkspace} />}
 
           {/* V6.0 AI Business Platform */}
           {workspace === "businessPlanGenerator" && <BusinessPlanGenerator setWorkspace={setWorkspace} />}

@@ -1,0 +1,52 @@
+/* ── V6.1 Investor & Pitch Studio — Shared Styles ─────────────────────────── */
+
+/* Export buttons */
+.is-export-btn {
+  padding: 8px 14px;
+  background: var(--card-bg, #f3f4f6);
+  color: var(--text, #374151);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.is-export-btn:hover {
+  background: var(--border, #e5e7eb);
+  border-color: #6C63FF;
+}
+
+/* Form labels */
+.is-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text, #374151);
+  margin-bottom: 6px;
+}
+
+/* Input hint (formatted value) */
+.is-hint {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #6C63FF;
+  font-weight: 600;
+}
+
+/* Dark mode */
+[data-theme="dark"] .is-export-btn {
+  background: #1f2937;
+  color: #d1d5db;
+  border-color: #374151;
+}
+[data-theme="dark"] .is-export-btn:hover {
+  background: #374151;
+}
+[data-theme="dark"] .is-label {
+  color: #d1d5db;
+}
+[data-theme="dark"] .is-hint {
+  color: #a78bfa;
+}
