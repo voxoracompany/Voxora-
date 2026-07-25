@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { isFirebaseConfigured } from "../../services/firebase/firebase";
 import PublicNav from "../../components/PublicNav";
 import PublicFooter from "../../components/PublicFooter";
 import "./public-pages.css";
@@ -12,6 +13,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const firebaseMode = isFirebaseConfigured();
 
   const handleGoogleSignIn = async () => {
     setError("");
@@ -118,7 +120,9 @@ export default function Login() {
           </button>
 
           <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: 10, padding: "10px 14px", marginTop: 16, fontSize: 12, color: "#1d4ed8" }}>
-            💡 <strong>Demo mode:</strong> Enter any email &amp; password to sign in. A demo account is created automatically.
+            {firebaseMode
+              ? <>🔒 <strong>Cloud authentication:</strong> Your account is securely managed by Firebase.</>
+              : <>💡 <strong>Demo mode:</strong> Enter any email &amp; password to sign in. A demo account is created automatically.</>}
           </div>
 
           <div className="pub-auth-footer">

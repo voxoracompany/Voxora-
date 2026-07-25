@@ -200,6 +200,10 @@ function friendlyError(e: unknown): string {
     "auth/too-many-requests":         "Too many attempts. Please wait and try again.",
     "auth/network-request-failed":    "Network error. Check your connection.",
     "auth/user-disabled":             "This account has been disabled.",
+    "auth/operation-not-allowed":     "This sign-in method is not enabled in Firebase.",
+    "auth/popup-closed-by-user":      "Google sign-in was cancelled.",
+    "auth/popup-blocked":              "Your browser blocked the Google sign-in window. Allow pop-ups and try again.",
+    "auth/unauthorized-domain":        "This domain is not authorized for Firebase sign-in.",
     "auth/requires-recent-login":     "Please log out and log back in before changing your password.",
   };
   return map[code] ?? ((e as { message?: string }).message ?? "An unexpected error occurred.");

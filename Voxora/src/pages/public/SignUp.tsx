@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { isFirebaseConfigured } from "../../services/firebase/firebase";
 import PublicNav from "../../components/PublicNav";
 import PublicFooter from "../../components/PublicFooter";
 import "./public-pages.css";
@@ -12,6 +13,7 @@ export default function SignUp() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const firebaseMode = isFirebaseConfigured();
 
   const handleGoogleSignIn = async () => {
     setError("");
@@ -138,6 +140,12 @@ export default function SignUp() {
             </svg>
             {googleLoading ? <><span className="auth-spinner auth-spinner--dark" aria-hidden="true" />Signing you in...</> : "Sign up with Google"}
           </button>
+
+          {firebaseMode && (
+            <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: 10, padding: "10px 14px", marginTop: 16, fontSize: 12, color: "#1d4ed8" }}>
+              🔒 <strong>Cloud authentication:</strong> Your account will be securely managed by Firebase.
+            </div>
+          )}
 
           <p style={{ fontSize: 12, color: "#9ca3af", textAlign: "center", marginTop: 16, lineHeight: 1.5 }}>
             By creating an account you agree to our{" "}
