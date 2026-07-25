@@ -171,17 +171,17 @@ export default function CRMExport({ setWorkspace }: Props) {
     }
 
     if (format === "csv") {
-      let csv = "";
-      if (dataset === "leads")    csv = leadsToCsv(leads);
-      else if (dataset === "contacts") csv = contactsToCsv(contacts);
-      else if (dataset === "meetings") csv = meetingsToCsv(meetings);
-      else if (dataset === "tasks")    csv = tasksToCsv(tasks);
-      else csv = [
-        "=== LEADS ===", leadsToCsv(leads),
-        "\n=== CONTACTS ===", contactsToCsv(contacts),
-        "\n=== MEETINGS ===", meetingsToCsv(meetings),
-        "\n=== TASKS ===", tasksToCsv(tasks),
-      ].join("\n");
+      const csv =
+        dataset === "leads"    ? leadsToCsv(leads)
+        : dataset === "contacts" ? contactsToCsv(contacts)
+        : dataset === "meetings" ? meetingsToCsv(meetings)
+        : dataset === "tasks"    ? tasksToCsv(tasks)
+        : [
+            "=== LEADS ===", leadsToCsv(leads),
+            "\n=== CONTACTS ===", contactsToCsv(contacts),
+            "\n=== MEETINGS ===", meetingsToCsv(meetings),
+            "\n=== TASKS ===", tasksToCsv(tasks),
+          ].join("\n");
       downloadBlob(csv, `voxora-crm-${dataset}-${ts}.csv`, "text/csv");
       showToast("✅ CSV exported!");
       return;
