@@ -41,6 +41,16 @@ const STRATEGY_TOOLS = [
   { id: "businessPlanGenerator", icon: "📋", label: "AI Business Plan"   },
 ];
 
+const MARKETING_STUDIO_TOOLS = [
+  { id: "marketingStudio",    icon: "📣", label: "Marketing Studio"          },
+  { id: "brandIdentityGen",   icon: "🎨", label: "Brand Identity Generator"  },
+  { id: "landingPageGen",     icon: "🖥️", label: "Landing Page Generator"   },
+  { id: "marketingCopyGen",   icon: "✍️", label: "Marketing Copy Generator" },
+  { id: "emailCampaignGen",   icon: "📧", label: "Email Campaign Generator"  },
+  { id: "socialMediaPlanner", icon: "📅", label: "Social Media Planner"      },
+  { id: "seoToolkit",         icon: "🔍", label: "SEO Toolkit"               },
+];
+
 const INVESTOR_STUDIO_TOOLS = [
   { id: "investorStudio",     icon: "🚀", label: "Investor Studio"         },
   { id: "pitchDeckGenerator", icon: "🎯", label: "Pitch Deck Generator"    },
@@ -258,6 +268,20 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
       <div className="sidebar-section-label">Strategy</div>
       <nav className="sidebar-nav">
         {STRATEGY_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">📣 Marketing Studio (V6.2)</div>
+      <nav className="sidebar-nav">
+        {MARKETING_STUDIO_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}

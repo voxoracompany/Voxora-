@@ -1,0 +1,51 @@
+/* ── V6.2 Marketing Studio — Shared Styles ───────────────────────────────────*/
+
+/* Export button */
+.ms-export-btn {
+  padding: 7px 13px;
+  background: var(--card-bg, #f3f4f6);
+  color: var(--text, #374151);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  width: 100%;
+  text-align: center;
+}
+.ms-export-btn:hover {
+  background: var(--border, #e5e7eb);
+  border-color: #6C63FF;
+}
+
+/* Form label */
+.ms-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text, #374151);
+  margin-bottom: 4px;
+}
+
+/* Tool card hover lift */
+.ms-tool-card {
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.ms-tool-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(108,99,255,0.12);
+}
+
+/* Dark mode */
+[data-theme="dark"] .ms-export-btn {
+  background: #1f2937;
+  color: #d1d5db;
+  border-color: #374151;
+}
+[data-theme="dark"] .ms-export-btn:hover {
+  background: #374151;
+}
+[data-theme="dark"] .ms-label {
+  color: #d1d5db;
+}

@@ -46,6 +46,14 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V6.2 Marketing Studio ────────────────────────────────────────────────────
+const MarketingStudio   = lazy(() => import("../Workspaces/MarketingStudio"));
+const BrandIdentityGen  = lazy(() => import("../Workspaces/BrandIdentityGen"));
+const LandingPageGen    = lazy(() => import("../Workspaces/LandingPageGen"));
+const MarketingCopyGen  = lazy(() => import("../Workspaces/MarketingCopyGen"));
+const EmailCampaignGen  = lazy(() => import("../Workspaces/EmailCampaignGen"));
+const SocialMediaPlanner = lazy(() => import("../Workspaces/SocialMediaPlanner"));
+const SEOToolkit        = lazy(() => import("../Workspaces/SEOToolkit"));
 // ── V6.1 Investor & Pitch Studio ─────────────────────────────────────────────
 const InvestorStudio      = lazy(() => import("../Workspaces/InvestorStudio"));
 const PitchDeckGenerator  = lazy(() => import("../Workspaces/PitchDeckGenerator"));
@@ -1203,6 +1211,15 @@ const Dashboard = () => {
           {workspace === "userProfile"      && <UserProfile        setWorkspace={setWorkspace} />}
           {workspace === "accountSettings"  && <AccountSettings    setWorkspace={setWorkspace} />}
           {workspace === "securitySettings" && <SecuritySettings   setWorkspace={setWorkspace} />}
+
+          {/* V6.2 Marketing Studio */}
+          {workspace === "marketingStudio"   && <MarketingStudio   setWorkspace={setWorkspace} />}
+          {workspace === "brandIdentityGen"  && <BrandIdentityGen  setWorkspace={setWorkspace} />}
+          {workspace === "landingPageGen"    && <LandingPageGen    setWorkspace={setWorkspace} />}
+          {workspace === "marketingCopyGen"  && <MarketingCopyGen  setWorkspace={setWorkspace} />}
+          {workspace === "emailCampaignGen"  && <EmailCampaignGen  setWorkspace={setWorkspace} />}
+          {workspace === "socialMediaPlanner"&& <SocialMediaPlanner setWorkspace={setWorkspace} />}
+          {workspace === "seoToolkit"        && <SEOToolkit        setWorkspace={setWorkspace} />}
 
           {/* V6.1 Investor & Pitch Studio */}
           {workspace === "investorStudio"     && <InvestorStudio     setWorkspace={setWorkspace} />}
