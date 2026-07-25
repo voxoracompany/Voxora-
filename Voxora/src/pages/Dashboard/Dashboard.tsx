@@ -158,6 +158,15 @@ const UnitEconomics      = lazy(() => import("../Workspaces/UnitEconomics"));
 const BreakEven          = lazy(() => import("../Workspaces/BreakEven"));
 const PitchDeck          = lazy(() => import("../Workspaces/PitchDeck"));
 const ExecutiveSummary   = lazy(() => import("../Workspaces/ExecutiveSummary"));
+// ── V6.3 Financial Studio ─────────────────────────────────────────────────────
+const FinancialStudio         = lazy(() => import("../Workspaces/FinancialStudio"));
+const FinancialDashboard      = lazy(() => import("../Workspaces/FinancialDashboard"));
+const RevenueForecast         = lazy(() => import("../Workspaces/RevenueForecast"));
+const StartupCostCalculator   = lazy(() => import("../Workspaces/StartupCostCalculator"));
+const BreakEvenCalculator     = lazy(() => import("../Workspaces/BreakEvenCalculator"));
+const PricingStrategyGenerator= lazy(() => import("../Workspaces/PricingStrategyGenerator"));
+const CashFlowPlanner         = lazy(() => import("../Workspaces/CashFlowPlanner"));
+const FinancialHealthScore    = lazy(() => import("../Workspaces/FinancialHealthScore"));
 // ── V4.2 Marketing Studio ─────────────────────────────────────────────────────
 const MarketingHub       = lazy(() => import("../Workspaces/MarketingHub"));
 const MarketingStrategy  = lazy(() => import("../Workspaces/MarketingStrategy"));
@@ -1313,7 +1322,16 @@ const Dashboard = () => {
           {workspace === "dueDiligence"        && <DueDiligence        setWorkspace={setWorkspace} />}
           {workspace === "capTable"            && <CapTable            setWorkspace={setWorkspace} />}
 
-          {/* V4.3 Financial Studio */}
+          {/* V6.3 Financial Studio */}
+          {workspace === "financialStudio"          && <FinancialStudio          setWorkspace={setWorkspace} />}
+          {workspace === "financialDashboard"       && <FinancialDashboard       setWorkspace={setWorkspace} />}
+          {workspace === "revenueForecast"          && <RevenueForecast          setWorkspace={setWorkspace} />}
+          {workspace === "startupCostCalculator"    && <StartupCostCalculator    setWorkspace={setWorkspace} />}
+          {workspace === "breakEvenCalculator"      && <BreakEvenCalculator      setWorkspace={setWorkspace} />}
+          {workspace === "pricingStrategyGenerator" && <PricingStrategyGenerator setWorkspace={setWorkspace} />}
+          {workspace === "cashFlowPlanner"          && <CashFlowPlanner          setWorkspace={setWorkspace} />}
+          {workspace === "financialHealthScore"     && <FinancialHealthScore     setWorkspace={setWorkspace} />}
+          {/* V4.3 Financial Studio (Legacy) */}
           {workspace === "financialHub"      && <FinancialHub      setWorkspace={setWorkspace} />}
           {workspace === "financialForecast" && <FinancialForecast setWorkspace={setWorkspace} />}
           {workspace === "revenueModel"      && <RevenueModel      setWorkspace={setWorkspace} />}
