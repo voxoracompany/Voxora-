@@ -69,6 +69,16 @@ const INVESTOR_TOOLS = [
   { id: "capTable",            icon: "📊", label: "Cap Table" },
 ];
 
+const OPS_TOOLS = [
+  { id: "opsStudio",       icon: "⚙️",  label: "Operations Studio"    },
+  { id: "opsTaskManager",  icon: "✅",  label: "Task Manager"          },
+  { id: "opsKanban",       icon: "📋",  label: "Kanban Board"          },
+  { id: "opsSOP",          icon: "📄",  label: "SOP Builder"           },
+  { id: "opsWorkflow",     icon: "🔄",  label: "Workflow Builder"      },
+  { id: "opsTeam",         icon: "👥",  label: "Team Manager"          },
+  { id: "opsPerformance",  icon: "📊",  label: "Performance Dashboard" },
+];
+
 const SALES_CRM_TOOLS = [
   { id: "salesCRM",             icon: "🤝", label: "Sales & CRM Studio"    },
   { id: "crmLeadManager",       icon: "👤", label: "Lead Manager"           },
@@ -333,6 +343,20 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
       <div className="sidebar-section-label">Investor Studio</div>
       <nav className="sidebar-nav">
         {INVESTOR_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">⚙️ Operations Studio (V6.5)</div>
+      <nav className="sidebar-nav">
+        {OPS_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}

@@ -46,6 +46,14 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
+// ── V6.5 Operations Studio ───────────────────────────────────────────────────
+const OperationsStudio   = lazy(() => import("../Workspaces/OperationsStudio"));
+const OpsTaskManager     = lazy(() => import("../Workspaces/OpsTaskManager"));
+const OpsKanban          = lazy(() => import("../Workspaces/OpsKanban"));
+const OpsSOPBuilder      = lazy(() => import("../Workspaces/OpsSOPBuilder"));
+const OpsWorkflowBuilder = lazy(() => import("../Workspaces/OpsWorkflowBuilder"));
+const OpsTeamManager     = lazy(() => import("../Workspaces/OpsTeamManager"));
+const OpsPerformance     = lazy(() => import("../Workspaces/OpsPerformance"));
 // ── V6.2 Marketing Studio ────────────────────────────────────────────────────
 const MarketingStudio   = lazy(() => import("../Workspaces/MarketingStudio"));
 const BrandIdentityGen  = lazy(() => import("../Workspaces/BrandIdentityGen"));
@@ -1331,6 +1339,15 @@ const Dashboard = () => {
           {workspace === "termSheet"           && <TermSheetGuide      setWorkspace={setWorkspace} />}
           {workspace === "dueDiligence"        && <DueDiligence        setWorkspace={setWorkspace} />}
           {workspace === "capTable"            && <CapTable            setWorkspace={setWorkspace} />}
+
+          {/* V6.5 Operations Studio */}
+          {workspace === "opsStudio"       && <OperationsStudio   setWorkspace={setWorkspace} />}
+          {workspace === "opsTaskManager"  && <OpsTaskManager     setWorkspace={setWorkspace} />}
+          {workspace === "opsKanban"       && <OpsKanban          setWorkspace={setWorkspace} />}
+          {workspace === "opsSOP"          && <OpsSOPBuilder      setWorkspace={setWorkspace} />}
+          {workspace === "opsWorkflow"     && <OpsWorkflowBuilder setWorkspace={setWorkspace} />}
+          {workspace === "opsTeam"         && <OpsTeamManager     setWorkspace={setWorkspace} />}
+          {workspace === "opsPerformance"  && <OpsPerformance     setWorkspace={setWorkspace} />}
 
           {/* V6.4 Sales & CRM Studio */}
           {workspace === "salesCRM"             && <SalesCRM             setWorkspace={setWorkspace} />}
