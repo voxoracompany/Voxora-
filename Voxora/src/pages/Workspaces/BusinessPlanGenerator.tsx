@@ -131,7 +131,9 @@ Business Title: ${plan.title}
 Write a detailed, professional, and actionable "${sec.label}" section. Be specific and data-driven where applicable. Format the response with clear sub-headings and bullet points where appropriate.`;
 
       try {
+        console.log(`[BPG] Before await AI generation for "${sec.label}"`);
         const res = await aiService.generate({ prompt, workspace: "businessPlan" });
+        console.log(`[BPG] After await AI generation for "${sec.label}"`);
         console.log(`[BPG] ✅ Section "${sec.label}" received (${res.content.length} chars)`);
         sections[sec.key] = res.content;
       } catch (err) {
@@ -160,6 +162,7 @@ Write a detailed, professional, and actionable "${sec.label}" section. Be specif
       showToast("⚠️ Please fill in the title and business idea.");
       return;
     }
+    let backgroundSave: BusinessPlan | null = null;
     const plan: BusinessPlan = {
       id: newPlanId(),
       title: formTitle.trim(),
@@ -173,28 +176,32 @@ Write a detailed, professional, and actionable "${sec.label}" section. Be specif
     };
 
     try {
+      console.log("[BPG] Before await generatePlan");
       const generated = await generatePlan(plan);
+      console.log("[BPG] After await generatePlan");
 
       if (cancelRef.current) {
         showToast("⛔ Generation cancelled.");
         return;
       }
 
-      console.log("[BPG] 💾 Saving plan…");
-      const saved = await savePlan(generated);
-      console.log("[BPG] ✅ Plan saved, switching to view:", saved.id);
+      console.log("[BPG] ✅ Plan generated, switching to view:", generated.id);
 
       // All state updates in one synchronous block so React batches them
       // into a single render — overlay closes and view panel appears together.
-      setPlans(prev => [saved, ...prev.filter(p => p.id !== saved.id)]);
-      setCurrentPlan(saved);
+      setPlans(prev => [generated, ...prev.filter(p => p.id !== generated.id)]);
+      setCurrentPlan(generated);
       setView("view");
       setActiveSection(SECTIONS[0].key);
       setFormTitle("");
       setFormIdea("");
       setFormIndustry("Technology");
       showToast("✅ Business Plan created successfully!");
-      console.log("[BPG] 🖥️ Rendering view panel for plan:", saved.id);
+      console.log("[BPG] 🖥️ Rendering view panel for plan:", generated.id);
+
+      // The view must render without waiting for Firestore. The save starts
+      // only after the finally block closes the generation overlay below.
+      backgroundSave = generated;
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Generation failed. Please try again.";
       console.error("[BPG] ❌ handleCreate error:", err);
@@ -204,6 +211,19 @@ Write a detailed, professional, and actionable "${sec.label}" section. Be specif
       setIsGenerating(false);
       setGenProgress(0);
       setGenStatus("");
+    }
+
+    if (backgroundSave) {
+      void (async () => {
+        try {
+          console.log("[BPG] Before await background savePlan");
+          await savePlan(backgroundSave, { rejectOnCloudFailure: true });
+          console.log("[BPG] After await background savePlan");
+        } catch (err) {
+          console.error("[BPG] ❌ Background cloud save failed:", err);
+          showToast("Business plan generated successfully, but cloud save failed.");
+        }
+      })();
     }
   }, [formTitle, formIdea, formIndustry, uid, activeProvider, generatePlan, showToast]);
 

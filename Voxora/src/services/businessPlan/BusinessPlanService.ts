@@ -17,6 +17,27 @@ export interface BusinessPlan {
 }
 
 const LS_KEY = "voxora-business-plans";
+const FIRESTORE_TIMEOUT_MS = 12_000;
+
+type SavePlanOptions = {
+  rejectOnCloudFailure?: boolean;
+};
+
+function withFirestoreTimeout<T>(
+  operation: Promise<T>,
+  operationName: string,
+): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new Error(`Firestore ${operationName} timed out after 12 seconds`));
+    }, FIRESTORE_TIMEOUT_MS);
+  });
+
+  return Promise.race([operation, timeout]).finally(() => {
+    if (timeoutId) clearTimeout(timeoutId);
+  });
+}
 
 // ── Local storage helpers ─────────────────────────────────────────────────────
 function readLocal(): BusinessPlan[] {
@@ -32,7 +53,10 @@ function writeLocal(plans: BusinessPlan[]): void {
 
 // ── Firestore helpers (dynamic import to avoid loading firebase if unconfigured) ─
 async function getCollection(uid: string) {
-  const { getFirestore, collection } = await import("firebase/firestore");
+  const { getFirestore, collection } = await withFirestoreTimeout(
+    import("firebase/firestore"),
+    "module load",
+  );
   const db = getFirestore(getFirebaseApp());
   return collection(db, `users/${uid}/businessPlans`);
 }
@@ -42,9 +66,15 @@ async function getCollection(uid: string) {
 export async function fetchPlans(uid: string): Promise<BusinessPlan[]> {
   if (!isFirebaseConfigured() || !uid) return readLocal().filter(p => p.ownerUid === uid);
   try {
-    const { getDocs, orderBy, query } = await import("firebase/firestore");
-    const col = await getCollection(uid);
-    const snap = await getDocs(query(col, orderBy("updatedAt", "desc")));
+    const { getDocs, orderBy, query } = await withFirestoreTimeout(
+      import("firebase/firestore"),
+      "module load",
+    );
+    const col = await withFirestoreTimeout(getCollection(uid), "collection lookup");
+    const snap = await withFirestoreTimeout(
+      getDocs(query(col, orderBy("updatedAt", "desc"))),
+      "fetch",
+    );
     return snap.docs.map(d => ({ id: d.id, ...d.data() } as BusinessPlan));
   } catch (e) {
     console.warn("[BusinessPlanService] Firestore fetch failed, using local", e);
@@ -52,7 +82,10 @@ export async function fetchPlans(uid: string): Promise<BusinessPlan[]> {
   }
 }
 
-export async function savePlan(plan: BusinessPlan): Promise<BusinessPlan> {
+export async function savePlan(
+  plan: BusinessPlan,
+  options: SavePlanOptions = {},
+): Promise<BusinessPlan> {
   if (!isFirebaseConfigured() || !plan.ownerUid) {
     const all = readLocal().filter(p => p.id !== plan.id);
     all.unshift(plan);
@@ -60,17 +93,26 @@ export async function savePlan(plan: BusinessPlan): Promise<BusinessPlan> {
     return plan;
   }
   try {
-    const { doc, setDoc } = await import("firebase/firestore");
-    const { getFirestore } = await import("firebase/firestore");
+    console.log("[BusinessPlanService] Before await Firestore module load");
+    const { doc, setDoc, getFirestore } = await withFirestoreTimeout(
+      import("firebase/firestore"),
+      "module load",
+    );
+    console.log("[BusinessPlanService] After await Firestore module load");
     const db = getFirestore(getFirebaseApp());
     const ref = doc(db, `users/${plan.ownerUid}/businessPlans/${plan.id}`);
-    await setDoc(ref, plan);
+    console.log("[BusinessPlanService] Before await Firestore save");
+    await withFirestoreTimeout(setDoc(ref, plan), "save");
+    console.log("[BusinessPlanService] After await Firestore save");
     return plan;
   } catch (e) {
     console.warn("[BusinessPlanService] Firestore save failed, using local", e);
     const all = readLocal().filter(p => p.id !== plan.id);
     all.unshift(plan);
     writeLocal(all);
+    if (options.rejectOnCloudFailure) {
+      throw e;
+    }
     return plan;
   }
 }
@@ -81,9 +123,15 @@ export async function deletePlan(uid: string, planId: string): Promise<void> {
     return;
   }
   try {
-    const { doc, deleteDoc, getFirestore } = await import("firebase/firestore");
+    const { doc, deleteDoc, getFirestore } = await withFirestoreTimeout(
+      import("firebase/firestore"),
+      "module load",
+    );
     const db = getFirestore(getFirebaseApp());
-    await deleteDoc(doc(db, `users/${uid}/businessPlans/${planId}`));
+    await withFirestoreTimeout(
+      deleteDoc(doc(db, `users/${uid}/businessPlans/${planId}`)),
+      "delete",
+    );
   } catch (e) {
     console.warn("[BusinessPlanService] Firestore delete failed, using local", e);
     writeLocal(readLocal().filter(p => p.id !== planId));
