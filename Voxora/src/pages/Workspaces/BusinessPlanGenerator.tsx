@@ -104,10 +104,15 @@ export default function BusinessPlanGenerator({ setWorkspace }: Props) {
   }, []);
 
   // ── Generate all sections ───────────────────────────────────────────────────
+  // NOTE: setIsGenerating(false) is intentionally NOT called here.
+  // The caller (handleCreate) owns that transition so all state updates
+  // (view, currentPlan, isGenerating) land in the same React render batch,
+  // preventing a flash back to the create form.
   const generatePlan = useCallback(async (plan: BusinessPlan): Promise<BusinessPlan> => {
     setIsGenerating(true);
     cancelRef.current = false;
     setGenProgress(0);
+    setGenStatus("");
 
     const sections: Record<string, string> = { ...plan.generatedSections };
 
@@ -115,7 +120,7 @@ export default function BusinessPlanGenerator({ setWorkspace }: Props) {
       if (cancelRef.current) break;
       const sec = SECTIONS[i];
       setGenStatus(`Generating: ${sec.label}…`);
-      setGenProgress(Math.round(((i) / SECTIONS.length) * 100));
+      setGenProgress(Math.round((i / SECTIONS.length) * 100));
 
       const prompt = `You are a professional business consultant. Generate the "${sec.label}" section for a business plan.
 
@@ -127,22 +132,26 @@ Write a detailed, professional, and actionable "${sec.label}" section. Be specif
 
       try {
         const res = await aiService.generate({ prompt, workspace: "businessPlan" });
+        console.log(`[BPG] ✅ Section "${sec.label}" received (${res.content.length} chars)`);
         sections[sec.key] = res.content;
-      } catch {
+      } catch (err) {
+        console.warn(`[BPG] ⚠️ Section "${sec.label}" failed:`, err);
         sections[sec.key] = `[Generation failed for this section. Click Retry to regenerate.]`;
       }
     }
 
     setGenProgress(100);
     setGenStatus("Complete!");
-    setIsGenerating(false);
+    // ← setIsGenerating(false) deliberately omitted here; handleCreate owns it.
 
-    return {
+    const result: BusinessPlan = {
       ...plan,
       generatedSections: sections,
       aiProvider: activeProvider,
       updatedAt: new Date().toISOString(),
     };
+    console.log("[BPG] 📋 Plan assembled:", result.id, "sections:", Object.keys(sections).length);
+    return result;
   }, [activeProvider]);
 
   // ── Create new plan ─────────────────────────────────────────────────────────
@@ -163,19 +172,39 @@ Write a detailed, professional, and actionable "${sec.label}" section. Be specif
       updatedAt: new Date().toISOString(),
     };
 
-    const generated = await generatePlan(plan);
-    if (cancelRef.current) {
-      showToast("⛔ Generation cancelled.");
-      return;
-    }
+    try {
+      const generated = await generatePlan(plan);
 
-    const saved = await savePlan(generated);
-    setPlans(prev => [saved, ...prev.filter(p => p.id !== saved.id)]);
-    setCurrentPlan(saved);
-    setView("view");
-    setActiveSection(SECTIONS[0].key);
-    showToast("✅ Business Plan created successfully!");
-    setFormTitle(""); setFormIdea(""); setFormIndustry("Technology");
+      if (cancelRef.current) {
+        showToast("⛔ Generation cancelled.");
+        return;
+      }
+
+      console.log("[BPG] 💾 Saving plan…");
+      const saved = await savePlan(generated);
+      console.log("[BPG] ✅ Plan saved, switching to view:", saved.id);
+
+      // All state updates in one synchronous block so React batches them
+      // into a single render — overlay closes and view panel appears together.
+      setPlans(prev => [saved, ...prev.filter(p => p.id !== saved.id)]);
+      setCurrentPlan(saved);
+      setView("view");
+      setActiveSection(SECTIONS[0].key);
+      setFormTitle("");
+      setFormIdea("");
+      setFormIndustry("Technology");
+      showToast("✅ Business Plan created successfully!");
+      console.log("[BPG] 🖥️ Rendering view panel for plan:", saved.id);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Generation failed. Please try again.";
+      console.error("[BPG] ❌ handleCreate error:", err);
+      showToast(`❌ ${msg}`);
+    } finally {
+      // Always clear the overlay last, in the same flush as the state above.
+      setIsGenerating(false);
+      setGenProgress(0);
+      setGenStatus("");
+    }
   }, [formTitle, formIdea, formIndustry, uid, activeProvider, generatePlan, showToast]);
 
   // ── Retry a single section ──────────────────────────────────────────────────
