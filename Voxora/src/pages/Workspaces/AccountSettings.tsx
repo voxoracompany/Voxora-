@@ -89,13 +89,25 @@ export default function AccountSettings({ setWorkspace }: Props) {
       showToast("Please type the confirmation phrase exactly.", "error"); return;
     }
     setDeleteLoading(true);
-    const result = await deleteAccount();
-    setDeleteLoading(false);
-    if (!result.ok) {
-      showToast(result.error || "Unable to delete your account.", "error");
-      return;
+    try {
+      const result = await deleteAccount();
+      if (!result.ok) {
+        showToast(
+          result.error?.toLowerCase().includes("requires recent login")
+            || result.error?.toLowerCase().includes("log out and log back in")
+            ? "For your security, please sign out, sign back in, and try deleting your account again."
+            : result.error || "Unable to delete your account.",
+          "error",
+        );
+        return;
+      }
+      navigate("/");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unable to delete your account.";
+      showToast(message, "error");
+    } finally {
+      setDeleteLoading(false);
     }
-    navigate("/");
   };
 
   const handleLogout = () => {

@@ -38,6 +38,27 @@ function recRef(uid: string, col: string, id: string) {
   return doc(db(), "users", uid, col, id);
 }
 
+const DELETE_TIMEOUT_MS = 15_000;
+
+function withTimeout<T>(promise: Promise<T>, operation: string): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timeoutId = window.setTimeout(() => {
+      reject(new Error(`${operation} timed out. Check your connection and try again.`));
+    }, DELETE_TIMEOUT_MS);
+
+    promise.then(
+      value => {
+        window.clearTimeout(timeoutId);
+        resolve(value);
+      },
+      error => {
+        window.clearTimeout(timeoutId);
+        reject(error);
+      },
+    );
+  });
+}
+
 // ── User Profile ──────────────────────────────────────────────────────────────
 export async function getUserProfile(uid: string): Promise<Partial<BackendUser> | null> {
   try {
@@ -66,11 +87,13 @@ export async function deleteUserData(uid: string): Promise<{ ok: boolean; error?
   ];
 
   try {
-    await Promise.all(collections.map(async col => {
-      const snap = await getDocs(colRef(uid, col));
-      await Promise.all(snap.docs.map(record => deleteDoc(record.ref)));
-    }));
-    await deleteDoc(userRef(uid));
+    await withTimeout((async () => {
+      await Promise.all(collections.map(async col => {
+        const snap = await getDocs(colRef(uid, col));
+        await Promise.all(snap.docs.map(record => deleteDoc(record.ref)));
+      }));
+      await deleteDoc(userRef(uid));
+    })(), "Deleting your Firestore data");
     return { ok: true };
   } catch (e: unknown) {
     return {

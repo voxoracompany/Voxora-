@@ -105,6 +105,8 @@ export class FirebaseBackendProvider implements BackendProvider {
     if (!dataResult.ok) return dataResult;
     const authResult = await firebaseDeleteAccount();
     if (!authResult.ok) return authResult;
+    // Auth deletion normally signs the current user out. Explicit sign-out
+    // keeps the client state clean across Firebase SDK/browser versions.
     await firebaseLogout();
     return { ok: true };
   }

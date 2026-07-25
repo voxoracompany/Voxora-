@@ -18,15 +18,40 @@ import { AIRequestManager }    from './AIRequestManager';
 import { AIContextManager }    from './AIContextManager';
 
 const SETTINGS_KEY = 'voxora-ai-settings';
+const envGeminiKey = import.meta.env.VITE_GEMINI_API_KEY ?? '';
 
 // ── Settings helpers ──────────────────────────────────────────────────────────
 function loadSettings(): AISettings {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
-    if (!raw) return { ...DEFAULT_AI_SETTINGS };
-    return { ...DEFAULT_AI_SETTINGS, ...JSON.parse(raw) };
+    const envDefaults: AISettings = {
+      ...DEFAULT_AI_SETTINGS,
+      provider: envGeminiKey ? 'gemini' : DEFAULT_AI_SETTINGS.provider,
+      apiKeys: { ...DEFAULT_AI_SETTINGS.apiKeys, gemini: envGeminiKey },
+    };
+    if (!raw) return envDefaults;
+
+    const saved = JSON.parse(raw) as Partial<AISettings>;
+    const savedKeys: Partial<AISettings['apiKeys']> = saved.apiKeys ?? {};
+    const hasSavedGeminiKey = typeof savedKeys.gemini === 'string' && savedKeys.gemini.length > 10;
+    return {
+      ...envDefaults,
+      ...saved,
+      provider: envGeminiKey && (!hasSavedGeminiKey || saved.provider === 'mock')
+        ? 'gemini'
+        : saved.provider ?? envDefaults.provider,
+      apiKeys: {
+        ...envDefaults.apiKeys,
+        ...savedKeys,
+        gemini: hasSavedGeminiKey ? savedKeys.gemini : envGeminiKey,
+      },
+    };
   } catch {
-    return { ...DEFAULT_AI_SETTINGS };
+    return {
+      ...DEFAULT_AI_SETTINGS,
+      provider: envGeminiKey ? 'gemini' : DEFAULT_AI_SETTINGS.provider,
+      apiKeys: { ...DEFAULT_AI_SETTINGS.apiKeys, gemini: envGeminiKey },
+    };
   }
 }
 

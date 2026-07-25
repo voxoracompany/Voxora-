@@ -229,13 +229,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // ── Delete Account ─────────────────────────────────────────────────────────
   const deleteAccount = useCallback(async (): Promise<{ ok: boolean; error?: string }> => {
     if (!user) return { ok: false, error: "Not logged in." };
-    const provider = bp ?? await getBackendProvider();
-    const result = await provider.deleteAccount(user.id);
-    if (!result.ok) return result;
-    localStorage.removeItem(HISTORY_KEY);
-    setUser(null);
-    setLoginHistory([]);
-    return { ok: true };
+    try {
+      const provider = bp ?? await getBackendProvider();
+      const result = await provider.deleteAccount(user.id);
+      if (!result.ok) return result;
+      localStorage.removeItem(HISTORY_KEY);
+      setUser(null);
+      setLoginHistory([]);
+      return { ok: true };
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unable to delete your account.";
+      return { ok: false, error: message };
+    }
   }, [bp, user]);
 
   // ── Profile completion ─────────────────────────────────────────────────────
