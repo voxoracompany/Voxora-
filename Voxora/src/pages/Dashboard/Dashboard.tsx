@@ -46,7 +46,8 @@ const SmartSearch        = lazy(() => import("../Workspaces/SmartSearch"));
 const ExportCenter       = lazy(() => import("../Workspaces/ExportCenter"));
 const HelpCenter         = lazy(() => import("../Workspaces/HelpCenter"));
 const DevAdmin           = lazy(() => import("../Workspaces/DevAdmin"));
-// ── V6.0 Launch Candidate ─────────────────────────────────────────────────────
+// ── V6.0 AI Business Platform ─────────────────────────────────────────────────
+const BusinessPlanGenerator = lazy(() => import("../Workspaces/BusinessPlanGenerator"));
 const BetaReadinessReport = lazy(() => import("../Workspaces/BetaReadinessReport"));
 // ── V5.9 Launch Preparation & Production Readiness ───────────────────────────
 const ErrorReporting     = lazy(() => import("../Workspaces/ErrorReporting"));
@@ -1196,7 +1197,8 @@ const Dashboard = () => {
           {workspace === "accountSettings"  && <AccountSettings    setWorkspace={setWorkspace} />}
           {workspace === "securitySettings" && <SecuritySettings   setWorkspace={setWorkspace} />}
 
-          {/* V6.0 Launch Candidate */}
+          {/* V6.0 AI Business Platform */}
+          {workspace === "businessPlanGenerator" && <BusinessPlanGenerator setWorkspace={setWorkspace} />}
           {workspace === "betaReadinessReport" && <BetaReadinessReport setWorkspace={setWorkspace} />}
 
           {/* V5.9 Launch Preparation & Production Readiness */}

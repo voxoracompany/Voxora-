@@ -36,8 +36,9 @@ const RESEARCH_TOOLS = [
 ];
 
 const STRATEGY_TOOLS = [
-  { id: "business",       icon: "🏢", label: "Business Model" },
-  { id: "productRoadmap", icon: "🗺️", label: "Product Roadmap" },
+  { id: "business",            icon: "🏢", label: "Business Model"       },
+  { id: "productRoadmap",      icon: "🗺️", label: "Product Roadmap"      },
+  { id: "businessPlanGenerator", icon: "📋", label: "AI Business Plan"   },
 ];
 
 const INVESTOR_TOOLS = [
