@@ -225,6 +225,16 @@ const LAUNCH_TOOLS = [
   { id: "documentationCenter", icon: "📚", label: "Documentation"       },
 ];
 
+const SUPPORT_STUDIO_TOOLS = [
+  { id: "supportStudio",        icon: "🎧", label: "Customer Support Studio" },
+  { id: "aiSupportAssistant",   icon: "🤖", label: "AI Support Assistant"    },
+  { id: "supportTickets",       icon: "🎫", label: "Ticket Manager"          },
+  { id: "supportKB",            icon: "📚", label: "Knowledge Base"          },
+  { id: "liveChat",             icon: "💬", label: "Live Chat Manager"       },
+  { id: "customerFeedback",     icon: "⭐", label: "Customer Feedback"       },
+  { id: "supportAnalytics",     icon: "📊", label: "Support Analytics"       },
+];
+
 const BOTTOM_NAV = [
   { id: "help",           icon: "❓", label: "Help Center" },
   { id: "settings",       icon: "⚙️", label: "Settings" },
@@ -536,6 +546,20 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
       <div className="sidebar-section-label">Admin & Monitoring</div>
       <nav className="sidebar-nav">
         {ADMIN_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">🎧 Customer Support Studio (V6.7)</div>
+      <nav className="sidebar-nav">
+        {SUPPORT_STUDIO_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}

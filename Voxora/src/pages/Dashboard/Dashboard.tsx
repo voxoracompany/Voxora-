@@ -194,6 +194,14 @@ const BreakEvenCalculator     = lazy(() => import("../Workspaces/BreakEvenCalcul
 const PricingStrategyGenerator= lazy(() => import("../Workspaces/PricingStrategyGenerator"));
 const CashFlowPlanner         = lazy(() => import("../Workspaces/CashFlowPlanner"));
 const FinancialHealthScore    = lazy(() => import("../Workspaces/FinancialHealthScore"));
+// ── V6.7 Customer Support Studio ─────────────────────────────────────────────
+const CustomerSupportStudio    = lazy(() => import("../Workspaces/CustomerSupportStudio"));
+const AISupportAssistant       = lazy(() => import("../Workspaces/AISupportAssistant"));
+const SupportTicketManager     = lazy(() => import("../Workspaces/SupportTicketManager"));
+const SupportKnowledgeBase     = lazy(() => import("../Workspaces/SupportKnowledgeBase"));
+const LiveChatManager          = lazy(() => import("../Workspaces/LiveChatManager"));
+const CustomerFeedbackTracker  = lazy(() => import("../Workspaces/CustomerFeedbackTracker"));
+const SupportAnalytics         = lazy(() => import("../Workspaces/SupportAnalytics"));
 // ── V4.2 Marketing Studio ─────────────────────────────────────────────────────
 const MarketingHub       = lazy(() => import("../Workspaces/MarketingHub"));
 const MarketingStrategy  = lazy(() => import("../Workspaces/MarketingStrategy"));
@@ -1397,6 +1405,15 @@ const Dashboard = () => {
           {workspace === "breakEven"         && <BreakEven         setWorkspace={setWorkspace} />}
           {workspace === "pitchDeck"         && <PitchDeck         setWorkspace={setWorkspace} />}
           {workspace === "executiveSummary"  && <ExecutiveSummary  setWorkspace={setWorkspace} />}
+
+          {/* V6.7 Customer Support Studio */}
+          {workspace === "supportStudio"       && <CustomerSupportStudio   setWorkspace={setWorkspace} />}
+          {workspace === "aiSupportAssistant"  && <AISupportAssistant      setWorkspace={setWorkspace} />}
+          {workspace === "supportTickets"      && <SupportTicketManager    setWorkspace={setWorkspace} />}
+          {workspace === "supportKB"           && <SupportKnowledgeBase    setWorkspace={setWorkspace} />}
+          {workspace === "liveChat"            && <LiveChatManager         setWorkspace={setWorkspace} />}
+          {workspace === "customerFeedback"    && <CustomerFeedbackTracker setWorkspace={setWorkspace} />}
+          {workspace === "supportAnalytics"    && <SupportAnalytics        setWorkspace={setWorkspace} />}
 
           {/* V4.2 Marketing Studio */}
           {workspace === "marketingHub"      && <MarketingHub       setWorkspace={setWorkspace} />}
