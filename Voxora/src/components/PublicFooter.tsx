@@ -47,6 +47,13 @@ export default function PublicFooter() {
             <h3>Legal</h3>
             <Link to="/privacy">Privacy Policy</Link>
             <Link to="/terms">Terms of Service</Link>
+            <Link to="/cookies">Cookie Policy</Link>
+          </div>
+          <div className="pub-footer-col">
+            <h3>Support</h3>
+            <Link to="/support">Help Center</Link>
+            <Link to="/contact">Contact Us</Link>
+            <a href="mailto:support@voxora.ai">support@voxora.ai</a>
           </div>
         </div>
       </div>
@@ -56,6 +63,8 @@ export default function PublicFooter() {
         <div className="pub-footer-bottom-links">
           <Link to="/privacy" style={{ fontSize: "13px", color: "#475569", textDecoration: "none" }}>Privacy</Link>
           <Link to="/terms" style={{ fontSize: "13px", color: "#475569", textDecoration: "none" }}>Terms</Link>
+          <Link to="/cookies" style={{ fontSize: "13px", color: "#475569", textDecoration: "none" }}>Cookies</Link>
+          <Link to="/support" style={{ fontSize: "13px", color: "#475569", textDecoration: "none" }}>Support</Link>
           <Link to="/contact" style={{ fontSize: "13px", color: "#475569", textDecoration: "none" }}>Contact</Link>
         </div>
       </div>

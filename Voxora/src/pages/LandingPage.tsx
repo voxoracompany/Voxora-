@@ -25,23 +25,23 @@ export default function LandingPage() {
   const FAQS = [
     {
       q: "Is Voxora free to use?",
-      a: "Yes — the core Voxora platform is free. Pro and Enterprise plans unlock advanced features, priority support, and team collaboration.",
+      a: "Yes — the full Voxora platform is free in Demo Mode with no account required. Pro and Enterprise plans unlock cloud sync, team collaboration, priority AI, and advanced analytics.",
     },
     {
       q: "Where is my data stored?",
-      a: "Your data is stored locally in your browser. Nothing is sent to external servers in the current version. A cloud sync option is coming with V2.2.",
+      a: "In Demo Mode your data lives entirely in your browser's localStorage — nothing leaves your device. When you create an account and enable cloud sync, your data is encrypted and stored securely on our servers.",
     },
     {
       q: "Do I need to create an account?",
-      a: "No account is required to use Voxora today. Authentication and cloud backup will be optional features in a future update.",
+      a: "No account is needed to explore Voxora today. Create one when you're ready to sync across devices, invite teammates, or unlock Pro features.",
     },
     {
       q: "Can I export my projects?",
-      a: "Yes! Export any project as PDF, Markdown, or plain text via the Export Center. You can also backup all your data as a JSON file from Settings.",
+      a: "Yes! Export any project as PDF, Markdown, or plain text via the Export Center. You can also back up all your data as a JSON file from Settings → Data Management.",
     },
     {
       q: "What AI models does Voxora use?",
-      a: "Voxora currently uses a built-in intelligent response system. Full AI model integration (GPT-4, Claude, etc.) is on the roadmap for V3.0.",
+      a: "Voxora supports OpenAI (GPT-4o), Google Gemini, and Anthropic Claude. In Demo Mode a built-in mock engine provides realistic responses. Add your API key in Settings → AI Configuration to switch to live models.",
     },
   ];
 

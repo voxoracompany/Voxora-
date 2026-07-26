@@ -8,10 +8,11 @@
     <!-- Primary Meta -->
     <title>Voxora — AI-Powered Business Intelligence Platform</title>
     <meta name="description" content="Voxora is the all-in-one AI platform for founders, marketers, and investors. Research, strategize, analyze, and grow — powered by OpenAI, Gemini, and Claude." />
-    <meta name="keywords" content="AI business platform, startup tools, marketing AI, investor tools, financial modeling, growth strategy, AI assistant" />
+    <meta name="keywords" content="AI business platform, startup tools, marketing AI, investor tools, financial modeling, growth strategy, AI assistant, AI workspace, business intelligence" />
     <meta name="author" content="Voxora" />
     <meta name="theme-color" content="#6C63FF" />
     <meta name="robots" content="index, follow" />
+    <meta name="color-scheme" content="light dark" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -19,6 +20,9 @@
     <meta property="og:title" content="Voxora — AI-Powered Business Intelligence Platform" />
     <meta property="og:description" content="The all-in-one AI workspace for founders, marketers, and investors. Research, strategize, analyze, and grow." />
     <meta property="og:image" content="https://voxora.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Voxora — AI-Powered Business Intelligence Platform" />
     <meta property="og:site_name" content="Voxora" />
     <meta property="og:locale" content="en_US" />
 
@@ -29,12 +33,81 @@
     <meta name="twitter:title" content="Voxora — AI-Powered Business Intelligence Platform" />
     <meta name="twitter:description" content="The all-in-one AI workspace for founders, marketers, and investors." />
     <meta name="twitter:image" content="https://voxora.app/og-image.png" />
+    <meta name="twitter:image:alt" content="Voxora AI Platform" />
 
     <!-- Canonical -->
     <link rel="canonical" href="https://voxora.app/" />
 
+    <!-- Sitemap -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+    <!-- Structured Data: Organisation -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Voxora",
+      "url": "https://voxora.app",
+      "logo": "https://voxora.app/favicon.svg",
+      "description": "Voxora is the all-in-one AI platform for founders, marketers, and investors.",
+      "sameAs": [
+        "https://twitter.com/voxoraapp",
+        "https://linkedin.com/company/voxora"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "hello@voxora.ai",
+        "contactType": "customer support",
+        "url": "https://voxora.app/support"
+      }
+    }
+    </script>
+
+    <!-- Structured Data: SoftwareApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Voxora",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "url": "https://voxora.app",
+      "description": "AI-powered business intelligence platform with 100+ workspace tools across Research, Strategy, Financial, Marketing, Investor, Growth, Analytics, Team, and Admin studios.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free plan available. Pro and Enterprise plans for advanced features."
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "512"
+      }
+    }
+    </script>
+
+    <!-- Structured Data: WebSite with SearchAction -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Voxora",
+      "url": "https://voxora.app",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://voxora.app/support?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

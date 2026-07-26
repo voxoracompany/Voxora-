@@ -20,6 +20,8 @@ import Contact from "./pages/public/Contact";
 import Pricing from "./pages/public/Pricing";
 import PrivacyPolicy from "./pages/public/PrivacyPolicy";
 import TermsOfService from "./pages/public/TermsOfService";
+import CookiePolicy from "./pages/public/CookiePolicy";
+import Support from "./pages/public/Support";
 import ForgotPassword from "./pages/public/ForgotPassword";
 import ResetPassword from "./pages/public/ResetPassword";
 import EmailVerification from "./pages/public/EmailVerification";
@@ -83,6 +85,8 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/cookies" element={<CookiePolicy />} />
+            <Route path="/support" element={<Support />} />
 
             {/* Platforms */}
             <Route path="/platforms/ai-command-center" element={<AICommandCenter />} />

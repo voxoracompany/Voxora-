@@ -1,8 +1,12 @@
 User-agent: *
 Allow: /
-Disallow: /dashboard
-Disallow: /verify-email
-Disallow: /reset-password
 
-# Sitemap
+# Disallow private app routes
+Disallow: /dashboard
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
+
 Sitemap: https://voxora.app/sitemap.xml
