@@ -19,6 +19,7 @@ import { AuditLogService } from "../../services/admin/AuditLogService";
 import { ErrorReportingService } from "../../services/admin/ErrorReportingService";
 import WelcomeWizard from "../../components/WelcomeWizard";
 import WorkspaceErrorBoundary from "../../components/WorkspaceErrorBoundary";
+import { WorkspacePreferences } from "../../services/storage/WorkspacePreferences";
 import "./Dashboard.css";
 
 const WIZARD_KEY = "voxora-wizard-done";
@@ -230,11 +231,28 @@ function msToDisplay(ms: number): string {
 
 function WorkspaceLoader() {
   return (
-    <div className="workspace-loader">
-      <div className="workspace-loader-spinner" />
+    <div className="workspace-loader" role="status" aria-live="polite" aria-label="Loading workspace">
+      <div className="workspace-skeleton workspace-skeleton--title" />
+      <div className="workspace-skeleton-row">
+        <div className="workspace-skeleton" />
+        <div className="workspace-skeleton" />
+        <div className="workspace-skeleton" />
+      </div>
+      <div className="workspace-skeleton workspace-skeleton--body" />
+      <span className="sr-only">Loading workspace…</span>
     </div>
   );
 }
+
+const WORKSPACE_LABELS: Record<string, string> = {
+  assistant: "AI Assistant", content: "AI Content", apps: "App Ideas", startup: "Startup Ideas",
+  research: "Customer Research", market: "Market Research", saved: "Saved Projects",
+  analytics: "Analytics", search: "Smart Search", export: "Export Center", settings: "Settings",
+  aiSettings: "AI Settings", business: "Business Model", productRoadmap: "Product Roadmap",
+  financialStudio: "Financial Studio", marketingStudio: "Marketing Studio", investorStudio: "Investor Studio",
+  growthHub: "Growth Studio", teamHub: "Team Hub", integrationsHub: "Integrations Hub",
+  supportStudio: "Customer Support Studio", opsStudio: "Operations Studio", hrStudio: "HR & People Studio",
+};
 
 const Dashboard = () => {
   const { user, getProfileCompletion } = useAuth();
@@ -242,6 +260,8 @@ const Dashboard = () => {
   const [workspace, setWorkspace] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
   const [showWizard, setShowWizard] = useState(() => !localStorage.getItem(WIZARD_KEY));
+  const [recentWorkspaces, setRecentWorkspaces] = useState<string[]>(() => WorkspacePreferences.getRecent());
+  const [favoriteWorkspaces, setFavoriteWorkspaces] = useState<string[]>(() => WorkspacePreferences.getFavorites());
   // Tracks whether admin/monitoring services have been seeded so dependent memos recompute after mount
   const [adminSeeded, setAdminSeeded] = useState(false);
 
@@ -287,6 +307,16 @@ const Dashboard = () => {
     NotificationService.seed();
     ErrorReportingService.seed();
     setAdminSeeded(true);
+  }, []);
+
+  useEffect(() => {
+    if (workspace !== "dashboard") {
+      setRecentWorkspaces(WorkspacePreferences.record(workspace));
+    }
+  }, [workspace]);
+
+  const toggleWorkspaceFavorite = useCallback((id: string) => {
+    setFavoriteWorkspaces(WorkspacePreferences.toggleFavorite(id));
   }, []);
   const sysMetrics    = useMemo(() => MonitoringService.getMetrics(),           [adminSeeded]);
   const unreadNotifs  = useMemo(() => NotificationService.getUnreadCount(),     [adminSeeded]);
@@ -367,7 +397,7 @@ const Dashboard = () => {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <main className="main-content">
+      <main className="main-content" id="main-content" tabIndex={-1}>
         <div className="mobile-topbar">
           <button
             className="hamburger-btn"
@@ -1140,7 +1170,34 @@ const Dashboard = () => {
                 </div>
               )}
 
-              {/* Quick Actions */}
+               {(recentWorkspaces.length > 0 || favoriteWorkspaces.length > 0) && (
+                 <div className="dashboard-panel workspace-shortcuts-panel" aria-labelledby="workspace-shortcuts-title">
+                   <div className="panel-header">
+                     <h2 id="workspace-shortcuts-title">⚡ Your Workspaces</h2>
+                     <button className="panel-link" onClick={() => setWorkspace("search")}>Find a workspace →</button>
+                   </div>
+                   <div className="workspace-shortcuts">
+                     {[...new Set([...favoriteWorkspaces, ...recentWorkspaces])].slice(0, 8).map((id) => (
+                       <div className="workspace-shortcut" key={id}>
+                         <button className="workspace-shortcut-open" onClick={() => setWorkspace(id)}>
+                           <span>{WORKSPACE_LABELS[id] || id.replace(/([A-Z])/g, " $1")}</span>
+                           <small>{favoriteWorkspaces.includes(id) ? "Favorite" : "Recently opened"}</small>
+                         </button>
+                         <button
+                           className="workspace-shortcut-star"
+                           onClick={() => toggleWorkspaceFavorite(id)}
+                           aria-label={`${favoriteWorkspaces.includes(id) ? "Remove" : "Add"} ${WORKSPACE_LABELS[id] || id} ${favoriteWorkspaces.includes(id) ? "from" : "to"} favorites`}
+                           aria-pressed={favoriteWorkspaces.includes(id)}
+                         >
+                           {favoriteWorkspaces.includes(id) ? "★" : "☆"}
+                         </button>
+                       </div>
+                     ))}
+                   </div>
+                 </div>
+               )}
+
+               {/* Quick Actions */}
               <div className="quick-actions">
                 <h2>⚡ Quick Actions</h2>
                 <div className="cards">

@@ -8,7 +8,7 @@ import "./index.css";
 // ── Apply stored theme tokens before first paint ─────────────────────────────
 const root = document.documentElement;
 const accent = localStorage.getItem("voxora-accent");
-const fontSize = localStorage.getItem("voxora-font-size");
+const fontSize = localStorage.getItem("voxora-font-size") || localStorage.getItem("voxora-fontsize");
 if (accent) root.style.setProperty("--accent", accent);
 if (fontSize) root.style.setProperty("--font-size-base", fontSize);
 

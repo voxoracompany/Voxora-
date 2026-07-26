@@ -38,6 +38,11 @@ html[data-theme="dark"] .stat-value      { color: #f1f5f9; }
 
 /* ─── Dashboard panels ─── */
 html[data-theme="dark"] .dashboard-panel { background: #1e293b; border-color: #334155; }
+html[data-theme="dark"] .workspace-shortcut { background: #0f172a; border-color: #334155; }
+html[data-theme="dark"] .workspace-shortcut-open { color: #e2e8f0; }
+html[data-theme="dark"] .workspace-shortcut-open small { color: #94a3b8; }
+html[data-theme="dark"] .workspace-shortcut-star { border-color: #334155; }
+html[data-theme="dark"] .workspace-skeleton { background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%); background-size: 200% 100%; }
 html[data-theme="dark"] .panel-header h2 { color: #f1f5f9; }
 html[data-theme="dark"] .panel-link      { color: var(--accent); }
 html[data-theme="dark"] .panel-empty p   { color: #64748b; }

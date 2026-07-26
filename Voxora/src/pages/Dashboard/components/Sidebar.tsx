@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import "./Sidebar.css";
 
@@ -243,6 +244,11 @@ const BOTTOM_NAV = [
 export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: SidebarProps) {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (isOpen && window.innerWidth < 768) closeButtonRef.current?.focus();
+  }, [isOpen]);
 
   const handleLogout = () => {
     logout();
@@ -269,6 +275,7 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
         <span className="sidebar-title">VOXORA</span>
         {onClose && (
           <button
+            ref={closeButtonRef}
             className="sidebar-close-btn"
             onClick={onClose}
             aria-label="Close navigation"
@@ -283,6 +290,7 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            aria-current={workspace === item.id ? "page" : undefined}
             onClick={() => setWorkspace(item.id)}
           >
             <span className="sidebar-item-icon">{item.icon}</span>
@@ -297,6 +305,7 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            aria-current={workspace === item.id ? "page" : undefined}
             onClick={() => setWorkspace(item.id)}
           >
             <span className="sidebar-item-icon">{item.icon}</span>

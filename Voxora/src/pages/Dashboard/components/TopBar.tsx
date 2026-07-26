@@ -46,6 +46,7 @@ export default function TopBar({ setWorkspace }: TopBarProps) {
         <span className="topbar-search-icon">🔍</span>
         <input
           type="text"
+          aria-label="Search projects, ideas, and analyses"
           placeholder="Search projects, ideas, analyses..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}

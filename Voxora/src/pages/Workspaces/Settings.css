@@ -201,6 +201,8 @@
 }
 
 @media (max-width: 600px) {
+  .settings-container { max-width: 100%; }
+  .settings-card { padding: 18px; }
   .theme-options { flex-direction: column; }
   .fontsize-options { flex-direction: column; }
   .backup-actions { flex-direction: column; }

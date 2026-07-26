@@ -2,6 +2,7 @@
 import { useState, useCallback } from "react";
 import { useOps, newOpsId } from "../../hooks/useOps";
 import type { OpsSOPDocument, SOPSection, SOPStep } from "../../hooks/useOps";
+import { escapeHtml } from "../../services/storage/SafeStorage";
 import "./Workspace.css";
 
 interface Props { setWorkspace: (w: string) => void }
@@ -146,18 +147,18 @@ export default function OpsSOPBuilder({ setWorkspace }: Props) {
   const exportPDF = useCallback((sop: OpsSOPDocument) => {
     const win = window.open("", "_blank");
     if (!win) return;
-    const html = `<!DOCTYPE html><html><head><title>${sop.title}</title>
+    const html = `<!DOCTYPE html><html><head><title>${escapeHtml(sop.title)}</title>
     <style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;color:#111}
     h1{color:#1e3a5f}h2{color:#2563eb;border-bottom:1px solid #ddd;padding-bottom:6px}
     h3{color:#374151}blockquote{border-left:3px solid #6C63FF;margin:0;padding:0 12px;color:#555}
     .meta{color:#6b7280;font-size:14px;margin:8px 0 20px}</style></head><body>
-    <h1>${sop.title}</h1>
-    <div class="meta">Category: ${sop.category} &nbsp;|&nbsp; ${sop.createdAt.slice(0,10)}</div>
-    <p>${sop.description}</p>
+    <h1>${escapeHtml(sop.title)}</h1>
+    <div class="meta">Category: ${escapeHtml(sop.category)} &nbsp;|&nbsp; ${escapeHtml(sop.createdAt.slice(0,10))}</div>
+    <p>${escapeHtml(sop.description)}</p>
     ${sop.sections.map((sec, si) => `
-      <h2>${si + 1}. ${sec.title}</h2>
-      ${sec.notes ? `<blockquote>${sec.notes}</blockquote>` : ""}
-      ${sec.steps.map((step, sti) => `<h3>Step ${sti + 1}: ${step.title}</h3><p>${step.description}</p>`).join("")}
+       <h2>${si + 1}. ${escapeHtml(sec.title)}</h2>
+       ${sec.notes ? `<blockquote>${escapeHtml(sec.notes)}</blockquote>` : ""}
+       ${sec.steps.map((step, sti) => `<h3>Step ${sti + 1}: ${escapeHtml(step.title)}</h3><p>${escapeHtml(step.description)}</p>`).join("")}
     `).join("")}
     </body></html>`;
     win.document.write(html);

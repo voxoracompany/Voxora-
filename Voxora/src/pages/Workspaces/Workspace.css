@@ -185,6 +185,10 @@
 }
 
 @media (max-width: 600px) {
+  .workspace-container { padding: 20px 16px; }
+  .workspace-container h1 { font-size: 24px; }
   .workspace-form-grid { grid-template-columns: 1fr; }
   .idea-card { flex-direction: column; align-items: flex-start; }
+  .workspace-btn, .backup-btn { width: 100%; }
+  .report-box { padding: 16px; overflow-x: auto; }
 }

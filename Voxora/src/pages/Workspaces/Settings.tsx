@@ -3,6 +3,8 @@ import { useActivity } from "../../context/ActivityContext";
 import { useToast } from "../../context/ToastContext";
 import { useProjects } from "../../context/ProjectContext";
 import { useSubscription } from "../../context/SubscriptionContext";
+import { downloadBlob, readJson, validateBackup, writeJson, writeString } from "../../services/storage/SafeStorage";
+import { WorkspacePreferences } from "../../services/storage/WorkspacePreferences";
 import "./Workspace.css";
 import "./Settings.css";
 
@@ -20,6 +22,18 @@ function shadeColor(hex: string, percent: number): string {
   const g = Math.min(255, Math.max(0, ((num >> 8) & 0xff) + percent));
   const b = Math.min(255, Math.max(0, (num & 0xff) + percent));
   return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
+}
+
+function isValidAccent(value: string): boolean {
+  return /^#[0-9a-f]{6}$/i.test(value);
+}
+
+function normalizeTheme(value: unknown): "light" | "dark" {
+  return value === "dark" ? "dark" : "light";
+}
+
+function normalizeFontSize(value: unknown): "small" | "medium" | "large" {
+  return value === "small" || value === "large" ? value : "medium";
 }
 
 const ACCENT_PRESETS = [
@@ -40,17 +54,20 @@ export default function Settings({ setWorkspace }: { setWorkspace: (workspace: s
 
   const [name, setName] = useState(() => localStorage.getItem("voxora-name") || "");
   const [goal, setGoal] = useState(() => localStorage.getItem("voxora-goal") || "");
-  const [theme, setTheme] = useState(() => localStorage.getItem("voxora-theme") || "light");
-  const [accent, setAccent] = useState(() => localStorage.getItem("voxora-accent") || "#6C63FF");
-  const [fontSize, setFontSize] = useState(() => localStorage.getItem("voxora-fontsize") || "medium");
+  const [theme, setTheme] = useState<"light" | "dark">(() => normalizeTheme(localStorage.getItem("voxora-theme")));
+  const [accent, setAccent] = useState(() => {
+    const value = localStorage.getItem("voxora-accent") || "#6C63FF";
+    return isValidAccent(value) ? value : "#6C63FF";
+  });
+  const [fontSize, setFontSize] = useState<"small" | "medium" | "large">(() => normalizeFontSize(localStorage.getItem("voxora-fontsize")));
   const [confirmClear, setConfirmClear] = useState(false);
 
   const saveProfile = () => {
     const trimmedName = name.trim().slice(0, 80);
     const trimmedGoal = goal.trim().slice(0, 200);
     if (!trimmedName) { showToast("Please enter your name.", "error"); return; }
-    localStorage.setItem("voxora-name", trimmedName);
-    localStorage.setItem("voxora-goal", trimmedGoal);
+    writeString("voxora-name", trimmedName);
+    writeString("voxora-goal", trimmedGoal);
     setName(trimmedName);
     setGoal(trimmedGoal);
     addActivity({ type: "settings_updated", title: "Profile Updated", description: "User profile was updated.", category: "Projects", icon: "👤" });
@@ -58,27 +75,30 @@ export default function Settings({ setWorkspace }: { setWorkspace: (workspace: s
   };
 
   const saveAppearance = () => {
-    localStorage.setItem("voxora-theme", theme);
-    localStorage.setItem("voxora-accent", accent);
-    localStorage.setItem("voxora-fontsize", fontSize);
+    writeString("voxora-theme", theme);
+    writeString("voxora-accent", accent);
+    writeString("voxora-fontsize", fontSize);
     applyTheme(theme, accent, fontSize);
     addActivity({ type: "settings_updated", title: "Appearance Updated", description: `Theme set to ${theme}, accent updated.`, category: "Projects", icon: "🎨" });
     showToast("🎨 Appearance saved!");
   };
 
   const handleThemeChange = (t: string) => {
-    setTheme(t);
-    applyTheme(t, accent, fontSize);
+    const nextTheme = normalizeTheme(t);
+    setTheme(nextTheme);
+    applyTheme(nextTheme, accent, fontSize);
   };
 
   const handleAccentChange = (a: string) => {
+    if (!isValidAccent(a)) return;
     setAccent(a);
     applyTheme(theme, a, fontSize);
   };
 
   const handleFontSizeChange = (f: string) => {
-    setFontSize(f);
-    applyTheme(theme, accent, f);
+    const nextFontSize = normalizeFontSize(f);
+    setFontSize(nextFontSize);
+    applyTheme(theme, accent, nextFontSize);
   };
 
   const exportAllData = () => {
@@ -93,20 +113,18 @@ export default function Settings({ setWorkspace }: { setWorkspace: (workspace: s
           accent: localStorage.getItem("voxora-accent") || "#6C63FF",
           fontsize: localStorage.getItem("voxora-fontsize") || "medium",
         },
-        projects: JSON.parse(localStorage.getItem("voxora-projects") || "[]"),
-        favorites: JSON.parse(localStorage.getItem("voxora-favorites") || "[]"),
-        pinned: JSON.parse(localStorage.getItem("voxora-pinned") || "[]"),
-        activities: JSON.parse(localStorage.getItem("voxora-activities") || "[]"),
-        chat: JSON.parse(localStorage.getItem("voxora-chat") || "[]"),
+         projects: readJson("voxora-projects", []),
+         favorites: readJson("voxora-favorites", []),
+         pinned: readJson("voxora-pinned", []),
+         activities: readJson("voxora-activities", []),
+         chat: readJson("voxora-chat", []),
         chatCount: Number(localStorage.getItem("voxora-chat-count")) || 0,
       };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `voxora-backup-${new Date().toISOString().slice(0, 10)}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
+      downloadBlob(
+        `voxora-backup-${new Date().toISOString().slice(0, 10)}.json`,
+        JSON.stringify(data, null, 2),
+        "application/json",
+      );
       addActivity({ type: "backup_exported", title: "Backup Exported", description: `Exported ${projects.length} projects and all data.`, category: "Projects", icon: "📥" });
       showToast("📥 Backup downloaded!");
     } catch {
@@ -122,24 +140,25 @@ export default function Settings({ setWorkspace }: { setWorkspace: (workspace: s
     const reader = new FileReader();
     reader.onload = (ev) => {
       try {
-        const data = JSON.parse(ev.target?.result as string);
-        if (!data.version || !Array.isArray(data.projects)) {
+         const data: unknown = JSON.parse(ev.target?.result as string);
+         if (!validateBackup(data)) {
           showToast("Invalid backup file format.", "error");
           return;
         }
-        if (data.profile) {
-          if (data.profile.name) localStorage.setItem("voxora-name", String(data.profile.name).slice(0, 80));
-          if (data.profile.goal) localStorage.setItem("voxora-goal", String(data.profile.goal).slice(0, 200));
-          if (data.profile.theme) localStorage.setItem("voxora-theme", data.profile.theme);
-          if (data.profile.accent) localStorage.setItem("voxora-accent", data.profile.accent);
-          if (data.profile.fontsize) localStorage.setItem("voxora-fontsize", data.profile.fontsize);
+         if (data.profile) {
+           const profile = data.profile;
+           if (typeof profile.name === "string") writeString("voxora-name", profile.name.slice(0, 80));
+           if (typeof profile.goal === "string") writeString("voxora-goal", profile.goal.slice(0, 200));
+           if (profile.theme === "light" || profile.theme === "dark") writeString("voxora-theme", profile.theme);
+           if (typeof profile.accent === "string" && isValidAccent(profile.accent)) writeString("voxora-accent", profile.accent);
+           if (profile.fontsize === "small" || profile.fontsize === "medium" || profile.fontsize === "large") writeString("voxora-fontsize", profile.fontsize);
         }
-        if (Array.isArray(data.projects)) localStorage.setItem("voxora-projects", JSON.stringify(data.projects));
-        if (Array.isArray(data.favorites)) localStorage.setItem("voxora-favorites", JSON.stringify(data.favorites));
-        if (Array.isArray(data.pinned)) localStorage.setItem("voxora-pinned", JSON.stringify(data.pinned));
-        if (Array.isArray(data.activities)) localStorage.setItem("voxora-activities", JSON.stringify(data.activities));
-        if (Array.isArray(data.chat)) localStorage.setItem("voxora-chat", JSON.stringify(data.chat));
-        if (data.chatCount) localStorage.setItem("voxora-chat-count", String(data.chatCount));
+         writeJson("voxora-projects", data.projects);
+         if (data.favorites) writeJson("voxora-favorites", data.favorites);
+         if (data.pinned) writeJson("voxora-pinned", data.pinned);
+         if (data.activities) writeJson("voxora-activities", data.activities);
+         if (data.chat) writeJson("voxora-chat", data.chat);
+         if (typeof data.chatCount === "number" && Number.isFinite(data.chatCount)) writeString("voxora-chat-count", String(Math.max(0, Math.floor(data.chatCount))));
         showToast("✅ Backup restored! Reloading…", "success");
         setTimeout(() => window.location.reload(), 1200);
       } catch {
@@ -158,6 +177,7 @@ export default function Settings({ setWorkspace }: { setWorkspace: (workspace: s
     }
     const keys = ["voxora-projects","voxora-favorites","voxora-pinned","voxora-activities","voxora-chat","voxora-chat-count","voxora-name","voxora-goal","voxora-theme","voxora-accent","voxora-fontsize"];
     keys.forEach((k) => localStorage.removeItem(k));
+    WorkspacePreferences.clear();
     showToast("🗑️ All data cleared. Reloading…", "info");
     setTimeout(() => window.location.reload(), 1200);
   };
