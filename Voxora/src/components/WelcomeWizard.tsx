@@ -12,19 +12,19 @@ interface Props {
 const STEPS = [
   {
     icon: "✨",
-    title: "Welcome to Voxora Beta",
+    title: "Welcome to Voxora",
     subtitle: "The AI-native platform for building intelligent agents, automations, and business applications.",
     content: (
       <div className="ww-intro">
         <div className="ww-badges">
-          <span className="ww-badge ww-badge--beta">🧪 Public Beta</span>
+          <span className="ww-badge ww-badge--beta">🚀 V8.0 Live</span>
           <span className="ww-badge ww-badge--ai">🤖 AI-Powered</span>
           <span className="ww-badge ww-badge--free">✅ Free to Start</span>
         </div>
-        <p>You're among the first to experience Voxora. This quick setup takes under 2 minutes.</p>
+        <p>Welcome to Voxora V8.0 — the fully launched AI platform. This quick setup takes under 2 minutes.</p>
         <div className="ww-stats-row">
-          <div className="ww-stat"><strong>50+</strong><span>AI Tools</span></div>
-          <div className="ww-stat"><strong>10+</strong><span>Studio Modules</span></div>
+          <div className="ww-stat"><strong>100+</strong><span>AI Tools</span></div>
+          <div className="ww-stat"><strong>15+</strong><span>Studio Modules</span></div>
           <div className="ww-stat"><strong>∞</strong><span>Possibilities</span></div>
         </div>
       </div>

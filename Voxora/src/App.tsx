@@ -8,6 +8,9 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { CloudProvider } from "./context/CloudContext";
 import { SubscriptionProvider } from "./context/SubscriptionContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import OfflineBanner from "./components/OfflineBanner";
+import CookieConsent from "./components/CookieConsent";
+import { useAnalytics } from "./hooks/useAnalytics";
 
 // Public pages
 import LandingPage from "./pages/LandingPage";
@@ -59,6 +62,12 @@ function PageLoader() {
   );
 }
 
+/** Fires route analytics + perf monitoring on every navigation. */
+function RouteTracker() {
+  useAnalytics();
+  return null;
+}
+
 // CloudProvider needs userId from AuthContext, so it lives inside AuthProvider
 function CloudWrapper({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
@@ -69,6 +78,10 @@ export default function App() {
   return (
     <AuthProvider>
       <CloudWrapper>
+        {/* Global UI — rendered outside Routes so they persist across navigations */}
+        <OfflineBanner />
+        <CookieConsent />
+        <RouteTracker />
         <Suspense fallback={<PageLoader />}>
           <Routes>
             {/* Public */}

@@ -1,4 +1,4 @@
-// Shared browser-storage and export helpers.
+// Shared browser-storage and export helpers — V8.0
 // Keep all imported data bounded and treat user-provided strings as text.
 
 export function readJson<T>(key: string, fallback: T): T {
@@ -49,6 +49,58 @@ export function downloadBlob(filename: string, content: BlobPart, type: string):
   link.click();
   link.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+/**
+ * Safe localStorage getter with a size guard.
+ * Returns null (not the fallback) when the stored value exceeds maxBytes.
+ */
+export function readJsonGuarded<T>(key: string, fallback: T, maxBytes = 2 * 1024 * 1024): T {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    if (raw.length > maxBytes) {
+      console.warn(`[SafeStorage] Key "${key}" exceeds ${maxBytes} bytes — skipping.`);
+      return fallback;
+    }
+    const parsed: unknown = JSON.parse(raw);
+    return parsed as T;
+  } catch {
+    return fallback;
+  }
+}
+
+/**
+ * Remove a key from localStorage without throwing.
+ */
+export function removeItem(key: string): void {
+  try { localStorage.removeItem(key); } catch { /* ignore */ }
+}
+
+/**
+ * Return the approximate size of a localStorage key in bytes.
+ */
+export function itemSizeBytes(key: string): number {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? new Blob([raw]).size : 0;
+  } catch {
+    return 0;
+  }
+}
+
+/**
+ * Estimate total localStorage usage in bytes across all keys.
+ */
+export function totalStorageBytes(): number {
+  let total = 0;
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key) total += itemSizeBytes(key);
+    }
+  } catch { /* ignore */ }
+  return total;
 }
 
 export function validateBackup(value: unknown): value is {

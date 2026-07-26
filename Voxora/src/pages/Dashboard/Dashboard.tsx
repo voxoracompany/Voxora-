@@ -455,17 +455,70 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {/* ── V5.5 Beta Status & Quick Nav ── */}
+              {/* ── V8.0 Continue Recent Work ── */}
+              {recentWorkspaces.length > 0 && (
+                <div className="dashboard-panel" style={{ marginBottom: 20 }}>
+                  <div className="panel-header">
+                    <h2>⏱️ Continue Recent Work</h2>
+                    <span style={{ fontSize: 12, color: "#94a3b8" }}>Pick up where you left off</span>
+                  </div>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    {recentWorkspaces.slice(0, 6).map((id) => (
+                      <button
+                        key={id}
+                        onClick={() => setWorkspace(id)}
+                        style={{
+                          padding: "8px 16px", borderRadius: 10, fontSize: 13, fontWeight: 600,
+                          background: workspace === id ? "#6C63FF" : "#f1f5f9",
+                          color: workspace === id ? "#fff" : "#374151",
+                          border: workspace === id ? "none" : "1px solid #e2e8f0",
+                          cursor: "pointer", transition: "all 0.15s", fontFamily: "inherit",
+                        }}
+                      >
+                        {WORKSPACE_LABELS[id] ?? id}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ── V8.0 Favorite Workspaces ── */}
+              {favoriteWorkspaces.length > 0 && (
+                <div className="dashboard-panel" style={{ marginBottom: 20 }}>
+                  <div className="panel-header">
+                    <h2>⭐ Favorite Workspaces</h2>
+                    <button className="panel-link" onClick={() => setWorkspace("saved")}>Manage →</button>
+                  </div>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    {favoriteWorkspaces.slice(0, 8).map((id) => (
+                      <button
+                        key={id}
+                        onClick={() => setWorkspace(id)}
+                        style={{
+                          padding: "8px 16px", borderRadius: 10, fontSize: 13, fontWeight: 600,
+                          background: "#fffbeb", color: "#92400e",
+                          border: "1px solid #fde68a", cursor: "pointer",
+                          transition: "all 0.15s", fontFamily: "inherit",
+                        }}
+                      >
+                        ⭐ {WORKSPACE_LABELS[id] ?? id}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ── V8.0 Platform Status (was Beta Status) ── */}
               <div style={{ margin: "0 0 28px" }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-                  🧪 Beta Status
-                  <span style={{ fontSize: 11, background: "#ede9fe", color: "#4c1d95", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>Public Beta</span>
+                  🚀 Platform Status
+                  <span style={{ fontSize: 11, background: "#dcfce7", color: "#166534", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>V8.0 Live</span>
                 </h2>
                 <div className="stats">
                   {/* Beta Badge */}
                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("gettingStarted")}>
                     <div className="stat-icon">🧪</div>
-                    <p className="stat-value" style={{ fontSize: 13 }}>Beta</p>
+                    <p className="stat-value" style={{ fontSize: 13 }}>Live</p>
                     <h3 className="stat-label">Release Stage</h3>
                   </div>
                   {/* Tour Progress */}
@@ -501,7 +554,7 @@ const Dashboard = () => {
                   {/* Latest Update */}
                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("help")}>
                     <div className="stat-icon">🆕</div>
-                    <p className="stat-value" style={{ fontSize: 13 }}>V5.5</p>
+                    <p className="stat-value" style={{ fontSize: 13 }}>V8.0</p>
                     <h3 className="stat-label">Latest Update</h3>
                   </div>
                   {/* Getting Started */}

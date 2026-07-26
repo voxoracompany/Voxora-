@@ -3,6 +3,7 @@
 // the entire dashboard. The user can retry without a full-page reload.
 
 import { Component, type ReactNode } from "react";
+import { ErrorReportingService } from "../services/admin/ErrorReportingService";
 
 interface Props {
   children: ReactNode;
@@ -22,6 +23,14 @@ export default class WorkspaceErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, info: { componentStack: string }) {
     console.error("[Voxora WorkspaceErrorBoundary]", error, info.componentStack);
+    // Report to ErrorReportingService so errors surface in admin monitoring
+    ErrorReportingService.report(error.message, {
+      category: "runtime",
+      severity: "high",
+      source: this.props.workspaceName ?? "WorkspaceErrorBoundary",
+      stack: error.stack,
+      context: { componentStack: info.componentStack.slice(0, 500) },
+    });
   }
 
   handleRetry = () => this.setState({ hasError: false, error: null });
