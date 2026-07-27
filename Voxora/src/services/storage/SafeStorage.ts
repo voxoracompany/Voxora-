@@ -123,3 +123,80 @@ export const SafeStorage = {
   /** Convenience: namespace-prefix a key for use with get/set. */
   key: ns,
 };
+
+// ── Standalone utility exports (used across Workspace pages) ──────────────────
+
+/** HTML-escape a string to prevent XSS when injecting into innerHTML. */
+export function escapeHtml(str: unknown): string {
+  if (typeof str !== 'string') return String(str ?? '');
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Read a JSON value from localStorage, returning `fallback` on miss or error. */
+export function readJson<T = unknown>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw === null) return fallback;
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+/** Write a JSON-serialisable value to localStorage. Silent on error. */
+export function writeJson(key: string, value: unknown): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch { /* silent */ }
+}
+
+/** Write a plain string value to localStorage. Silent on error. */
+export function writeString(key: string, value: string): void {
+  try {
+    localStorage.setItem(key, value);
+  } catch { /* silent */ }
+}
+
+/** Trigger a file download in the browser. */
+export function downloadBlob(filename: string, content: string, mimeType: string): void {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/** Voxora backup shape — minimal required fields. */
+interface VoxoraBackup {
+  version: string;
+  exportedAt: string;
+  projects?: unknown;
+  profile?: {
+    name?: unknown;
+    goal?: unknown;
+    theme?: unknown;
+    accent?: unknown;
+    fontsize?: unknown;
+  };
+  favorites?: unknown;
+  pinned?: unknown;
+  activities?: unknown;
+  chat?: unknown;
+  chatCount?: unknown;
+}
+
+/** Type-guard: verify an imported backup has the expected shape. */
+export function validateBackup(data: unknown): data is VoxoraBackup {
+  if (typeof data !== 'object' || data === null) return false;
+  const d = data as Record<string, unknown>;
+  return typeof d['version'] === 'string' && typeof d['exportedAt'] === 'string';
+}
