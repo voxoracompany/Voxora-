@@ -89,6 +89,10 @@ const BusinessPlanGenerator = lazy(() => import("../Workspaces/BusinessPlanGener
 const BetaReadinessReport = lazy(() => import("../Workspaces/BetaReadinessReport"));
 // ── V9.0 Public Beta Launch ──────────────────────────────────────────────────
 const AIProviderStatus   = lazy(() => import("../Workspaces/AIProviderStatus"));
+// ── V9.2 Public Launch & Customer Success ────────────────────────────────────
+const CustomerSuccessDashboard = lazy(() => import("../Workspaces/CustomerSuccessDashboard"));
+const ProductAnalytics         = lazy(() => import("../Workspaces/ProductAnalytics"));
+const ReleaseCenter            = lazy(() => import("../Workspaces/ReleaseCenter"));
 
 // ── V5.9 Launch Preparation & Production Readiness ───────────────────────────
 const ErrorReporting     = lazy(() => import("../Workspaces/ErrorReporting"));
@@ -269,6 +273,7 @@ const WORKSPACE_LABELS: Record<string, string> = {
   intDashboard: "Integrations Dashboard", integrationsHub: "Integrations Hub",
   intMonitoring: "Integrations Monitoring",
   supportStudio: "Customer Support Studio", opsStudio: "Operations Studio", hrStudio: "HR & People Studio",
+  customerSuccess: "Customer Success", productAnalytics: "Product Analytics", releaseCenter: "Release Center",
 };
 
 const Dashboard = () => {
@@ -1377,6 +1382,46 @@ const Dashboard = () => {
                  </div>
                )}
 
+               {/* ── V9.2 Customer Success & Analytics ── */}
+               <div style={{ margin: "28px 0 4px" }}>
+                 <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                   💚 Customer Success
+                   <span style={{ fontSize: 11, background: "#dcfce7", color: "#166534", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>V9.2</span>
+                 </h2>
+                 <div className="stats">
+                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("customerSuccess")}>
+                     <div className="stat-icon">💚</div>
+                     <p className="stat-value" style={{ fontSize: 13 }}>87</p>
+                     <h3 className="stat-label">Avg Health Score</h3>
+                   </div>
+                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("customerSuccess")}>
+                     <div className="stat-icon">⚠️</div>
+                     <p className="stat-value" style={{ fontSize: 13, color: "#ef4444" }}>2</p>
+                     <h3 className="stat-label">High Churn Risk</h3>
+                   </div>
+                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("productAnalytics")}>
+                     <div className="stat-icon">📊</div>
+                     <p className="stat-value">{projects.length}</p>
+                     <h3 className="stat-label">Projects Created</h3>
+                   </div>
+                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("productAnalytics")}>
+                     <div className="stat-icon">⚡</div>
+                     <p className="stat-value">{Math.min(100, projects.length * 4 + Math.min(30, activities.length * 2) + Math.min(20, usage.todayCount * 2))}</p>
+                     <h3 className="stat-label">Productivity Score</h3>
+                   </div>
+                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("releaseCenter")}>
+                     <div className="stat-icon">🆕</div>
+                     <p className="stat-value" style={{ fontSize: 13 }}>V9.2</p>
+                     <h3 className="stat-label">Latest Release</h3>
+                   </div>
+                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("releaseCenter")}>
+                     <div className="stat-icon">🚀</div>
+                     <p className="stat-value" style={{ fontSize: 13 }}>Open</p>
+                     <h3 className="stat-label">Release Center</h3>
+                   </div>
+                 </div>
+               </div>
+
                {/* Quick Actions */}
               <div className="quick-actions">
                 <h2>⚡ Quick Actions</h2>
@@ -1654,6 +1699,11 @@ const Dashboard = () => {
           {workspace === "breakEven"         && <BreakEven         setWorkspace={setWorkspace} />}
           {workspace === "pitchDeck"         && <PitchDeck         setWorkspace={setWorkspace} />}
           {workspace === "executiveSummary"  && <ExecutiveSummary  setWorkspace={setWorkspace} />}
+
+          {/* V9.2 Public Launch & Customer Success */}
+          {workspace === "customerSuccess"  && <CustomerSuccessDashboard setWorkspace={setWorkspace} />}
+          {workspace === "productAnalytics" && <ProductAnalytics         setWorkspace={setWorkspace} />}
+          {workspace === "releaseCenter"    && <ReleaseCenter            setWorkspace={setWorkspace} />}
 
           {/* V6.7 Customer Support Studio */}
           {workspace === "supportStudio"       && <CustomerSupportStudio   setWorkspace={setWorkspace} />}

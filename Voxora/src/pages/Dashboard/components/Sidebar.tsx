@@ -234,6 +234,13 @@ const LAUNCH_TOOLS = [
   { id: "betaReadinessReport", icon: "📋", label: "Beta Readiness"      },
 ];
 
+// ── V9.2 Public Launch & Customer Success ────────────────────────────────────
+const V92_TOOLS = [
+  { id: "customerSuccess",  icon: "💚", label: "Customer Success"   },
+  { id: "productAnalytics", icon: "📊", label: "Product Analytics"  },
+  { id: "releaseCenter",    icon: "🚀", label: "Release Center"     },
+];
+
 // ── V9.0 Public Beta Launch ────────────────────────────────────────────────────
 const V90_TOOLS = [
   { id: "aiProviderStatus",    icon: "🤖", label: "AI Provider Status"  },
@@ -610,6 +617,21 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
             onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">💚 V9.2 Customer Success</div>
+      <nav className="sidebar-nav">
+        {V92_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+            aria-label={item.label}
           >
             <span className="sidebar-item-icon">{item.icon}</span>
             <span className="sidebar-item-label">{item.label}</span>
