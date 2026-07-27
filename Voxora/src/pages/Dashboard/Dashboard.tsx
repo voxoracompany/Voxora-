@@ -22,6 +22,8 @@ import { AuditLogService } from "../../services/admin/AuditLogService";
 import { ErrorReportingService } from "../../services/admin/ErrorReportingService";
 import WelcomeWizard from "../../components/WelcomeWizard";
 import WorkspaceErrorBoundary from "../../components/WorkspaceErrorBoundary";
+import { ProductTour, useShouldShowTour, TOUR_KEY } from "../../components/ProductTour";
+import { FeedbackWidget } from "../../components/FeedbackWidget";
 import { WorkspacePreferences } from "../../services/storage/WorkspacePreferences";
 import "./Dashboard.css";
 
@@ -85,6 +87,9 @@ const InvestorReadiness   = lazy(() => import("../Workspaces/InvestorReadiness")
 // ── V6.0 AI Business Platform ─────────────────────────────────────────────────
 const BusinessPlanGenerator = lazy(() => import("../Workspaces/BusinessPlanGenerator"));
 const BetaReadinessReport = lazy(() => import("../Workspaces/BetaReadinessReport"));
+// ── V9.0 Public Beta Launch ──────────────────────────────────────────────────
+const AIProviderStatus   = lazy(() => import("../Workspaces/AIProviderStatus"));
+
 // ── V5.9 Launch Preparation & Production Readiness ───────────────────────────
 const ErrorReporting     = lazy(() => import("../Workspaces/ErrorReporting"));
 const HealthCheck        = lazy(() => import("../Workspaces/HealthCheck"));
@@ -276,10 +281,17 @@ const Dashboard = () => {
   const [favoriteWorkspaces, setFavoriteWorkspaces] = useState<string[]>(() => WorkspacePreferences.getFavorites());
   // Tracks whether admin/monitoring services have been seeded so dependent memos recompute after mount
   const [adminSeeded, setAdminSeeded] = useState(false);
+  const [showTour, setShowTour] = useState(false);
+
+  const shouldShowTour = useShouldShowTour();
 
   const handleWizardComplete = useCallback(() => {
     localStorage.setItem(WIZARD_KEY, "1");
     setShowWizard(false);
+    // Show product tour after wizard if not seen
+    if (!localStorage.getItem(TOUR_KEY)) {
+      setTimeout(() => setShowTour(true), 500);
+    }
   }, []);
   const { projects, favorites, pinned } = useProjects();
   const { activities } = useActivity();
@@ -399,6 +411,14 @@ const Dashboard = () => {
       {showWizard && (
         <WelcomeWizard onComplete={handleWizardComplete} setWorkspace={(w) => { handleWizardComplete(); setWorkspace(w); }} />
       )}
+
+      {/* V9.0 Product Tour */}
+      {!showWizard && (showTour || shouldShowTour) && (
+        <ProductTour onComplete={() => setShowTour(false)} />
+      )}
+
+      {/* V9.0 Feedback Widget — always visible */}
+      <FeedbackWidget onOpenFeedbackCenter={() => setWorkspace("feedback")} />
 
       {/* Mobile backdrop overlay */}
       {sidebarOpen && (
@@ -530,7 +550,7 @@ const Dashboard = () => {
               <div style={{ margin: "0 0 28px" }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
                   🚀 Platform Status
-                  <span style={{ fontSize: 11, background: "#dcfce7", color: "#166534", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>V8.0 Live</span>
+                  <span style={{ fontSize: 11, background: "#dcfce7", color: "#166534", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>V9.0 Public Beta</span>
                 </h2>
                 <div className="stats">
                   {/* Beta Badge */}
@@ -572,7 +592,7 @@ const Dashboard = () => {
                   {/* Latest Update */}
                   <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("help")}>
                     <div className="stat-icon">🆕</div>
-                    <p className="stat-value" style={{ fontSize: 13 }}>V8.0</p>
+                    <p className="stat-value" style={{ fontSize: 13 }}>V9.0</p>
                     <h3 className="stat-label">Latest Update</h3>
                   </div>
                   {/* Getting Started */}
@@ -1489,6 +1509,9 @@ const Dashboard = () => {
           {workspace === "elevatorPitch"      && <ElevatorPitch      setWorkspace={setWorkspace} />}
           {workspace === "fundingCalculator"  && <FundingCalculator  setWorkspace={setWorkspace} />}
           {workspace === "investorReadiness"  && <InvestorReadiness  setWorkspace={setWorkspace} />}
+
+          {/* V9.0 Public Beta Launch */}
+          {workspace === "aiProviderStatus" && <AIProviderStatus setWorkspace={setWorkspace} />}
 
           {/* V6.0 AI Business Platform */}
           {workspace === "businessPlanGenerator" && <BusinessPlanGenerator setWorkspace={setWorkspace} />}

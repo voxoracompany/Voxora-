@@ -231,6 +231,14 @@ const LAUNCH_TOOLS = [
   { id: "deploymentChecklist", icon: "✨", label: "Deployment Checklist"},
   { id: "errorReporting",      icon: "🚨", label: "Error Reporting"     },
   { id: "documentationCenter", icon: "📚", label: "Documentation"       },
+  { id: "betaReadinessReport", icon: "📋", label: "Beta Readiness"      },
+];
+
+// ── V9.0 Public Beta Launch ────────────────────────────────────────────────────
+const V90_TOOLS = [
+  { id: "aiProviderStatus",    icon: "🤖", label: "AI Provider Status"  },
+  { id: "gettingStarted",      icon: "🗺️", label: "Getting Started"    },
+  { id: "feedback",            icon: "💬", label: "Feedback Center"     },
 ];
 
 const SUPPORT_STUDIO_TOOLS = [
@@ -602,6 +610,21 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
             onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">🚀 V9.0 Public Beta</div>
+      <nav className="sidebar-nav">
+        {V90_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+            aria-label={item.label}
           >
             <span className="sidebar-item-icon">{item.icon}</span>
             <span className="sidebar-item-label">{item.label}</span>

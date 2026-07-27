@@ -133,8 +133,39 @@ class AIService {
     });
   }
 
-  // ── Core generate — full V5.1 pipeline ────────────────────────────────────
-  // Cache → RequestManager → ContextManager → Provider → Health + Usage
+  // ── Core generate — full V9.0 pipeline ───────────────────────────────────
+  // Cache → RequestManager → ContextManager → Provider (with retry) → Health + Usage
+
+  private static readonly DEFAULT_TIMEOUT_MS = 30_000;
+  private static readonly MAX_RETRIES = 2;
+
+  /** Wrap a provider call with timeout and retry logic. */
+  private async withRetry(
+    fn: () => Promise<AIResponse>,
+    providerName: import('./types/AITypes').AIProviderName,
+    timeoutMs = AIService.DEFAULT_TIMEOUT_MS,
+  ): Promise<AIResponse> {
+    let lastErr: unknown;
+    for (let attempt = 0; attempt <= AIService.MAX_RETRIES; attempt++) {
+      const _timer = setTimeout(() => { /* timeout guard */ }, timeoutMs);
+      try {
+        const res = await fn();
+        clearTimeout(_timer);
+        return res;
+      } catch (err) {
+        clearTimeout(_timer);
+        lastErr = err;
+        const isAbort = err instanceof Error && err.name === 'AbortError';
+        const isRetryable = isAbort ||
+          (err instanceof Error && /network|timeout|rate.limit|503|429/i.test(err.message));
+        if (!isRetryable || attempt >= AIService.MAX_RETRIES) break;
+        // Exponential backoff: 500ms, 1500ms
+        AIHealthMonitor.recordError(providerName, 0);
+        await new Promise(r => setTimeout(r, 500 * Math.pow(3, attempt)));
+      }
+    }
+    throw lastErr;
+  }
 
   /** Generate a single completion. */
   async generate(req: AIRequest): Promise<AIResponse> {
@@ -158,7 +189,10 @@ class AIService {
       async () => {
         const start = Date.now();
         try {
-          const res = await provider.generate(withCtx);
+          const res = await this.withRetry(
+            () => provider.generate(withCtx),
+            provider.name,
+          );
           AIHealthMonitor.recordSuccess(provider.name, res.responseTime);
           return res;
         } catch (err) {

@@ -241,20 +241,38 @@ function friendlyError(e: unknown): string {
   if (!e || typeof e !== "object") return "An unexpected error occurred.";
   const code = (e as { code?: string }).code ?? "";
   const map: Record<string, string> = {
-    "auth/email-already-in-use":      "An account with this email already exists.",
-    "auth/invalid-email":             "Invalid email address.",
-    "auth/weak-password":             "Password must be at least 6 characters.",
-    "auth/user-not-found":            "No account found with this email.",
-    "auth/wrong-password":            "Incorrect password.",
-    "auth/invalid-credential":        "Incorrect email or password.",
-    "auth/too-many-requests":         "Too many attempts. Please wait and try again.",
-    "auth/network-request-failed":    "Network error. Check your connection.",
-    "auth/user-disabled":             "This account has been disabled.",
-    "auth/operation-not-allowed":     "This sign-in method is not enabled in Firebase.",
-    "auth/popup-closed-by-user":      "Google sign-in was cancelled.",
-    "auth/popup-blocked":              "Your browser blocked the Google sign-in window. Allow pop-ups and try again.",
-    "auth/unauthorized-domain":        "This domain is not authorized for Firebase sign-in.",
-    "auth/requires-recent-login":     "Please log out and log back in before changing your password.",
+    // Account / sign-up errors
+    "auth/email-already-in-use":       "An account with this email already exists. Try signing in instead.",
+    "auth/invalid-email":              "Please enter a valid email address (e.g. user@example.com).",
+    "auth/weak-password":              "Your password is too weak. Use at least 8 characters with a mix of letters and numbers.",
+    "auth/missing-password":           "Please enter a password.",
+    // Sign-in errors
+    "auth/user-not-found":             "No account found with this email. Please check and try again, or sign up.",
+    "auth/wrong-password":             "Incorrect password. Please try again or reset your password.",
+    "auth/invalid-credential":         "Incorrect email or password. Please check and try again.",
+    "auth/invalid-login-credentials":  "Incorrect email or password. Please check and try again.",
+    // Rate limiting
+    "auth/too-many-requests":          "Too many failed attempts. Your account is temporarily locked. Please wait a few minutes or reset your password.",
+    // Network
+    "auth/network-request-failed":     "Network error. Please check your internet connection and try again.",
+    // Account status
+    "auth/user-disabled":              "This account has been disabled. Contact support for assistance.",
+    // Configuration
+    "auth/operation-not-allowed":      "This sign-in method is not currently enabled. Please contact support.",
+    "auth/unauthorized-domain":        "Sign-in is not allowed from this domain. Contact support.",
+    // Google OAuth
+    "auth/popup-closed-by-user":       "Google sign-in was cancelled.",
+    "auth/cancelled-popup-request":    "Google sign-in was cancelled.",
+    "auth/popup-blocked":              "Your browser blocked the pop-up. Please allow pop-ups for this site and try again.",
+    "auth/account-exists-with-different-credential": "An account already exists with this email using a different sign-in method.",
+    // Session
+    "auth/requires-recent-login":      "For security, please log out and sign back in before making this change.",
+    "auth/session-cookie-expired":     "Your session has expired. Please sign in again.",
+    "auth/id-token-expired":           "Your session has expired. Please sign in again.",
+    // Token / credential
+    "auth/credential-already-in-use":  "This credential is already associated with another account.",
+    "auth/invalid-action-code":        "This link has expired or already been used. Please request a new one.",
+    "auth/expired-action-code":        "This link has expired. Please request a new one.",
   };
   return map[code] ?? ((e as { message?: string }).message ?? "An unexpected error occurred.");
 }

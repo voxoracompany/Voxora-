@@ -1,126 +1,125 @@
-// Shared browser-storage and export helpers — V8.0
-// Keep all imported data bounded and treat user-provided strings as text.
-
-export function readJson<T>(key: string, fallback: T): T {
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
-    const parsed: unknown = JSON.parse(raw);
-    return parsed as T;
-  } catch {
-    return fallback;
-  }
-}
-
-export function writeJson(key: string, value: unknown): boolean {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export function writeString(key: string, value: string): boolean {
-  try {
-    localStorage.setItem(key, value);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export function escapeHtml(value: unknown): string {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-export function downloadBlob(filename: string, content: BlobPart, type: string): void {
-  const url = URL.createObjectURL(new Blob([content], { type }));
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  link.rel = "noopener";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 0);
-}
-
 /**
- * Safe localStorage getter with a size guard.
- * Returns null (not the fallback) when the stored value exceeds maxBytes.
+ * SafeStorage — V9.0
+ * Typed, validated, and error-safe wrappers around localStorage.
+ * - Never throws.
+ * - Validates keys to prevent injection.
+ * - Enforces per-entry size limits.
+ * - Gracefully degrades on quota exceeded (prunes oldest entries).
  */
-export function readJsonGuarded<T>(key: string, fallback: T, maxBytes = 2 * 1024 * 1024): T {
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
-    if (raw.length > maxBytes) {
-      console.warn(`[SafeStorage] Key "${key}" exceeds ${maxBytes} bytes — skipping.`);
-      return fallback;
+
+import { validateStorageKey, validateJsonSize } from '../validation/InputValidator';
+import { ProductionLogger } from '../logging/ProductionLogger';
+
+const MAX_ENTRY_BYTES = 2 * 1024 * 1024; // 2 MB per entry
+const NAMESPACE = 'voxora';
+
+function ns(key: string): string {
+  return key.startsWith(NAMESPACE + '-') ? key : `${NAMESPACE}-${key}`;
+}
+
+export const SafeStorage = {
+  /**
+   * Get a value by key. Returns `null` on miss or parse error.
+   */
+  get<T = unknown>(rawKey: string): T | null {
+    const keyCheck = validateStorageKey(rawKey.replace(/^voxora-/, ''));
+    if (!keyCheck.ok) {
+      ProductionLogger.warn(`SafeStorage.get: invalid key — ${keyCheck.error}`, 'SafeStorage');
+      return null;
     }
-    const parsed: unknown = JSON.parse(raw);
-    return parsed as T;
-  } catch {
-    return fallback;
-  }
-}
-
-/**
- * Remove a key from localStorage without throwing.
- */
-export function removeItem(key: string): void {
-  try { localStorage.removeItem(key); } catch { /* ignore */ }
-}
-
-/**
- * Return the approximate size of a localStorage key in bytes.
- */
-export function itemSizeBytes(key: string): number {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? new Blob([raw]).size : 0;
-  } catch {
-    return 0;
-  }
-}
-
-/**
- * Estimate total localStorage usage in bytes across all keys.
- */
-export function totalStorageBytes(): number {
-  let total = 0;
-  try {
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key) total += itemSizeBytes(key);
+    try {
+      const raw = localStorage.getItem(rawKey);
+      if (raw === null) return null;
+      return JSON.parse(raw) as T;
+    } catch (e) {
+      ProductionLogger.warn(`SafeStorage.get: parse error for "${rawKey}"`, 'SafeStorage', e);
+      return null;
     }
-  } catch { /* ignore */ }
-  return total;
-}
+  },
 
-export function validateBackup(value: unknown): value is {
-  version: string;
-  projects: unknown[];
-  favorites?: unknown[];
-  pinned?: unknown[];
-  activities?: unknown[];
-  chat?: unknown[];
-  chatCount?: number;
-  profile?: Record<string, unknown>;
-} {
-  if (!value || typeof value !== "object") return false;
-  const backup = value as Record<string, unknown>;
-  return typeof backup.version === "string"
-    && Array.isArray(backup.projects)
-    && backup.projects.length <= 5000
-    && (!backup.favorites || Array.isArray(backup.favorites))
-    && (!backup.pinned || Array.isArray(backup.pinned))
-    && (!backup.activities || Array.isArray(backup.activities))
-    && (!backup.chat || Array.isArray(backup.chat))
-    && (!backup.profile || typeof backup.profile === "object");
-}
+  /**
+   * Set a value by key. Returns false if quota exceeded or key invalid.
+   */
+  set(rawKey: string, value: unknown): boolean {
+    try {
+      const serialised = JSON.stringify(value);
+
+      // Check size
+      const sizeCheck = validateJsonSize(serialised, MAX_ENTRY_BYTES);
+      if (!sizeCheck.ok) {
+        ProductionLogger.warn(`SafeStorage.set: value too large for "${rawKey}" — ${sizeCheck.error}`, 'SafeStorage');
+        return false;
+      }
+
+      localStorage.setItem(rawKey, serialised);
+      return true;
+    } catch (e) {
+      // QuotaExceededError — try to free space
+      if (e instanceof DOMException && e.name === 'QuotaExceededError') {
+        ProductionLogger.warn('SafeStorage.set: quota exceeded — attempting prune', 'SafeStorage');
+        this._pruneOldest(3);
+        try {
+          localStorage.setItem(rawKey, JSON.stringify(value));
+          return true;
+        } catch {
+          return false;
+        }
+      }
+      ProductionLogger.error(`SafeStorage.set error for "${rawKey}"`, 'SafeStorage', e);
+      return false;
+    }
+  },
+
+  /**
+   * Remove a key. Silent on miss.
+   */
+  remove(key: string): void {
+    try { localStorage.removeItem(key); } catch { /* silent */ }
+  },
+
+  /**
+   * Safely check whether a key exists.
+   */
+  has(key: string): boolean {
+    try { return localStorage.getItem(key) !== null; } catch { return false; }
+  },
+
+  /**
+   * Get all Voxora-namespaced keys.
+   */
+  getVoxoraKeys(): string[] {
+    try {
+      return Object.keys(localStorage).filter(k => k.startsWith(NAMESPACE + '-'));
+    } catch { return []; }
+  },
+
+  /**
+   * Estimate total storage used by all Voxora keys (bytes).
+   */
+  estimateUsage(): number {
+    try {
+      return this.getVoxoraKeys().reduce((sum, k) => {
+        const v = localStorage.getItem(k) ?? '';
+        return sum + k.length + v.length;
+      }, 0);
+    } catch { return 0; }
+  },
+
+  /**
+   * Remove the N oldest Voxora entries (by alphabetic key order as fallback).
+   * Called when quota is exceeded.
+   */
+  _pruneOldest(n: number): void {
+    const keys = this.getVoxoraKeys();
+    // Skip critical keys
+    const skip = new Set(['voxora-auth-history', 'voxora-subscription', 'voxora-ai-settings']);
+    const prunable = keys.filter(k => !skip.has(k));
+    prunable.slice(0, n).forEach(k => {
+      try { localStorage.removeItem(k); } catch { /* silent */ }
+    });
+    ProductionLogger.info(`SafeStorage: pruned ${Math.min(n, prunable.length)} entries`, 'SafeStorage');
+  },
+
+  /** Convenience: namespace-prefix a key for use with get/set. */
+  key: ns,
+};

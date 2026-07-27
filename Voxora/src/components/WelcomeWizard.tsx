@@ -17,11 +17,11 @@ const STEPS = [
     content: (
       <div className="ww-intro">
         <div className="ww-badges">
-          <span className="ww-badge ww-badge--beta">🚀 V8.0 Live</span>
+          <span className="ww-badge ww-badge--beta">🚀 V9.0 Public Beta</span>
           <span className="ww-badge ww-badge--ai">🤖 AI-Powered</span>
           <span className="ww-badge ww-badge--free">✅ Free to Start</span>
         </div>
-        <p>Welcome to Voxora V8.0 — the fully launched AI platform. This quick setup takes under 2 minutes.</p>
+        <p>Welcome to Voxora V9.0 Public Beta — the fully launched AI-native business platform. This quick setup takes under 2 minutes.</p>
         <div className="ww-stats-row">
           <div className="ww-stat"><strong>100+</strong><span>AI Tools</span></div>
           <div className="ww-stat"><strong>15+</strong><span>Studio Modules</span></div>
@@ -84,6 +84,8 @@ const QUICK_ACTIONS = [
   { icon: "📊", label: "View Analytics", workspace: "analytics" },
   { icon: "💡", label: "App Ideas", workspace: "apps" },
   { icon: "📋", label: "Getting Started Guide", workspace: "gettingStarted" },
+  { icon: "🤖", label: "AI Provider Status", workspace: "aiProviderStatus" },
+  { icon: "💳", label: "Manage Billing", workspace: "billing" },
 ];
 
 export default function WelcomeWizard({ onComplete, setWorkspace }: Props) {
