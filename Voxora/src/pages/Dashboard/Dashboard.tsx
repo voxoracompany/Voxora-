@@ -120,6 +120,9 @@ const Billing            = lazy(() => import("../Workspaces/Billing"));
 const UserProfile        = lazy(() => import("../Workspaces/UserProfile"));
 const AccountSettings    = lazy(() => import("../Workspaces/AccountSettings"));
 const SecuritySettings   = lazy(() => import("../Workspaces/SecuritySettings"));
+// ── V8.3 Integrations Marketplace ────────────────────────────────────────────
+const IntegrationsDashboard = lazy(() => import("../Workspaces/IntegrationsDashboard"));
+const IntegrationsMonitoring = lazy(() => import("../Workspaces/IntegrationsMonitoring"));
 // ── V4.8 Integrations Studio ─────────────────────────────────────────────────
 const IntegrationsHub      = lazy(() => import("../Workspaces/IntegrationsHub"));
 const IntOpenAI            = lazy(() => import("../Workspaces/IntOpenAI"));
@@ -257,7 +260,9 @@ const WORKSPACE_LABELS: Record<string, string> = {
   analytics: "Analytics", search: "Smart Search", export: "Export Center", settings: "Settings",
   aiSettings: "AI Settings", business: "Business Model", productRoadmap: "Product Roadmap",
   financialStudio: "Financial Studio", marketingStudio: "Marketing Studio", investorStudio: "Investor Studio",
-  growthHub: "Growth Studio", teamHub: "Team Hub", integrationsHub: "Integrations Hub",
+  growthHub: "Growth Studio", teamHub: "Team Hub",
+  intDashboard: "Integrations Dashboard", integrationsHub: "Integrations Hub",
+  intMonitoring: "Integrations Monitoring",
   supportStudio: "Customer Support Studio", opsStudio: "Operations Studio", hrStudio: "HR & People Studio",
 };
 
@@ -1514,6 +1519,10 @@ const Dashboard = () => {
           {workspace === "intGoogleCal"    && <IntGoogleCal        setWorkspace={setWorkspace} />}
           {workspace === "intOutlook"      && <IntOutlook          setWorkspace={setWorkspace} />}
           {workspace === "intGitHub"       && <IntGitHub           setWorkspace={setWorkspace} />}
+
+          {/* V8.3 Integrations Marketplace */}
+          {workspace === "intDashboard"   && <IntegrationsDashboard  setWorkspace={setWorkspace} />}
+          {workspace === "intMonitoring"  && <IntegrationsMonitoring setWorkspace={setWorkspace} />}
 
           {/* V4.8 Integrations Studio */}
           {workspace === "integrationsHub" && <IntegrationsHub     setWorkspace={setWorkspace} />}

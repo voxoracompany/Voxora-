@@ -165,21 +165,28 @@ const TEAM_TOOLS = [
 ];
 
 const INTEGRATIONS_TOOLS = [
+  // ── V8.3 Integrations Marketplace ────────────────────────────────────────
+  { id: "intDashboard",     icon: "📊", label: "Integrations Dashboard" },
   { id: "integrationsHub",  icon: "🔌", label: "Integrations Hub" },
+  { id: "intMonitoring",    icon: "📡", label: "Monitoring" },
+  { id: "intWebhooks",      icon: "🔗", label: "Webhooks" },
+  { id: "intSettings",      icon: "⚙️", label: "Integration Settings" },
+  // ── Automation ────────────────────────────────────────────────────────────
   { id: "automation",       icon: "⚡", label: "Automation Engine" },
+  // ── AI Providers ──────────────────────────────────────────────────────────
   { id: "intOpenAI",        icon: "🧠", label: "OpenAI" },
   { id: "intGemini",        icon: "♊", label: "Google Gemini" },
   { id: "intAnthropic",     icon: "🤖", label: "Anthropic Claude" },
+  // ── Cloud Storage ─────────────────────────────────────────────────────────
   { id: "intGoogleDrive",   icon: "🗂️", label: "Google Drive" },
   { id: "intDropbox",       icon: "📦", label: "Dropbox" },
   { id: "intNotion",        icon: "📄", label: "Notion" },
+  // ── Communication & Developer ─────────────────────────────────────────────
   { id: "intSlack",         icon: "💬", label: "Slack" },
   { id: "intZapier",        icon: "⚡", label: "Zapier" },
-  { id: "intWebhooks",      icon: "🔗", label: "Webhooks" },
   { id: "intGoogleCal",     icon: "📅", label: "Google Calendar" },
   { id: "intOutlook",       icon: "📧", label: "Microsoft Outlook" },
   { id: "intGitHub",        icon: "🐙", label: "GitHub" },
-  { id: "intSettings",      icon: "⚙️", label: "Integration Settings" },
 ];
 
 const ANALYTICS_TOOLS = [

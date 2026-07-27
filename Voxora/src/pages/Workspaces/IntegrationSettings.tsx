@@ -1,212 +1,545 @@
-// ── V4.8 Integration Settings ────────────────────────────────────────────────
-import { useState } from "react";
+// ── V8.3 Integration Settings ────────────────────────────────────────────────
+import React, { useState, useCallback, useMemo } from "react";
+import { IntegrationService } from "../../services/integrations/IntegrationService";
 import { useActivity } from "../../context/ActivityContext";
 import { useToast } from "../../context/ToastContext";
+import type { SyncFrequency, IntegrationPreferences, NotificationPreferences } from "../../services/integrations/IntegrationTypes";
 import "./Workspace.css";
 import "./Settings.css";
 
 interface Props { setWorkspace: (w: string) => void }
 
-interface IntegrationConfig {
-  id: string;
-  name: string;
-  icon: string;
-  category: string;
-  storageKey: string;
-  description: string;
-}
+type Tab = "accounts" | "sync" | "retries" | "notifications" | "oauth" | "preferences";
 
-const INTEGRATIONS: IntegrationConfig[] = [
-  { id: "openai",       name: "OpenAI",            icon: "🧠", category: "AI Provider",    storageKey: "voxora-int-openai-enabled",    description: "GPT-4 and GPT-4o AI models" },
-  { id: "gemini",       name: "Google Gemini",      icon: "♊", category: "AI Provider",    storageKey: "voxora-int-gemini-enabled",    description: "Gemini Pro and Ultra models" },
-  { id: "anthropic",    name: "Anthropic Claude",   icon: "🤖", category: "AI Provider",    storageKey: "voxora-int-anthropic-enabled", description: "Claude Opus, Sonnet, and Haiku" },
-  { id: "googledrive",  name: "Google Drive",       icon: "🗂️", category: "Cloud Storage",  storageKey: "voxora-int-gdrive-enabled",    description: "Cloud file export and import" },
-  { id: "dropbox",      name: "Dropbox",            icon: "📦", category: "Cloud Storage",  storageKey: "voxora-int-dropbox-enabled",   description: "Dropbox backup and restore" },
-  { id: "notion",       name: "Notion",             icon: "📄", category: "Productivity",   storageKey: "voxora-int-notion-enabled",    description: "Notion workspace export" },
-  { id: "slack",        name: "Slack",              icon: "💬", category: "Communication",  storageKey: "voxora-int-slack-enabled",     description: "Slack notifications and alerts" },
-  { id: "zapier",       name: "Zapier",             icon: "⚡", category: "Automation",     storageKey: "voxora-int-zapier-enabled",    description: "Zapier webhook automation" },
-  { id: "webhooks",     name: "Webhooks",           icon: "🔗", category: "Automation",     storageKey: "voxora-int-webhooks-enabled",  description: "Custom incoming/outgoing webhooks" },
-  // V5.7 additions
-  { id: "googleCal",    name: "Google Calendar",    icon: "📅", category: "Calendar",       storageKey: "voxora-int-gcal-enabled",      description: "Sync milestones and deadlines" },
-  { id: "outlook",      name: "Microsoft Outlook",  icon: "📧", category: "Calendar",       storageKey: "voxora-int-outlook-enabled",   description: "Outlook calendar and tasks" },
-  { id: "github",       name: "GitHub",             icon: "🐙", category: "Developer Tools", storageKey: "voxora-int-github-enabled",   description: "Link repos to Voxora projects" },
+const TABS: { id: Tab; label: string; icon: string }[] = [
+  { id: "accounts",      label: "Connected Accounts",     icon: "🔌" },
+  { id: "sync",          label: "Sync Frequency",         icon: "🔄" },
+  { id: "retries",       label: "Retry Attempts",         icon: "🔁" },
+  { id: "notifications", label: "Notifications",          icon: "🔔" },
+  { id: "oauth",         label: "OAuth Connections",      icon: "🔐" },
+  { id: "preferences",   label: "Preferences",            icon: "⚙️" },
 ];
 
-const MOCK_SYNC_LOG = [
-  { time: "Just now",  action: "OpenAI model updated to GPT-4o",           status: "success" },
-  { time: "5m ago",    action: "Zapier webhook test fired",                 status: "success" },
-  { time: "23m ago",   action: "Slack notification sent — Team Brief",      status: "success" },
-  { time: "1h ago",    action: "Anthropic Claude model saved",              status: "success" },
-  { time: "2h ago",    action: "Google Drive export — 5 projects",          status: "success" },
-  { time: "Yesterday", action: "Outgoing webhook failed — timeout",         status: "failed"  },
+const FREQ_OPTIONS: { value: SyncFrequency; label: string; desc: string }[] = [
+  { value: "realtime", label: "Realtime",    desc: "Sync immediately on every event" },
+  { value: "hourly",   label: "Hourly",      desc: "Sync once per hour automatically" },
+  { value: "daily",    label: "Daily",       desc: "Sync once per day at midnight" },
+  { value: "manual",   label: "Manual only", desc: "Sync only when you click the button" },
 ];
 
-function lastSync(id: string): string {
-  const saved = localStorage.getItem(`voxora-int-${id}-lastsync`);
-  return saved ? new Date(saved).toLocaleString() : "Never";
+const STATUS_COLOR: Record<string, string> = {
+  connected: "#10b981", available: "#9ca3af", error: "#ef4444",
+  syncing: "#f59e0b", disconnected: "#6b7280",
+};
+
+function formatRelative(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "Just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
 }
 
-export default function IntegrationSettings({ setWorkspace }: Props) {
-  const { addActivity } = useActivity();
-  const { showToast } = useToast();
-
-  const [enabled, setEnabled] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(
-      INTEGRATIONS.map(i => [i.id, localStorage.getItem(i.storageKey) !== "false"])
-    )
+// ── Toggle ─────────────────────────────────────────────────────────────────────
+const Toggle = React.memo(function Toggle({
+  value, onChange, label, desc,
+}: { value: boolean; onChange: (v: boolean) => void; label: string; desc?: string }) {
+  return (
+    <div style={{
+      display: "flex", alignItems: "center", justifyContent: "space-between",
+      padding: "14px 0", borderBottom: "1px solid #f1f5f9",
+    }}>
+      <div>
+        <div style={{ fontWeight: 600, fontSize: 14 }}>{label}</div>
+        {desc && <div style={{ fontSize: 12, color: "#9ca3af", marginTop: 2 }}>{desc}</div>}
+      </div>
+      <button
+        onClick={() => onChange(!value)}
+        style={{
+          width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
+          background: value ? "#6C63FF" : "#d1d5db",
+          transition: "background 0.2s", position: "relative", flexShrink: 0,
+        }}
+      >
+        <span style={{
+          position: "absolute", top: 3, left: value ? 22 : 3,
+          width: 18, height: 18, borderRadius: "50%", background: "#fff",
+          transition: "left 0.18s", display: "block",
+        }} />
+      </button>
+    </div>
   );
-  const [activeTab, setActiveTab] = useState<"overview" | "logs">("overview");
+});
 
-  const toggle = (id: string) => {
-    const next = !enabled[id];
-    setEnabled(prev => ({ ...prev, [id]: next }));
-    const integration = INTEGRATIONS.find(i => i.id === id)!;
-    localStorage.setItem(integration.storageKey, String(next));
-    addActivity({
-      type: "settings_updated",
-      title: `${integration.name} ${next ? "Enabled" : "Disabled"}`,
-      description: `Integration toggled via Integration Settings.`,
-      category: "Integrations",
-      icon: integration.icon,
-    });
-    showToast(`${integration.icon} ${integration.name} ${next ? "enabled" : "disabled"}.`);
-  };
+// ── Panel Wrapper ──────────────────────────────────────────────────────────────
+const Panel = React.memo(function Panel({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div style={{
+      background: "var(--bg-card, #fff)", border: "1.5px solid var(--border, #e5e7eb)",
+      borderRadius: 16, padding: "20px 22px", marginBottom: 16,
+    }}>
+      <h3 style={{ margin: "0 0 16px", fontSize: 15, fontWeight: 700 }}>{title}</h3>
+      {children}
+    </div>
+  );
+});
 
-  const categories = [...new Set(INTEGRATIONS.map(i => i.category))];
+// ── Connected Accounts Tab ─────────────────────────────────────────────────────
+const AccountsTab = React.memo(function AccountsTab({
+  onNavigate,
+}: { onNavigate: (ws: string) => void }) {
+  const all = IntegrationService.getAll();
+  const connected = all.filter(i => i.status === "connected");
+  const metrics   = IntegrationService.getAllSyncMetrics();
+  const metricsMap = Object.fromEntries(metrics.map(m => [m.integrationId, m]));
 
   return (
-    <div className="workspace-container" style={{ maxWidth: 800 }}>
-      <button className="back-btn" onClick={() => setWorkspace("integrationsHub")}>← Back to Integrations</button>
+    <div>
+      {connected.length === 0 ? (
+        <Panel title="Connected Accounts">
+          <div style={{ textAlign: "center", padding: "32px 20px", color: "#9ca3af" }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>🔌</div>
+            <p>No integrations connected yet.</p>
+            <button className="workspace-btn" onClick={() => onNavigate("integrationsHub")}
+              style={{ padding: "8px 20px", marginTop: 8 }}>
+              Connect Integrations →
+            </button>
+          </div>
+        </Panel>
+      ) : (
+        <Panel title={`Connected Accounts (${connected.length})`}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {connected.map(i => {
+              const m = metricsMap[i.id];
+              const rate = m && m.totalSyncs > 0
+                ? `${Math.round(m.successRate * 100)}% success rate`
+                : "No syncs yet";
+              return (
+                <div key={i.id} style={{
+                  display: "flex", alignItems: "center", gap: 14,
+                  padding: "14px 16px", background: "#f8fafc", borderRadius: 12,
+                  border: "1.5px solid #e5e7eb",
+                }}>
+                  <span style={{ fontSize: 26 }}>{i.icon}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 700, fontSize: 14 }}>{i.name}</div>
+                    <div style={{ fontSize: 12, color: "#9ca3af" }}>
+                      {i.lastSync ? `Last sync ${formatRelative(i.lastSync)}` : "Never synced"} · {rate}
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                    <span style={{
+                      width: 8, height: 8, borderRadius: "50%",
+                      background: STATUS_COLOR[i.status] ?? "#9ca3af",
+                    }} />
+                    <span style={{ fontSize: 12, color: STATUS_COLOR[i.status], fontWeight: 600, textTransform: "capitalize" }}>
+                      {i.status}
+                    </span>
+                  </div>
+                  {i.syncCount > 0 && (
+                    <span style={{ fontSize: 12, color: "#9ca3af" }}>{i.syncCount} syncs</span>
+                  )}
+                  <button className="workspace-btn" onClick={() => onNavigate("integrationsHub")}
+                    style={{ padding: "5px 12px", fontSize: 12 }}>
+                    Manage →
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </Panel>
+      )}
 
-      <div style={{
-        background: "linear-gradient(135deg, #0f172a, #4c1d95)",
-        borderRadius: 20, padding: "32px 30px", marginBottom: 28, color: "#fff",
-      }}>
-        <div style={{ fontSize: 42, marginBottom: 10 }}>⚙️</div>
-        <h1 style={{ margin: 0, fontSize: 26, fontWeight: 800 }}>Integration Settings</h1>
-        <p style={{ margin: "8px 0 0", fontSize: 14, opacity: 0.9 }}>
-          Enable or disable integrations, view connection status, last sync time, and sync logs.
-        </p>
-      </div>
+      {/* All integrations overview */}
+      <Panel title="All Integrations">
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          {all.map(i => (
+            <div key={i.id} style={{
+              display: "flex", alignItems: "center", gap: 8,
+              padding: "7px 14px", background: "#f8fafc", borderRadius: 10,
+              border: `1.5px solid ${i.status === "connected" ? "#bbf7d0" : "#e5e7eb"}`,
+            }}>
+              <span style={{ fontSize: 18 }}>{i.icon}</span>
+              <span style={{ fontSize: 13, fontWeight: 600 }}>{i.name}</span>
+              <span style={{
+                width: 7, height: 7, borderRadius: "50%",
+                background: STATUS_COLOR[i.status] ?? "#9ca3af",
+              }} />
+            </div>
+          ))}
+        </div>
+      </Panel>
+    </div>
+  );
+});
 
-      {/* Summary stats */}
-      <div className="stats" style={{ marginBottom: 28 }}>
-        <div className="stat-card">
-          <div className="stat-icon">🔌</div>
-          <p className="stat-value">{Object.values(enabled).filter(Boolean).length}</p>
-          <h3 className="stat-label">Active</h3>
+// ── Sync Frequency Tab ─────────────────────────────────────────────────────────
+const SyncTab = React.memo(function SyncTab({ prefs, onChange }: {
+  prefs: IntegrationPreferences;
+  onChange: (p: Partial<IntegrationPreferences>) => void;
+}) {
+  const connected = IntegrationService.getConnected();
+  const [perInteg, setPerInteg] = useState<Record<string, SyncFrequency>>(() =>
+    Object.fromEntries(connected.map(i => [i.id, (i.config.syncFrequency as SyncFrequency) ?? prefs.defaultSyncFrequency]))
+  );
+
+  const handlePerChange = (id: string, val: SyncFrequency) => {
+    setPerInteg(prev => ({ ...prev, [id]: val }));
+    IntegrationService.updateConfig(id, { syncFrequency: val });
+  };
+
+  return (
+    <div>
+      <Panel title="Default Sync Frequency">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 10 }}>
+          {FREQ_OPTIONS.map(opt => (
+            <button key={opt.value} onClick={() => onChange({ defaultSyncFrequency: opt.value })} style={{
+              padding: "14px 16px", borderRadius: 12, textAlign: "left",
+              border: `2px solid ${prefs.defaultSyncFrequency === opt.value ? "#6C63FF" : "#e5e7eb"}`,
+              background: prefs.defaultSyncFrequency === opt.value ? "#ede9fe" : "var(--bg-card, #fff)",
+              cursor: "pointer",
+            }}>
+              <div style={{ fontWeight: 700, fontSize: 14, color: prefs.defaultSyncFrequency === opt.value ? "#6C63FF" : "#111827" }}>
+                {opt.label}
+              </div>
+              <div style={{ fontSize: 12, color: "#6b7280", marginTop: 4 }}>{opt.desc}</div>
+            </button>
+          ))}
         </div>
-        <div className="stat-card">
-          <div className="stat-icon">⏸️</div>
-          <p className="stat-value">{Object.values(enabled).filter(v => !v).length}</p>
-          <h3 className="stat-label">Disabled</h3>
+      </Panel>
+
+      {connected.length > 0 && (
+        <Panel title="Per-Integration Sync Frequency">
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {connected.map(i => (
+              <div key={i.id} style={{
+                display: "flex", alignItems: "center", gap: 14,
+                padding: "12px 16px", background: "#f8fafc", borderRadius: 12,
+              }}>
+                <span style={{ fontSize: 22 }}>{i.icon}</span>
+                <div style={{ flex: 1, fontWeight: 600, fontSize: 14 }}>{i.name}</div>
+                <select
+                  value={perInteg[i.id] ?? prefs.defaultSyncFrequency}
+                  onChange={e => handlePerChange(i.id, e.target.value as SyncFrequency)}
+                  style={{
+                    padding: "7px 12px", borderRadius: 8, border: "1.5px solid #e5e7eb",
+                    fontSize: 13, background: "#fff", cursor: "pointer",
+                  }}
+                >
+                  {FREQ_OPTIONS.map(o => (
+                    <option key={o.value} value={o.value}>{o.label}</option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+        </Panel>
+      )}
+    </div>
+  );
+});
+
+// ── Retry Attempts Tab ─────────────────────────────────────────────────────────
+const RetriesTab = React.memo(function RetriesTab({ prefs, onChange }: {
+  prefs: IntegrationPreferences;
+  onChange: (p: Partial<IntegrationPreferences>) => void;
+}) {
+  return (
+    <div>
+      <Panel title="Retry Configuration">
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ display: "block", fontWeight: 600, fontSize: 14, marginBottom: 8 }}>
+            Max Retry Attempts: <span style={{ color: "#6C63FF", fontWeight: 800 }}>{prefs.defaultRetryAttempts}</span>
+          </label>
+          <input
+            type="range" min={0} max={5} step={1}
+            value={prefs.defaultRetryAttempts}
+            onChange={e => onChange({ defaultRetryAttempts: Number(e.target.value) })}
+            style={{ width: "100%", accentColor: "#6C63FF" }}
+          />
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#9ca3af", marginTop: 4 }}>
+            <span>0 (no retry)</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon">🧠</div>
-          <p className="stat-value">3</p>
-          <h3 className="stat-label">AI Providers</h3>
+        <Toggle
+          value={prefs.autoReconnect}
+          onChange={v => onChange({ autoReconnect: v })}
+          label="Auto-Reconnect"
+          desc="Automatically reconnect integrations that become disconnected"
+        />
+      </Panel>
+
+      <Panel title="Log Retention">
+        <div>
+          <label style={{ display: "block", fontWeight: 600, fontSize: 14, marginBottom: 8 }}>
+            Keep logs for: <span style={{ color: "#6C63FF", fontWeight: 800 }}>{prefs.logRetention} days</span>
+          </label>
+          <input
+            type="range" min={7} max={90} step={7}
+            value={prefs.logRetention}
+            onChange={e => onChange({ logRetention: Number(e.target.value) })}
+            style={{ width: "100%", accentColor: "#6C63FF" }}
+          />
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#9ca3af", marginTop: 4 }}>
+            <span>7d</span><span>30d</span><span>60d</span><span>90d</span>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon">☁️</div>
-          <p className="stat-value">2</p>
-          <h3 className="stat-label">Cloud Sync</h3>
+      </Panel>
+    </div>
+  );
+});
+
+// ── Notifications Tab ──────────────────────────────────────────────────────────
+const NotificationsTab = React.memo(function NotificationsTab({ notif, onChange }: {
+  notif: NotificationPreferences;
+  onChange: (n: Partial<NotificationPreferences>) => void;
+}) {
+  return (
+    <div>
+      <Panel title="Notification Level">
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 8 }}>
+          {([
+            { value: "all",         label: "All Events",   desc: "Connect, sync, failures" },
+            { value: "errors_only", label: "Errors Only",  desc: "Failures and alerts only" },
+            { value: "none",        label: "Silent",       desc: "No notifications" },
+          ] as const).map(opt => (
+            <button key={opt.value} onClick={() => onChange({ level: opt.value })} style={{
+              flex: "1 1 140px", padding: "12px 14px", borderRadius: 12, textAlign: "left",
+              border: `2px solid ${notif.level === opt.value ? "#6C63FF" : "#e5e7eb"}`,
+              background: notif.level === opt.value ? "#ede9fe" : "var(--bg-card, #fff)",
+              cursor: "pointer",
+            }}>
+              <div style={{ fontWeight: 700, fontSize: 13, color: notif.level === opt.value ? "#6C63FF" : "#111827" }}>
+                {opt.label}
+              </div>
+              <div style={{ fontSize: 12, color: "#6b7280", marginTop: 3 }}>{opt.desc}</div>
+            </button>
+          ))}
+        </div>
+      </Panel>
+
+      <Panel title="Event Triggers">
+        <Toggle value={notif.onConnect}        onChange={v => onChange({ onConnect: v })}        label="On Connect"         desc="Notify when an integration is connected" />
+        <Toggle value={notif.onDisconnect}     onChange={v => onChange({ onDisconnect: v })}     label="On Disconnect"      desc="Notify when an integration disconnects" />
+        <Toggle value={notif.onSyncFail}       onChange={v => onChange({ onSyncFail: v })}       label="On Sync Failure"    desc="Notify when a sync operation fails" />
+        <Toggle value={notif.onWebhookFail}    onChange={v => onChange({ onWebhookFail: v })}    label="On Webhook Failure" desc="Notify when a webhook delivery fails" />
+        <Toggle value={notif.onHealthDegraded} onChange={v => onChange({ onHealthDegraded: v })} label="On Health Degraded" desc="Notify when a provider's health degrades" />
+      </Panel>
+    </div>
+  );
+});
+
+// ── OAuth Tab ──────────────────────────────────────────────────────────────────
+const OAuthTab = React.memo(function OAuthTab({ onNavigate }: { onNavigate: (ws: string) => void }) {
+  const OAUTH_INTEGRATIONS = [
+    { id: "googleDrive", name: "Google Drive",     icon: "🗂️", scope: "drive.file, drive.readonly", provider: "Google" },
+    { id: "googleCal",   name: "Google Calendar",  icon: "📅", scope: "calendar.events, calendar.readonly", provider: "Google" },
+    { id: "notion",      name: "Notion",            icon: "📄", scope: "read_content, update_content", provider: "Notion" },
+    { id: "slack",       name: "Slack",             icon: "💬", scope: "channels:read, chat:write", provider: "Slack" },
+    { id: "github",      name: "GitHub",            icon: "🐙", scope: "repo, read:user", provider: "GitHub" },
+    { id: "dropbox",     name: "Dropbox",           icon: "📦", scope: "files.content.read, files.content.write", provider: "Dropbox" },
+  ];
+
+  const all = IntegrationService.getAll();
+  const statusMap = Object.fromEntries(all.map(i => [i.id, i.status]));
+
+  return (
+    <div>
+      <Panel title="OAuth Connections">
+        <div style={{
+          background: "#fef9c3", border: "1.5px solid #fde68a", borderRadius: 10,
+          padding: "12px 16px", fontSize: 13, color: "#92400e", marginBottom: 16,
+        }}>
+          🔐 OAuth connections are available in production with real API keys configured.
+          In Demo Mode, connections are simulated and no data leaves your device.
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {OAUTH_INTEGRATIONS.map(o => {
+            const status = statusMap[o.id] ?? "available";
+            const isConn = status === "connected";
+            return (
+              <div key={o.id} style={{
+                display: "flex", alignItems: "center", gap: 14,
+                padding: "14px 16px", background: "#f8fafc", borderRadius: 12,
+                border: `1.5px solid ${isConn ? "#bbf7d0" : "#e5e7eb"}`,
+              }}>
+                <span style={{ fontSize: 24 }}>{o.icon}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 700, fontSize: 14 }}>{o.name}</div>
+                  <div style={{ fontSize: 12, color: "#9ca3af" }}>
+                    Provider: {o.provider} · Scopes: <code style={{ fontSize: 11, background: "#f1f5f9", padding: "1px 5px", borderRadius: 4 }}>{o.scope}</code>
+                  </div>
+                </div>
+                <span style={{
+                  fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 8,
+                  background: isConn ? "#d1fae5" : "#f1f5f9",
+                  color: isConn ? "#059669" : "#6b7280",
+                }}>
+                  {isConn ? "Connected" : "Not Connected"}
+                </span>
+                <button className="workspace-btn" onClick={() => onNavigate("integrationsHub")}
+                  style={{ padding: "5px 12px", fontSize: 12 }}>
+                  {isConn ? "Manage" : "Connect"}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </Panel>
+    </div>
+  );
+});
+
+// ── Preferences Tab ────────────────────────────────────────────────────────────
+const PreferencesTab = React.memo(function PreferencesTab({ prefs, onChange }: {
+  prefs: IntegrationPreferences;
+  onChange: (p: Partial<IntegrationPreferences>) => void;
+}) {
+  return (
+    <div>
+      <Panel title="Integration Preferences">
+        <Toggle
+          value={prefs.autoReconnect}
+          onChange={v => onChange({ autoReconnect: v })}
+          label="Auto-Reconnect"
+          desc="Automatically reconnect integrations that become unavailable"
+        />
+        <div style={{ paddingTop: 12, marginTop: 4 }}>
+          <label style={{ fontWeight: 600, fontSize: 14, display: "block", marginBottom: 8 }}>
+            Default Sync Frequency
+          </label>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {FREQ_OPTIONS.map(opt => (
+              <button key={opt.value} onClick={() => onChange({ defaultSyncFrequency: opt.value })} style={{
+                padding: "8px 14px", borderRadius: 10, fontSize: 13,
+                border: `2px solid ${prefs.defaultSyncFrequency === opt.value ? "#6C63FF" : "#e5e7eb"}`,
+                background: prefs.defaultSyncFrequency === opt.value ? "#ede9fe" : "#fff",
+                color: prefs.defaultSyncFrequency === opt.value ? "#6C63FF" : "#374151",
+                fontWeight: prefs.defaultSyncFrequency === opt.value ? 700 : 500,
+                cursor: "pointer",
+              }}>{opt.label}</button>
+            ))}
+          </div>
+        </div>
+      </Panel>
+
+      <Panel title="Data Management">
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "12px 0", borderBottom: "1px solid #f1f5f9",
+          }}>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>Export Integration Config</div>
+              <div style={{ fontSize: 12, color: "#9ca3af" }}>Download your integration settings as JSON</div>
+            </div>
+            <button className="workspace-btn" onClick={() => {
+              const data = { integrations: IntegrationService.getAll(), prefs };
+              const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+              const url  = URL.createObjectURL(blob);
+              const a    = document.createElement("a");
+              a.href = url; a.download = "voxora-integrations.json"; a.click();
+              URL.revokeObjectURL(url);
+            }} style={{ padding: "6px 14px", fontSize: 12 }}>
+              📥 Export
+            </button>
+          </div>
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "12px 0",
+          }}>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: 14, color: "#dc2626" }}>Reset All Integrations</div>
+              <div style={{ fontSize: 12, color: "#9ca3af" }}>Disconnect all and clear local data</div>
+            </div>
+            <button className="workspace-btn" onClick={() => {
+              if (window.confirm("This will disconnect all integrations and clear local data. Continue?")) {
+                localStorage.removeItem("voxora-integrations-v2");
+                localStorage.removeItem("voxora-integration-events-v2");
+                localStorage.removeItem("voxora-integration-health-v1");
+                localStorage.removeItem("voxora-integration-metrics-v1");
+                window.location.reload();
+              }
+            }} style={{ padding: "6px 14px", fontSize: 12, background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca" }}>
+              🗑️ Reset
+            </button>
+          </div>
+        </div>
+      </Panel>
+    </div>
+  );
+});
+
+// ── Main Component ─────────────────────────────────────────────────────────────
+export default function IntegrationSettings({ setWorkspace }: Props) {
+  const { addActivity } = useActivity();
+  const { showToast }   = useToast();
+
+  const [tab, setTab] = useState<Tab>("accounts");
+  const [prefs, setPrefs] = useState<IntegrationPreferences>(() => IntegrationService.getPreferences());
+
+  const handlePrefsChange = useCallback((updates: Partial<IntegrationPreferences>) => {
+    const next = { ...prefs, ...updates };
+    setPrefs(next);
+    IntegrationService.savePreferences(next);
+    showToast("✅ Settings saved.");
+    addActivity({ type: "settings_saved", title: "Integration Settings", description: "Preferences updated.", category: "Integrations", icon: "⚙️" });
+  }, [prefs, showToast, addActivity]);
+
+  const handleNotifChange = useCallback((updates: Partial<NotificationPreferences>) => {
+    const next: IntegrationPreferences = { ...prefs, notifications: { ...prefs.notifications, ...updates } };
+    setPrefs(next);
+    IntegrationService.savePreferences(next);
+    showToast("✅ Notification preferences saved.");
+  }, [prefs, showToast]);
+
+  const notif = useMemo(() => prefs.notifications, [prefs]);
+
+  return (
+    <div className="workspace-container" style={{ maxWidth: 860 }}>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
+        <div>
+          <h1 className="workspace-title">⚙️ Integration Settings</h1>
+          <p style={{ color: "#6b7280", fontSize: 14, margin: "4px 0 0" }}>
+            Manage accounts, sync frequency, retries, notifications, OAuth, and preferences.
+          </p>
+        </div>
+        <div style={{ display: "flex", gap: 10 }}>
+          <button className="workspace-btn" onClick={() => setWorkspace("intDashboard")}
+            style={{ padding: "8px 16px", fontSize: 13 }}>
+            📊 Dashboard
+          </button>
+          <button className="workspace-btn" onClick={() => setWorkspace("integrationsHub")}
+            style={{ padding: "8px 16px", fontSize: 13, background: "#6C63FF", color: "#fff", border: "none" }}>
+            🔌 Manage Integrations
+          </button>
         </div>
       </div>
 
       {/* Tabs */}
-      <div style={{ display: "flex", gap: 4, marginBottom: 24, background: "#f3f4f6", borderRadius: 12, padding: 4 }}>
-        {(["overview", "logs"] as const).map(tab => (
-          <button key={tab} onClick={() => setActiveTab(tab)} style={{
-            flex: 1, padding: "8px 0", borderRadius: 10, border: "none", cursor: "pointer", fontWeight: 600, fontSize: 14,
-            background: activeTab === tab ? "#fff" : "transparent",
-            color: activeTab === tab ? "#111827" : "#6b7280",
-            boxShadow: activeTab === tab ? "0 1px 4px rgba(0,0,0,0.1)" : "none",
-            transition: "all 0.2s",
-          }}>
-            {tab === "overview" ? "🔌 Integrations" : "📋 Sync Logs"}
-          </button>
+      <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+        {TABS.map(t => (
+          <button key={t.id} onClick={() => setTab(t.id)} style={{
+            padding: "8px 14px", borderRadius: 10, border: "1.5px solid",
+            borderColor: tab === t.id ? "#6C63FF" : "var(--border, #e5e7eb)",
+            background: tab === t.id ? "#ede9fe" : "var(--bg-card, #fff)",
+            color: tab === t.id ? "#6C63FF" : "#374151",
+            fontWeight: tab === t.id ? 700 : 500, fontSize: 13, cursor: "pointer",
+            transition: "all 0.15s",
+          }}>{t.icon} {t.label}</button>
         ))}
       </div>
 
-      {activeTab === "overview" && (
-        <>
-          {categories.map(cat => (
-            <div key={cat} style={{ marginBottom: 24 }}>
-              <h3 style={{ fontSize: 13, fontWeight: 700, color: "#6b7280", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>
-                {cat}
-              </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {INTEGRATIONS.filter(i => i.category === cat).map(integration => (
-                  <div key={integration.id} style={{
-                    display: "flex", alignItems: "center", gap: 14,
-                    padding: "16px 18px", background: "#fff",
-                    border: `1.5px solid ${enabled[integration.id] ? "#c4b5fd" : "#e5e7eb"}`,
-                    borderRadius: 14, boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                    transition: "border-color 0.2s",
-                  }}>
-                    <div style={{ fontSize: 28 }}>{integration.icon}</div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 700, fontSize: 14, color: "#111827" }}>{integration.name}</div>
-                      <div style={{ fontSize: 12, color: "#6b7280", marginTop: 2 }}>{integration.description}</div>
-                      <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 4 }}>
-                        Last sync: {lastSync(integration.id)}
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-                      <span style={{
-                        fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 6,
-                        background: enabled[integration.id] ? "#ede9fe" : "#f3f4f6",
-                        color: enabled[integration.id] ? "#6C63FF" : "#9ca3af",
-                      }}>
-                        {enabled[integration.id] ? "ACTIVE" : "DISABLED"}
-                      </span>
-                      <button
-                        onClick={() => toggle(integration.id)}
-                        style={{
-                          width: 42, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
-                          background: enabled[integration.id] ? "#6C63FF" : "#d1d5db",
-                          transition: "background 0.2s", position: "relative", flexShrink: 0,
-                        }}
-                      >
-                        <span style={{
-                          position: "absolute", top: 3, left: enabled[integration.id] ? 20 : 3,
-                          width: 18, height: 18, borderRadius: "50%", background: "#fff",
-                          transition: "left 0.2s", display: "block",
-                        }} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </>
-      )}
-
-      {activeTab === "logs" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {MOCK_SYNC_LOG.map((log, i) => (
-            <div key={i} style={{
-              display: "flex", alignItems: "center", gap: 12,
-              padding: "13px 16px", background: "#fff",
-              border: "1.5px solid #e5e7eb", borderRadius: 12,
-            }}>
-              <span style={{ fontSize: 16 }}>{log.status === "success" ? "✅" : "❌"}</span>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, color: "#111827", fontWeight: 500 }}>{log.action}</div>
-                <div style={{ fontSize: 12, color: "#9ca3af", marginTop: 2 }}>{log.time}</div>
-              </div>
-              <span style={{
-                fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 6,
-                background: log.status === "success" ? "#d1fae5" : "#fee2e2",
-                color: log.status === "success" ? "#065f46" : "#991b1b",
-              }}>
-                {log.status.toUpperCase()}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Tab Content */}
+      {tab === "accounts"      && <AccountsTab onNavigate={setWorkspace} />}
+      {tab === "sync"          && <SyncTab prefs={prefs} onChange={handlePrefsChange} />}
+      {tab === "retries"       && <RetriesTab prefs={prefs} onChange={handlePrefsChange} />}
+      {tab === "notifications" && <NotificationsTab notif={notif} onChange={handleNotifChange} />}
+      {tab === "oauth"         && <OAuthTab onNavigate={setWorkspace} />}
+      {tab === "preferences"   && <PreferencesTab prefs={prefs} onChange={handlePrefsChange} />}
     </div>
   );
 }
