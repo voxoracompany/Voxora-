@@ -236,6 +236,14 @@ const SUPPORT_STUDIO_TOOLS = [
   { id: "supportAnalytics",     icon: "📊", label: "Support Analytics"       },
 ];
 
+// ── V8.2 Enterprise AI Automation ─────────────────────────────────────────────
+const ENTERPRISE_AI_TOOLS = [
+  { id: "aiAgents",          icon: "🤖", label: "AI Agents"            },
+  { id: "automation",        icon: "⚡", label: "Automation Engine"     },
+  { id: "scheduledTasks",    icon: "⏰", label: "Scheduled Tasks"       },
+  { id: "enterpriseMemory",  icon: "🧠", label: "Enterprise AI Memory" },
+];
+
 const BOTTOM_NAV = [
   { id: "help",           icon: "❓", label: "Help Center" },
   { id: "settings",       icon: "⚙️", label: "Settings" },
@@ -499,6 +507,20 @@ export default function Sidebar({ workspace, setWorkspace, isOpen, onClose }: Si
       <div className="sidebar-section-label">My Account</div>
       <nav className="sidebar-nav">
         {ACCOUNT_TOOLS.map((item) => (
+          <button
+            key={item.id}
+            className={`sidebar-item ${workspace === item.id ? "active" : ""}`}
+            onClick={() => setWorkspace(item.id)}
+          >
+            <span className="sidebar-item-icon">{item.icon}</span>
+            <span className="sidebar-item-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-section-label">🤖 Enterprise AI (V8.2)</div>
+      <nav className="sidebar-nav">
+        {ENTERPRISE_AI_TOOLS.map((item) => (
           <button
             key={item.id}
             className={`sidebar-item ${workspace === item.id ? "active" : ""}`}

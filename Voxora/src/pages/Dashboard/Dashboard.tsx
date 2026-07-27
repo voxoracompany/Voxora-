@@ -13,6 +13,9 @@ import { AIUsage } from "../../services/ai/AIUsage";
 import { MemoryService } from "../../services/memory/MemoryService";
 import { IntegrationService } from "../../services/integrations/IntegrationService";
 import { AutomationEngine } from "../../services/automation/AutomationEngine";
+import { ScheduledTaskService } from "../../services/automation/ScheduledTaskService";
+import { AgentService } from "../../services/ai/agents/AgentService";
+import { EnterpriseMemory } from "../../services/ai/EnterpriseMemory";
 import { MonitoringService } from "../../services/admin/MonitoringService";
 import { NotificationService } from "../../services/admin/NotificationService";
 import { AuditLogService } from "../../services/admin/AuditLogService";
@@ -95,6 +98,10 @@ const SystemMonitoring   = lazy(() => import("../Workspaces/SystemMonitoring"));
 const AuditLogs          = lazy(() => import("../Workspaces/AuditLogs"));
 const NotificationCenter = lazy(() => import("../Workspaces/NotificationCenter"));
 const FeatureFlags       = lazy(() => import("../Workspaces/FeatureFlags"));
+// ── V8.2 Enterprise AI Automation ────────────────────────────────────────────
+const AIAgents           = lazy(() => import("../Workspaces/AIAgents"));
+const ScheduledTasksMgr  = lazy(() => import("../Workspaces/ScheduledTasksManager"));
+const EnterpriseMemoryWS = lazy(() => import("../Workspaces/EnterpriseMemory"));
 // ── V5.7 Integrations & Automation ───────────────────────────────────────────
 const AutomationWorkspace = lazy(() => import("../Workspaces/AutomationWorkspace"));
 const IntGoogleCal        = lazy(() => import("../Workspaces/IntGoogleCal"));
@@ -300,6 +307,12 @@ const Dashboard = () => {
   // V5.7 — Integration & Automation stats
   const intStats  = useMemo(() => IntegrationService.getStats(), []);
   const autoStats = useMemo(() => AutomationEngine.getStats(), []);
+
+  // V8.2 — Enterprise AI stats
+  const taskStats        = useMemo(() => ScheduledTaskService.getStats(), []);
+  const agentTotalMsgs   = useMemo(() => AgentService.getTotalMessages(), []);
+  const topAgent         = useMemo(() => AgentService.getMostUsedAgent(), []);
+  const enterpriseReady  = useMemo(() => EnterpriseMemory.isConfigured(), []);
 
   // V5.8 — Admin & Monitoring stats (seed once on mount, then set flag so dependent memos recompute)
   useEffect(() => {
@@ -645,6 +658,95 @@ const Dashboard = () => {
                     </div>
                   </div>
                 )}
+              </div>
+
+              {/* ── V8.2 Enterprise AI Automation ── */}
+              <div style={{ margin: "28px 0 4px" }}>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                  🤖 Enterprise AI Automation
+                  <span style={{ fontSize: 11, background: "#ede9fe", color: "#4c1d95", borderRadius: 8, padding: "2px 10px", fontWeight: 700 }}>V8.2</span>
+                </h2>
+                <div className="stats">
+                  {/* AI Agents */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("aiAgents")}>
+                    <div className="stat-icon">🤖</div>
+                    <p className="stat-value">7</p>
+                    <h3 className="stat-label">AI Agents</h3>
+                  </div>
+                  {/* Agent Messages */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("aiAgents")}>
+                    <div className="stat-icon">💬</div>
+                    <p className="stat-value">{agentTotalMsgs}</p>
+                    <h3 className="stat-label">Agent Messages</h3>
+                  </div>
+                  {/* Top Agent */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("aiAgents")}>
+                    <div className="stat-icon">{topAgent ? topAgent.icon : "⭐"}</div>
+                    <p className="stat-value" style={{ fontSize: 12 }}>{topAgent ? topAgent.name.replace(" Agent", "") : "None"}</p>
+                    <h3 className="stat-label">Top Agent</h3>
+                  </div>
+                  {/* Running Automations */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("automation")}>
+                    <div className="stat-icon">⚡</div>
+                    <p className="stat-value">{autoStats.active}</p>
+                    <h3 className="stat-label">Running Automations</h3>
+                  </div>
+                  {/* Automation Success Rate */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("automation")}>
+                    <div className="stat-icon">✅</div>
+                    <p className="stat-value">{autoStats.successRate}%</p>
+                    <h3 className="stat-label">Success Rate</h3>
+                  </div>
+                  {/* Scheduled Jobs */}
+                  <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setWorkspace("scheduledTasks")}>
+                    <div className="stat-icon">⏰</div>
+                    <p className="stat-value">{taskStats.active}</p>
+                    <h3 className="stat-label">Scheduled Jobs</h3>
+                  </div>
+                </div>
+
+                {/* Enterprise Memory status + recent executions */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 16 }}>
+                  {/* Enterprise Memory card */}
+                  <div className="dashboard-panel" style={{ cursor: "pointer" }} onClick={() => setWorkspace("enterpriseMemory")}>
+                    <div className="panel-header">
+                      <h2>🧠 Enterprise AI Memory</h2>
+                      <span style={{ fontSize: 11, color: enterpriseReady ? "#10b981" : "#f59e0b", fontWeight: 700 }}>
+                        {enterpriseReady ? "✅ Configured" : "⚠️ Not set up"}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: 12, color: "#64748b", margin: 0 }}>
+                      {enterpriseReady
+                        ? "Your company profile, products, and brand context are active — AI agents will give personalised responses."
+                        : "Set up your company profile, brand tone, and customer context to get personalised AI agent responses."}
+                    </p>
+                  </div>
+                  {/* Recent Automation Jobs */}
+                  <div className="dashboard-panel">
+                    <div className="panel-header">
+                      <h2>📋 Recent AI Jobs</h2>
+                      <button className="panel-link" onClick={() => setWorkspace("automation")}>View all →</button>
+                    </div>
+                    {autoStats.recentExecutions.length === 0 ? (
+                      <p style={{ fontSize: 12, color: "#94a3b8" }}>No automation runs yet.</p>
+                    ) : (
+                      <div className="activity-mini-list">
+                        {autoStats.recentExecutions.slice(0, 3).map((ex) => (
+                          <div key={ex.id} className="activity-mini-item">
+                            <span className="activity-mini-icon">
+                              {ex.status === "success" ? "✅" : ex.status === "failed" ? "❌" : "⏭️"}
+                            </span>
+                            <div className="activity-mini-body">
+                              <span className="activity-mini-title">{ex.workflowName}</span>
+                              <span className="activity-mini-desc">{ex.message}</span>
+                            </div>
+                            <span className="activity-mini-time">{timeAgo(ex.timestamp)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
 
               {/* ── Team Collaboration Widgets ── */}
@@ -1401,6 +1503,11 @@ const Dashboard = () => {
           {workspace === "auditLogs"          && <AuditLogs          setWorkspace={setWorkspace} />}
           {workspace === "notificationCenter" && <NotificationCenter setWorkspace={setWorkspace} />}
           {workspace === "featureFlags"       && <FeatureFlags       setWorkspace={setWorkspace} />}
+
+          {/* V8.2 Enterprise AI Automation */}
+          {workspace === "aiAgents"          && <AIAgents           setWorkspace={setWorkspace} />}
+          {workspace === "scheduledTasks"    && <ScheduledTasksMgr  setWorkspace={setWorkspace} />}
+          {workspace === "enterpriseMemory"  && <EnterpriseMemoryWS setWorkspace={setWorkspace} />}
 
           {/* V5.7 Integrations & Automation */}
           {workspace === "automation"      && <AutomationWorkspace setWorkspace={setWorkspace} />}
