@@ -13,7 +13,18 @@ export default function CommandCenter({
   const { activities } = useActivity();
 
   const recentProjects = [...projects].slice(-5).reverse();
+const totalProjects = projects.length;
+const totalFavorites = favorites.length;
+const totalPinned = pinned.length;
+const totalActivities = activities.length;
 
+const productivityScore = Math.min(
+  100,
+  totalProjects * 10 +
+    totalFavorites * 5 +
+    totalPinned * 5 +
+    totalActivities * 2
+);
   return (
     <div className="workspace">
       <h1>🚀 Voxora Command Center</h1>
@@ -76,6 +87,128 @@ export default function CommandCenter({
           <p>Assistant Online</p>
         </div>
       </div>
+      </div>
+
+      {/* Workspace Overview */}
+
+      <div
+        style={{
+          marginTop: "40px",
+          padding: "24px",
+          borderRadius: "16px",
+          background: "#f8fafc",
+          border: "1px solid #e5e7eb",
+        }}
+      >
+        <h2>📊 Workspace Overview</h2>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
+            gap: "16px",
+            marginTop: "20px",
+          }}
+        >
+          <div>
+            <strong>{totalProjects}</strong>
+            <p>Projects</p>
+          </div>
+
+          <div>
+            <strong>{totalFavorites}</strong>
+            <p>Favorites</p>
+          </div>
+
+          <div>
+            <strong>{totalPinned}</strong>
+            <p>Pinned</p>
+          </div>
+
+          <div>
+            <strong>{totalActivities}</strong>
+            <p>Activities</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Productivity Score */}
+
+      <div
+        style={{
+          marginTop: "30px",
+          padding: "24px",
+          borderRadius: "16px",
+          background: "#ecfeff",
+          border: "1px solid #a5f3fc",
+        }}
+      >
+        <h2>📈 Productivity Score</h2>
+
+        <h1>{productivityScore}%</h1>
+
+        <progress
+          value={productivityScore}
+          max={100}
+          style={{
+            width: "100%",
+            height: "20px",
+          }}
+        />
+
+        <p style={{ marginTop: "12px" }}>
+          Your productivity increases as you create projects, save favorites,
+          pin important work, and stay active in Voxora.
+        </p>
+      </div>
+{/* Startup Progress */}
+
+<div
+  style={{
+    marginTop: "30px",
+    padding: "24px",
+    borderRadius: "16px",
+    background: "#ffffff",
+    border: "1px solid #e5e7eb",
+  }}
+>
+  <h2>🚀 Startup Progress</h2>
+
+  <div style={{ marginTop: "20px" }}>
+    <p><strong>💡 Idea</strong></p>
+    <progress value={100} max={100} style={{ width: "100%" }} />
+
+    <p style={{ marginTop: "16px" }}><strong>✅ Validation</strong></p>
+    <progress value={75} max={100} style={{ width: "100%" }} />
+
+    <p style={{ marginTop: "16px" }}><strong>🛠 Build</strong></p>
+    <progress value={55} max={100} style={{ width: "100%" }} />
+
+    <p style={{ marginTop: "16px" }}><strong>🚀 Launch</strong></p>
+    <progress value={20} max={100} style={{ width: "100%" }} />
+  </div>
+</div>
+      {/* AI Insights */}
+
+<div
+  style={{
+    marginTop: "30px",
+    padding: "24px",
+    borderRadius: "16px",
+    background: "#eef6ff",
+    border: "1px solid #bfdbfe",
+  }}
+>
+  <h2>🧠 AI Insights</h2>
+
+  <ul style={{ marginTop: "16px" }}>
+    <li>💡 You currently have {projects.length} saved projects.</li>
+    <li>⭐ {favorites.length} projects are marked as favorites.</li>
+    <li>📌 {pinned.length} projects are pinned for quick access.</li>
+    <li>📊 Your productivity score is {productivityScore}%.</li>
+    <li>🚀 Keep building consistently to increase your productivity.</li>
+  </ul>
+</div>
       {/* Quick Actions */}
 
       <div style={{ marginTop: "40px" }}>
